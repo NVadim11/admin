@@ -1,0 +1,2 @@
+<a class="btn btn-sm btn-icon btn-primary mt-3 mb-3" href="{{ action($controller.'@edit', $model->id) }}" title="{{__('Редактировать')}}"><i class="ki-outline ki-pencil fs-5 m-0"></i></a>
+<a href="#" title="{{__('Удалить')}}" class="btn btn-sm btn-icon btn-danger mt-3 mb-3" data-kt-customer-table-filter="delete_row" data-item-id="{{ $model->id }}"><i class="ki-outline ki-trash fs-5 m-0"></i></a>

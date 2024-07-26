@@ -1,0 +1,1 @@
+<a class="btn btn-sm btn-icon btn-primary mt-3 mb-3" href="<?php echo e(action($controller.'@edit', $model->id)); ?>" title="<?php echo e(__('Редактировать')); ?>"><i class="ki-outline ki-pencil fs-5 m-0"></i></a><?php /**PATH /home/ubuntu/theshit_php/Modules/DailyQuests/Providers/../Resources/views/list_fields/actions.blade.php ENDPATH**/ ?>

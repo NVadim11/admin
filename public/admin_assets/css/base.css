@@ -1,0 +1,191 @@
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-ExtraBoldItalic.eot);
+	src: url(/html/fonts/Montserrat-ExtraBoldItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-ExtraBoldItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-ExtraBoldItalic.woff) format("woff"),url(/html/fonts/Montserrat-ExtraBoldItalic.ttf) format("truetype");
+	font-weight: 700;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-ExtraBold.eot);
+	src: url(/html/fonts/Montserrat-ExtraBold.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-ExtraBold.woff2) format("woff2"),url(/html/fonts/Montserrat-ExtraBold.woff) format("woff"),url(/html/fonts/Montserrat-ExtraBold.ttf) format("truetype");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-Italic.eot);
+	src: url(/html/fonts/Montserrat-Italic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-Italic.woff2) format("woff2"),url(/html/fonts/Montserrat-Italic.woff) format("woff"),url(/html/fonts/Montserrat-Italic.ttf) format("truetype");
+	font-weight: 400;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-BoldItalic.eot);
+	src: url(/html/fonts/Montserrat-BoldItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-BoldItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-BoldItalic.woff) format("woff"),url(/html/fonts/Montserrat-BoldItalic.ttf) format("truetype");
+	font-weight: 700;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-BlackItalic.eot);
+	src: url(/html/fonts/Montserrat-BlackItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-BlackItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-BlackItalic.woff) format("woff"),url(/html/fonts/Montserrat-BlackItalic.ttf) format("truetype");
+	font-weight: 900;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-ExtraLight.eot);
+	src: url(/html/fonts/Montserrat-ExtraLight.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-ExtraLight.woff2) format("woff2"),url(/html/fonts/Montserrat-ExtraLight.woff) format("woff"),url(/html/fonts/Montserrat-ExtraLight.ttf) format("truetype");
+	font-weight: 200;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-Bold.eot);
+	src: url(/html/fonts/Montserrat-Bold.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-Bold.woff2) format("woff2"),url(/html/fonts/Montserrat-Bold.woff) format("woff"),url(/html/fonts/Montserrat-Bold.ttf) format("truetype");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-ExtraLightItalic.eot);
+	src: url(/html/fonts/Montserrat-ExtraLightItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-ExtraLightItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-ExtraLightItalic.woff) format("woff"),url(/html/fonts/Montserrat-ExtraLightItalic.ttf) format("truetype");
+	font-weight: 200;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-Black.eot);
+	src: url(/html/fonts/Montserrat-Black.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-Black.woff2) format("woff2"),url(/html/fonts/Montserrat-Black.woff) format("woff"),url(/html/fonts/Montserrat-Black.ttf) format("truetype");
+	font-weight: 900;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-Medium.eot);
+	src: url(/html/fonts/Montserrat-Medium.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-Medium.woff2) format("woff2"),url(/html/fonts/Montserrat-Medium.woff) format("woff"),url(/html/fonts/Montserrat-Medium.ttf) format("truetype");
+	font-weight: 500;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-SemiBold.eot);
+	src: url(/html/fonts/Montserrat-SemiBold.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-SemiBold.woff2) format("woff2"),url(/html/fonts/Montserrat-SemiBold.woff) format("woff"),url(/html/fonts/Montserrat-SemiBold.ttf) format("truetype");
+	font-weight: 600;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-Light.eot);
+	src: url(/html/fonts/Montserrat-Light.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-Light.woff2) format("woff2"),url(/html/fonts/Montserrat-Light.woff) format("woff"),url(/html/fonts/Montserrat-Light.ttf) format("truetype");
+	font-weight: 300;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-SemiBoldItalic.eot);
+	src: url(/html/fonts/Montserrat-SemiBoldItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-SemiBoldItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-SemiBoldItalic.woff) format("woff"),url(/html/fonts/Montserrat-SemiBoldItalic.ttf) format("truetype");
+	font-weight: 600;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-ThinItalic.eot);
+	src: url(/html/fonts/Montserrat-ThinItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-ThinItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-ThinItalic.woff) format("woff"),url(/html/fonts/Montserrat-ThinItalic.ttf) format("truetype");
+	font-weight: 100;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-LightItalic.eot);
+	src: url(/html/fonts/Montserrat-LightItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-LightItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-LightItalic.woff) format("woff"),url(/html/fonts/Montserrat-LightItalic.ttf) format("truetype");
+	font-weight: 300;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-MediumItalic.eot);
+	src: url(/html/fonts/Montserrat-MediumItalic.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-MediumItalic.woff2) format("woff2"),url(/html/fonts/Montserrat-MediumItalic.woff) format("woff"),url(/html/fonts/Montserrat-MediumItalic.ttf) format("truetype");
+	font-weight: 500;
+	font-style: italic;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-Thin.eot);
+	src: url(/html/fonts/Montserrat-Thin.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-Thin.woff2) format("woff2"),url(/html/fonts/Montserrat-Thin.woff) format("woff"),url(/html/fonts/Montserrat-Thin.ttf) format("truetype");
+	font-weight: 100;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "Montserrat";
+	src: url(/html/fonts/Montserrat-Regular.eot);
+	src: url(/html/fonts/Montserrat-Regular.eot?#iefix) format("embedded-opentype"),url(/html/fonts/Montserrat-Regular.woff2) format("woff2"),url(/html/fonts/Montserrat-Regular.woff) format("woff"),url(/html/fonts/Montserrat-Regular.ttf) format("truetype");
+	font-weight: 400;
+	font-style: normal;
+	font-display: swap
+}
+
+@font-face {
+	font-family: "TT Almet Origin";
+	src: url(/html/fonts/TTAlmetOrigin-Bold.eot);
+	src: url(/html/fonts/TTAlmetOrigin-Bold.eot?#iefix) format("embedded-opentype"),url(/html/fonts/TTAlmetOrigin-Bold.woff2) format("woff2"),url(/html/fonts/TTAlmetOrigin-Bold.woff) format("woff"),url(/html/fonts/TTAlmetOrigin-Bold.ttf) format("truetype");
+	font-weight: 700;
+	font-style: normal;
+	font-display: swap
+}
+
+.ctm-block .inner-small {
+	max-width: 1200px;
+	margin-right: auto;
+	margin-left: auto;
+}
+.ctm-block .two-column-photo {
+	display: grid;
+	line-height: 0;
+	gap: 16px;
+	grid-template-columns: 1fr 1fr;
+}
+.ctm-block ._br {
+	border-radius: 20px;
+}
+.ctm-block ._br {
+	overflow: hidden;
+}
+.ctm-block ._dark-style .h2, .ctm-block ._dark-style .h3,  .ctm-block ._dark-style .h4, .ctm-block ._dark-style h2, .ctm-block ._dark-style h3, .ctm-block ._dark-style h4, .ctm-block a:hover, .ctm-block color {
+	color: #d0b787;
+}

@@ -1,0 +1,214 @@
+/* here you can put your own css to customize and override the theme */
+
+/***
+Rounded Portlets
+***/
+/*
+.portlet {
+	border-radius: 4px !important;
+}
+
+.portlet .portlet-title {
+	border-radius: 4px 4px 0px 0px !important;
+}
+
+.portlet .portlet-body,
+.portlet .portlet-body .form-actions  {
+	border-radius: 0px 0px 4px 4px !important;
+}
+*/
+
+.navbar-nav > li > a.tosite{
+    padding-top: 25px;
+    background: none;
+}
+
+.navbar-nav > li > a.tosite:hover{
+    background: none;
+}
+
+.dashboard-stat2 .display{
+    margin-bottom: 0px;
+}
+
+.page-sidebar-menu .sub-menu ul{
+    padding: 0px 0 0 0px;
+}
+
+.page-sidebar-menu .sub-menu ul li{
+    list-style: none;
+}
+.page-sidebar-menu .sub-menu ul li a
+{
+    color: #485a6a;
+    padding-left: 40px !important;
+}
+.page-sidebar-menu .sub-menu ul li.active a,
+.page-sidebar-menu .sub-menu ul li a:hover
+{
+    background: #f2f6f9 none repeat scroll 0 0 !important;
+    color: #5b9bd1;
+}
+
+
+
+#httre{position: relative}
+.htreebnts{position: absolute; right: 0px; display: inline-block; opacity: 0.3}
+.htreebnts .btn {vertical-align: top}
+.htreebnts.hover {opacity: 1}
+#httre .jstree-container-ul{margin-right: 20px;}
+#httre.jstree-default .jstree-anchor{display: inline-block; width: 100%; padding-right: 100px;}
+
+.del_fr_foto {
+    background: url("/admin/img/close_box_red.png") repeat scroll 0 0 transparent;
+    height: 16px;
+     position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 16px;
+}
+
+.gal_img{
+    float: left; 
+    width: 154px; 
+    min-height: 150px; 
+    padding-top: 3px;
+    margin-left: 10px;
+    border: 1px solid #cccccc;
+    position: relative;
+    margin-bottom: 10px;
+}
+
+
+.cat_fotos tbody tr td{
+    vertical-align: middle;
+    text-align: center;
+}
+
+.newbook a{
+    color: #32b512;
+}
+
+.resort_map_cover{
+    position: relative; width: 100%;height: 700px; overflow: hidden; border: 2px solid #000; overflow: scroll;
+}
+
+.resort_map_cover .plans_wrap{
+    position: absolute; left:0px; top: 0px; cursor: move;
+}
+
+.resort_map_cover .point{
+    position: absolute;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+.qq-gallery-upload-list{
+    padding: 15px;
+    margin: 15px 0;
+}
+
+.qq-gallery-upload-list .gallery-upload-list__item{
+    width: 100%;
+    height: 150px;
+    display: flex;
+    align-items:center;
+    background: none;
+    margin-bottom: 15px;
+    border: 1px solid #CCC;
+    padding: 0
+}
+
+.qq-gallery-upload-list .gallery-upload-list__image{
+    width: 150px;
+    height: 100px;
+    border-right: 1px solid #CCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qq-gallery-upload-list .gallery-upload-list__input{
+    width: 100%;
+    height: 100px;
+    padding: 0 20px;
+    border-right: 1px solid #CCC;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qq-gallery-upload-list  .gallery-upload-list__delete{
+    width: 100px;
+    height: 100px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cke_editor_ckeditor_dialog{
+    position: relative;
+    z-index: 10070;
+}
+
+.cke_panel{
+    z-index: 10070;
+}
+
+.jstree-anchor{
+    overflow: hidden;
+}
+
+.table thead tr th {
+    /*white-space: nowrap;*/
+    vertical-align: middle;
+    background-color: #eee;
+}
+.dataTables_wrapper .dataTables_filter input{
+    padding: 0;
+}
+.dataTables_wrapper .dataTables_processing{
+    padding-top: 7px;
+}
+
+.table-bordered > tbody > tr > td, table.dataTable.no-footer{
+    border-bottom: 0 !important;
+}
+.select2-container--open .select2-dropdown--below {
+    z-index: 9991 !important;
+}
+.tox.tox-tinymce-aux,
+.tox-fullscreen .tox.tox-tinymce-aux {
+  z-index: 99999999999 !important;
+}
+.qq-thumbnail-selector {display: block !important}
+
+@media (max-width: 768px) {
+    .table-striped th, .table-striped td, .table-group-actions, .dataTables_length, .dataTables_info, .page-actions{
+        display: none;
+    }
+    .table-striped th.mob_visible, .table-striped td.mob_visible, .table-striped tr td:nth-child(2), .table-striped tr td:last-child {
+        display: block !important;
+    }
+    .dataTables_filter {
+        text-align: right !important;
+        margin-bottom: 20px;
+    }
+    .dataTables_paginate {
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+        position: relative;
+        width: 100%;
+    }
+    .page-top, .input-fixed {
+        display: none !important;
+    }
+    .login .logo {
+        margin-top: 20% !important;
+    }
+    .input-medium, .input-large {
+        width: 128px !important;
+    }
+}

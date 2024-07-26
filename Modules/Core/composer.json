@@ -1,0 +1,20 @@
+{
+    "name": "c-tm/core",
+    "description": "",
+    "authors": [
+        {
+            "name": "Dmitry",
+            "email": "sautkin@c-tm.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Modules\\Core\\": ""
+        }
+    },
+    "require": {
+        "php": ">=5.6.4",
+        "intervention/image": "^2.4",
+        "kris/laravel-form-builder": "^1.12"
+    }
+}

@@ -1,0 +1,1 @@
+<a class="btn btn-icon-only blue" href="{{ action('\Modules\Events\Http\Controllers\EventsController@edit', $model->id) }}" target="_blank" title="{{__('Редактировать')}}"><i class="fa fa-pencil"></i></a>

@@ -1,0 +1,48 @@
+<?php
+return [
+    'placeholder_search' => 'Поиск',
+
+    'btn_create' => 'Создать',
+    'btn_add' => 'Добавить',
+    'btn_upload' => 'Загрузить',
+    'btn_export' => 'Экспорт',
+    'btn_selected' => 'Выбраны',
+    'btn_delete_selected' => 'Удалить выбранные',
+    'btn_to_list' => 'К списку',
+    'btn_back' => 'Назад',
+    'btn_cancel' => 'Отмена',
+    'btn_save' => 'Сохранить',
+    'btn_profile' => 'Профиль',
+    'btn_mode' => 'Тема',
+    'btn_mode_light' => 'Светлая',
+    'btn_mode_dark' => 'Темная',
+    'btn_mode_system' => 'Системная',
+    'btn_signout' => 'Выход',
+
+    'title_general' => 'Основное',
+    'title_loading' => 'Загрузка...',
+    'title_media' => 'Медиа',
+    'title_media_drop' => 'Перетащите файлы сюда или нажмите, чтобы загрузить.',
+    'title_media_gallery' => 'Галерея изображений объекта',
+    'title_media_gallery_format' => 'Загрузите файлы формата jpg, jpeg, png',
+    'title_hello' => 'Привет',
+
+    'message_delete_item' => 'Вы уверены, что хотите удалить элемент?',
+    'message_yes' => 'Да, удалить!',
+    'message_no' => 'Нет, отменить',
+    'message_deleted' => 'Запись удалена!',
+    'message_got_it' => 'Ок',
+    'message_not_deleted' => 'Запись не была удалена',
+    'message_delete_selected' => 'Вы уверены, что хотите удалить выбранные элементы?',
+    'message_deleted_selected' => 'Выбранные записи удалены',
+    'message_not_deleted_selected' => 'Выбранные записи не были удалены',
+    'message_cancel_form' => 'Вы уверены, что хотите отменить?',
+    'message_yes_cancel' => 'Да',
+    'message_no_return' => 'Нет',
+    'message_not_cancel_form' => 'Ваша форма не была отменена!.',
+    'message_errors_in_form' => 'Извините, похоже, обнаружены ошибки. Повторите попытку.',
+    'message_success_submitted' => 'Форма успешно сохранена!',
+
+    'th_pos' => 'Поз',
+    'th_actions' => 'Действия'
+];

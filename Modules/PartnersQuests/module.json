@@ -1,0 +1,16 @@
+{
+    "name": "PartnersQuests",
+    "alias": "partners_quests",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 10,
+    "providers": [
+        "Modules\\PartnersQuests\\Providers\\PartnersQuestsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

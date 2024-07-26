@@ -1,0 +1,48 @@
+<?php
+return [
+    'placeholder_search' => 'Search',
+
+    'btn_create' => 'Create',
+    'btn_add' => 'Add',
+    'btn_upload' => 'Upload',
+    'btn_export' => 'Export',
+    'btn_selected' => 'Selected',
+    'btn_delete_selected' => 'Delete selected',
+    'btn_to_list' => 'To list',
+    'btn_back' => 'Back',
+    'btn_cancel' => 'Cancel',
+    'btn_save' => 'Save',
+    'btn_profile' => 'Profile',
+    'btn_mode' => 'Mode',
+    'btn_mode_light' => 'Light',
+    'btn_mode_dark' => 'Dark',
+    'btn_mode_system' => 'System',
+    'btn_signout' => 'Sign Out',
+
+    'title_general' => 'General',
+    'title_loading' => 'Loading...',
+    'title_media' => 'Media',
+    'title_media_drop' => 'Перетащите файлы сюда или нажмите, чтобы загрузить.',
+    'title_media_gallery' => 'Галерея изображений объекта',
+    'title_media_gallery_format' => 'Загрузите файлы формата jpg, jpeg, png',
+    'title_hello' => 'Hello',
+
+    'message_delete_item' => 'Are you sure you want to delete item?',
+    'message_yes' => 'Yes, delete!',
+    'message_no' => 'No, cancel',
+    'message_deleted' => 'You have deleted item!',
+    'message_got_it' => 'Ok, got it!',
+    'message_not_deleted' => 'Item was not deleted.',
+    'message_delete_selected' => 'Are you sure you want to delete selected items?',
+    'message_deleted_selected' => 'You have deleted all selected',
+    'message_not_deleted_selected' => 'Selected items was not deleted',
+    'message_cancel_form' => 'Are you sure you would like to cancel?',
+    'message_yes_cancel' => 'Yes, cancel it',
+    'message_no_return' => 'No, return',
+    'message_not_cancel_form' => 'Your form has not been cancelled!.',
+    'message_errors_in_form' => 'Sorry, looks like there are some errors detected, please try again.',
+    'message_success_submitted' => 'Form has been successfully submitted!',
+
+    'th_pos' => 'Pos',
+    'th_actions' => 'Actions'
+];
