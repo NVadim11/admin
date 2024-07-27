@@ -167,7 +167,7 @@ class ClaimerApiController extends Controller
                 $chat_member_data['result']['status'] == 'creator')) {
 
 
-            $subscriber_info = $user_id . ' ' . $username . PHP_EOL;
+            //$subscriber_info = $user_id . ' ' . $username . PHP_EOL;
             echo 'subscriber added';
             
         } else {
