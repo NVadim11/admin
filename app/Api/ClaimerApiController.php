@@ -38,8 +38,9 @@ class ClaimerApiController extends Controller
 
             $max_coins = app('settings')->get('update_balance_max_coins');
             $claimer_bonus = 1;
+            $claimer_period = 60*60;
 
-            // checking account in Redis
+            // Getting account from Redis
             if ($id_telegram && $account = $redis->getData($id_telegram)) {
 
                 $account = json_decode($account);
@@ -77,7 +78,8 @@ class ClaimerApiController extends Controller
                     
                     $account->wallet_balance = $account->wallet_balance + $claimer_bonus;
                     $account->updated_at = Carbon::now();
-                    
+                    $account->claimer_timer = $currentTime + $claimer_period;
+
                     // if account from DB
                     if ($account instanceof Account) {
                         
@@ -101,7 +103,8 @@ class ClaimerApiController extends Controller
                             ->update([
                                 'wallet_balance' => $account->wallet_balance,
                                 'update_balance_at' => $account->update_balance_at,
-                                'updated_at' => $account->updated_at
+                                'updated_at' => $account->updated_at,
+                                'calimer_timer' => $account->claimer_timer
                             ]);
 
                         $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
@@ -112,7 +115,7 @@ class ClaimerApiController extends Controller
                         //log
                     }
 
-                    return response()->json(['message' => 'Claimed! New balacne: '.$account->wallet_balance], 200);
+                    return response()->json(['message' => 'Claimed! New balacne: '.$account->wallet_balance, 'account'=> $account,'timer'=>$account->claimer_timer], 200);
 
                 } Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
                 return response()->json(['message' => 'claimer not ready'], 404);
