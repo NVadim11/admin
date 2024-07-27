@@ -80,7 +80,8 @@ class ClaimerApiController extends Controller
                     $account->updated_at = Carbon::now();
                     $account->claimer_timer = $currentTime + $claimer_period;
 
-                    // if account from DB
+                    // Savig account 
+                    // -- if account from DB
                     if ($account instanceof Account) {
                         
                         //log
@@ -132,6 +133,55 @@ class ClaimerApiController extends Controller
 
     public function test(Request $request)
     {
-        echo 'test';
+        $user_id = "7172543732";
+        $channel_id = "-1002225952190"; 
+        $bot_token =  "7246664265:AAEKzuZz4nAkJDT5E2us3tMWoeRqS52EB_I";
+        $api_url = "https://api.telegram.org/bot$bot_token/getChatMember?chat_id=$channel_id&user_id=$user_id";
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $api_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $chat_member = curl_exec($ch);
+
+        if (curl_errno($ch)) {
+            echo("cURL error: " . curl_error($ch));
+            curl_close($ch);
+            exit;
+        }
+        curl_close($ch);
+
+        if ($chat_member === FALSE) {
+            echo("Failed to get chat member info from API: $api_url");
+            exit;
+        }
+
+        echo("Chat member API response: ");
+        
+
+        $chat_member_data = json_decode($chat_member, true);
+        var_dump($chat_member_data);
+
+        if (isset($chat_member_data['result']['status']) &&
+            ($chat_member_data['result']['status'] == 'member' ||
+                $chat_member_data['result']['status'] == 'administrator' ||
+                $chat_member_data['result']['status'] == 'creator')) {
+
+
+            $subscriber_info = $user_id . ' ' . $username . PHP_EOL;
+            echo 'subscriber added';
+            
+        } else {
+            echo 'status unavaliable';
+        }
+    }
+
+    private function getAccount($data)
+    {
+        
+    }
+
+    private function updateAccount($data)
+    {
+
     }
 }
