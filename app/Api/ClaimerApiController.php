@@ -104,7 +104,7 @@ class ClaimerApiController extends Controller
                                 'wallet_balance' => $account->wallet_balance,
                                 'update_balance_at' => $account->update_balance_at,
                                 'updated_at' => $account->updated_at,
-                                'calimer_timer' => $account->claimer_timer
+                                'claimer_timer' => $account->claimer_timer
                             ]);
 
                         $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
