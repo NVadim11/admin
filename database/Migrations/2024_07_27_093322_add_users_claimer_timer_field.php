@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->integer('claimer_timer')->default(0)->after('some_existing_column'); // Use the correct existing column to place your new column after
+            $table->integer('claimer_timer')->default(0);
         });
     }
 
