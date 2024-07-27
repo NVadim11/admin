@@ -39,3 +39,4 @@ Route::post('pass-daily-quest', [\App\Api\DailyQuestsApiController::class, 'pass
 Route::get('partners-quests', [\App\Api\PartnersQuestsApiController::class, 'partners_quests']);
 Route::post('pass-partners-quest', [\App\Api\PartnersQuestsApiController::class, 'pass_partners_quest']);
 Route::post('claimer', [\App\Api\ClaimerApiController::class, 'index']);
+Route::get('test', [\App\Api\UpdateBalanceApiController::class, 'test']);

@@ -272,4 +272,9 @@ class UpdateBalanceApiController extends Controller
         Log::channel('update_balance_log')->debug("Invalid request");
         return response()->json(['message' => 'Invalid request'], 404);
     }
+
+    public function test(Request $request)
+    {
+        echo 'test';
+    }
 }
