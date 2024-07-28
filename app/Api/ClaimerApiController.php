@@ -258,7 +258,7 @@ class ClaimerApiController extends Controller
                     $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
                 }
 
-                return response()->json(['message' => 'Task completed!'], 200);
+                return response()->json(['message' => 'Task completed!', 'success'=>true], 200);
             }
             else return response()->json(['message' => 'Task was not completed'], 400);
 
