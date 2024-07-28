@@ -184,7 +184,7 @@ class ClaimerApiController extends Controller
     private function getAccount($id_telegram, $wallet_address)
     {
         $account = [];
-
+        $redis = new RedisService();
         // Getting account from Redis
         if ($id_telegram && $account = $redis->getData($id_telegram)) {
 
@@ -209,6 +209,20 @@ class ClaimerApiController extends Controller
 
     public function check_task(Request $request)
     {
+        if(!checkToken($request->post('token'))) {
+            return response()->json(['message' => 'token invalid'], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'wallet_address' => 'min:10|max:100',
+            'id_telegram' => 'min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 401);
+        }
+
         $wallet_address = $request->post('wallet_address');
         $id_telegram = $request->post('id_telegram');
         $task_code = $request->post('code');
