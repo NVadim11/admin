@@ -176,10 +176,18 @@ class ClaimerApiController extends Controller
         //var_dump($chat_member);
         $chat_member_data = json_decode($chat_member, true);
 
-        if (isset($chat_member_data['result']['status']) &&
+        if (isset($chat_member_data['result']['status']) 
+        
+            /*
+            &&
             ($chat_member_data['result']['status'] == 'member' ||
                 $chat_member_data['result']['status'] == 'administrator' ||
-                $chat_member_data['result']['status'] == 'creator')) {
+                $chat_member_data['result']['status'] == 'creator' ||
+                $chat_member_data['result']['status'] == 'restricted'
+                )
+                */
+                
+                ) {
             return true;
             
         } else {
@@ -277,8 +285,8 @@ class ClaimerApiController extends Controller
 
     public function test()
     {
-        $account = $this->getAccount('64288442', '61ebb74112ea5cd963800f90dd7f119b5aaa7e6681de59b091707f5a44b5170e');
-        var_dump($account);
+        //$account = $this->getAccount('64288442', '61ebb74112ea5cd963800f90dd7f119b5aaa7e6681de59b091707f5a44b5170e');
+        //var_dump($account);
         exit();
     }
 }
