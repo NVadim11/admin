@@ -40,3 +40,4 @@ Route::get('partners-quests', [\App\Api\PartnersQuestsApiController::class, 'par
 Route::post('pass-partners-quest', [\App\Api\PartnersQuestsApiController::class, 'pass_partners_quest']);
 Route::post('claimer', [\App\Api\ClaimerApiController::class, 'index']);
 Route::post('check_task', [\App\Api\ClaimerApiController::class, 'check_task']);
+Route::get('test', [\App\Api\ClaimerApiController::class, 'test']);

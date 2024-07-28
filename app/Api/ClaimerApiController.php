@@ -264,4 +264,10 @@ class ClaimerApiController extends Controller
     }
 
 
+    public function test()
+    {
+        $account = getAccount('64288442', '61ebb74112ea5cd963800f90dd7f119b5aaa7e6681de59b091707f5a44b5170e');
+        var_dumpt($account);
+
+    }
 }
