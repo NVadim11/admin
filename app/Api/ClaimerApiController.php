@@ -141,7 +141,7 @@ class ClaimerApiController extends Controller
         //$user_id = "7172543732";
         //$channel_id = "-1002225952190"; 
         //$bot_token =  "7246664265:AAEKzuZz4nAkJDT5E2us3tMWoeRqS52EB_I";
-        $bot_token = $this->bot_token;
+        $bot_token = $this->verification_bot_token;
         $api_url = "https://api.telegram.org/bot$bot_token/getChatMember?chat_id=$channel_id&user_id=$user_id";
 
         $ch = curl_init();
