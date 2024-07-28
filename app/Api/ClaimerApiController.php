@@ -207,7 +207,7 @@ class ClaimerApiController extends Controller
         return $account;
     }
 
-    public function check_task($request)
+    public function check_task(Request $request)
     {
         $wallet_address = $request->post('wallet_address');
         $id_telegram = $request->post('id_telegram');
