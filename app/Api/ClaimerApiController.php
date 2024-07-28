@@ -17,10 +17,13 @@ class ClaimerApiController extends Controller
     public $tg_channel_id = -1002230268780;
     public $tg_chat_id = -1002216416628;
 
+    public $claimer_bonus = 1;
+    public $claimer_period = 10;
+
     public function index(Request $request)
     {
-        $claimer_bonus = 1;
-        $claimer_period = 60*60;
+        $claimer_bonus = $this->claimer_bonus;
+        $claimer_period = $this->claimer_period;
 
         if(!checkToken($request->post('token'))) {
             return response()->json(['message' => 'token invalid'], 404);
@@ -78,7 +81,8 @@ class ClaimerApiController extends Controller
             if ($account) {
                 $currentTime = time();
                 $claimerTime = (isset($account->claimer_timer)) ? $account->claimer_timer : 0;
-
+                $claimer_bonus = ($claimerTime == 0) ? 3 : $claimer_bonus;
+                
                 if ($currentTime > $claimerTime) {
                     
                     $account->wallet_balance = $account->wallet_balance + $claimer_bonus;
@@ -121,7 +125,11 @@ class ClaimerApiController extends Controller
                         //log
                     }
 
-                    return response()->json(['message' => 'Claimed! New balacne: '.$account->wallet_balance, 'account'=> $account,'timer'=>$account->claimer_timer], 200);
+                    return response()->json([
+                        'message' => 'Claimed! New balacne: '.$account->wallet_balance, 
+                        'success' => true,
+                        'wallet_balance'=> $account->wallet_balance,
+                        'claimer_timer'=>$account->claimer_timer], 200);
 
                 } Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
                 return response()->json(['message' => 'claimer not ready'], 404);
