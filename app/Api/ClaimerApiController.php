@@ -82,7 +82,7 @@ class ClaimerApiController extends Controller
                 $currentTime = time();
                 $claimerTime = (isset($account->claimer_timer)) ? $account->claimer_timer : 0;
                 $claimer_bonus = ($claimerTime == 0) ? 3 : $claimer_bonus;
-                
+
                 if ($currentTime > $claimerTime) {
                     
                     $account->wallet_balance = $account->wallet_balance + $claimer_bonus;
@@ -129,6 +129,7 @@ class ClaimerApiController extends Controller
                         'message' => 'Claimed! New balacne: '.$account->wallet_balance, 
                         'success' => true,
                         'wallet_balance'=> $account->wallet_balance,
+                        'claimer_bonus' => $this->claimer_bonus,
                         'claimer_timer'=>$account->claimer_timer], 200);
 
                 } Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
