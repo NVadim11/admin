@@ -15,6 +15,9 @@ class ClaimerApiController extends Controller
 {
     public function index(Request $request)
     {
+        $claimer_bonus = 1;
+        $claimer_period = 60*60;
+
         if(!checkToken($request->post('token'))) {
             return response()->json(['message' => 'token invalid'], 404);
         }
@@ -37,8 +40,6 @@ class ClaimerApiController extends Controller
             $redis = new RedisService();
 
             $max_coins = app('settings')->get('update_balance_max_coins');
-            $claimer_bonus = 1;
-            $claimer_period = 60*60;
 
             // Getting account from Redis
             if ($id_telegram && $account = $redis->getData($id_telegram)) {
@@ -131,10 +132,10 @@ class ClaimerApiController extends Controller
         return response()->json(['message' => 'Invalid request'], 404);
     }
 
-    public function test(Request $request)
+    private function check_tg_subscriber( $user_id, $channel_id )
     {
-        $user_id = "7172543732";
-        $channel_id = "-1002225952190"; 
+        //$user_id = "7172543732";
+        //$channel_id = "-1002225952190"; 
         $bot_token =  "7246664265:AAEKzuZz4nAkJDT5E2us3tMWoeRqS52EB_I";
         $api_url = "https://api.telegram.org/bot$bot_token/getChatMember?chat_id=$channel_id&user_id=$user_id";
 
@@ -146,20 +147,19 @@ class ClaimerApiController extends Controller
         if (curl_errno($ch)) {
             echo("cURL error: " . curl_error($ch));
             curl_close($ch);
-            exit;
+            return false;
         }
         curl_close($ch);
 
         if ($chat_member === FALSE) {
-            echo("Failed to get chat member info from API: $api_url");
-            exit;
+       //     echo("Failed to get chat member info from API: $api_url");
+           return false;
         }
 
-        echo("Chat member API response: ");
+        //echo("Chat member API response: ");
         
 
         $chat_member_data = json_decode($chat_member, true);
-        var_dump($chat_member_data);
 
         if (isset($chat_member_data['result']['status']) &&
             ($chat_member_data['result']['status'] == 'member' ||
@@ -168,20 +168,82 @@ class ClaimerApiController extends Controller
 
 
             //$subscriber_info = $user_id . ' ' . $username . PHP_EOL;
-            echo 'subscriber added';
+            return true;
             
         } else {
-            echo 'status unavaliable';
+         //   echo 'status unavaliable';
+        }
+        return false;
+    }
+
+    private function getAccount($id_telegram, $wallet_address)
+    {
+        $account = [];
+
+        // Getting account from Redis
+        if ($id_telegram && $account = $redis->getData($id_telegram)) {
+
+            $account = json_decode($account);
+
+        } 
+        // Getting from DB
+        else {
+            if ($wallet_address) {
+                $account = Account::where('wallet_address', $wallet_address)
+                    ->with(['daily_quests', 'partners_quests'])
+                    ->first();
+            } elseif ($id_telegram) {
+                $account = Account::where('id_telegram', $id_telegram)
+                    ->with(['daily_quests', 'partners_quests'])
+                    ->first();
+            }
+        }
+
+        return $account;
+    }
+
+    public function check_task($request)
+    {
+        $tg_channel_id = '';
+        $tg_group_id = '';
+
+        $wallet_address = $request->post('wallet_address');
+        $id_telegram = $request->post('id_telegram');
+        $task_code = $request->post('code');
+        $account = $this->getAccount($id_telegram, $wallet_address);
+
+        if ($account && ($task_code == 'tg_channel' || $task_code == 'tg_chat' || $task_code == 'twitter'))
+        {
+
+            if ($task_code == 'tg_channel')
+            {
+                $check = $this->check_tg_subscriber($tg_channel_id, $account->id_telegram);
+            } else if ($task_code == 'tg_chat')
+            {
+                $check = $this->check_tg_subscriber($tg_group_id, $account->id_telegram);
+            }
+            else 
+                $check = true;
+
+            if ($check)
+            {
+                $account->$task_code = 1;
+                // Savig account 
+                // -- if account from DB
+                if ($account instanceof Account) {
+                    $account->save();
+                }
+                // if account from Redis 
+                else {
+                    DB::table('accounts')
+                        ->where('id_telegram', $account->id_telegram)
+                        ->update([
+                            $task_code  => 1,
+                        ]);
+                }
+            }
         }
     }
 
-    private function getAccount($data)
-    {
-        
-    }
 
-    private function updateAccount($data)
-    {
-
-    }
 }

@@ -477,7 +477,7 @@ class ApiController extends Controller
                 $currentDateTime->add(new \DateInterval('PT72H'));
 
                 $account->wallet_address = $request->post('wallet_address');
-                $account->wallet_balance = $account->wallet_balance + (int)app('settings')->get('wallet_connect_price');
+                $account->wallet_balance = $account->wallet_balance;// + (int)app('settings')->get('wallet_connect_price');
                 $account->update_wallet_at = $currentDateTime->getTimestamp();
                 $account->save();
 
@@ -553,7 +553,7 @@ class ApiController extends Controller
 
                     $redis->updateIfNotSet($exist->id_telegram, $exist->toJson(), $exist->timezone);
                 } else {
-                    return response()->json(['message' => 'account already registered'], 404);
+                    return response()->json(['message' => 'Wallet already registered','error_code'=>'wallet_exist'], 404);
                 }
             }
         }
