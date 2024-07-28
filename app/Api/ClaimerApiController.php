@@ -144,9 +144,7 @@ class ClaimerApiController extends Controller
         $bot_token = $this->verification_bot_token;
         $user_id = intval($user_id);
         $api_url = "https://api.telegram.org/bot$bot_token/getChatMember?chat_id=$channel_id&user_id=$user_id";
-        var_dump ($api_url);
-        var_dump ($channel_id);
-        var_dump ($user_id);
+       
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $api_url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
@@ -160,26 +158,23 @@ class ClaimerApiController extends Controller
         curl_close($ch);
 
         if ($chat_member === FALSE) {
-            echo("Failed to get chat member info from API: $api_url");
+            //echo("Failed to get chat member info from API: $api_url");
            return false;
         }
 
         //echo("Chat member API response: ");
         
-        var_dump($chat_member);
+        //var_dump($chat_member);
         $chat_member_data = json_decode($chat_member, true);
 
         if (isset($chat_member_data['result']['status']) &&
             ($chat_member_data['result']['status'] == 'member' ||
                 $chat_member_data['result']['status'] == 'administrator' ||
                 $chat_member_data['result']['status'] == 'creator')) {
-
-
-            $subscriber_info = $user_id . ' ' . $username . PHP_EOL;
             return true;
             
         } else {
-            echo 'status unavaliable';
+           // echo 'status unavaliable';
         }
         return false;
     }
