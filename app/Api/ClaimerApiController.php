@@ -220,7 +220,7 @@ class ClaimerApiController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 401);
         }
-
+        $redis = new RedisService();
         $wallet_address = $request->post('wallet_address');
         $id_telegram = $request->post('id_telegram');
         $task_code = $request->post('code');
