@@ -231,7 +231,8 @@ class ClaimerApiController extends Controller
 
             if ($task_code == 'tg_channel')
             {
-                $check = $this->check_tg_subscriber($account->id_telegram, $this->tg_channel_id);
+                $check = true;
+                //$check = $this->check_tg_subscriber($account->id_telegram, $this->tg_channel_id);
             } else if ($task_code == 'tg_chat')
             {
                 $check = $this->check_tg_subscriber($account->id_telegram, $this->tg_chat_id);
