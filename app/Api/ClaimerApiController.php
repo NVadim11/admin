@@ -15,7 +15,7 @@ class ClaimerApiController extends Controller
 {
     public $verification_bot_token = '7426539518:AAE_mYyuaqQ2euVHk7eAWohVqrhKwLyPJ4I';
     public $tg_channel_id = '1111';
-    public $tg_group_id = -1002216416628;
+    public $tg_chat_id = -1002216416628;
 
     public function index(Request $request)
     {
@@ -239,7 +239,7 @@ class ClaimerApiController extends Controller
                 $check = $this->check_tg_subscriber($account->id_telegram, $this->tg_channel_id);
             } else if ($task_code == 'tg_chat')
             {
-                $check = $this->check_tg_subscriber($account->id_telegram, $this->tg_channel_id);
+                $check = $this->check_tg_subscriber($account->id_telegram, $this->tg_chat_id);
             }
             else 
                 $check = true;
