@@ -13,6 +13,10 @@ use Modules\Accounts\Entities\Account;
 
 class ClaimerApiController extends Controller
 {
+    public $verification_bot_token = '7426539518:AAE_mYyuaqQ2euVHk7eAWohVqrhKwLyPJ4I';
+    public $tg_channel_id = '1111';
+    public $tg_group_id = -1002216416628;
+
     public function index(Request $request)
     {
         $claimer_bonus = 1;
@@ -136,7 +140,8 @@ class ClaimerApiController extends Controller
     {
         //$user_id = "7172543732";
         //$channel_id = "-1002225952190"; 
-        $bot_token =  "7246664265:AAEKzuZz4nAkJDT5E2us3tMWoeRqS52EB_I";
+        //$bot_token =  "7246664265:AAEKzuZz4nAkJDT5E2us3tMWoeRqS52EB_I";
+        $bot_token = $this->bot_token;
         $api_url = "https://api.telegram.org/bot$bot_token/getChatMember?chat_id=$channel_id&user_id=$user_id";
 
         $ch = curl_init();
@@ -204,9 +209,6 @@ class ClaimerApiController extends Controller
 
     public function check_task($request)
     {
-        $tg_channel_id = '';
-        $tg_group_id = '';
-
         $wallet_address = $request->post('wallet_address');
         $id_telegram = $request->post('id_telegram');
         $task_code = $request->post('code');
@@ -217,10 +219,10 @@ class ClaimerApiController extends Controller
 
             if ($task_code == 'tg_channel')
             {
-                $check = $this->check_tg_subscriber($tg_channel_id, $account->id_telegram);
+                $check = $this->check_tg_subscriber($this->tg_channel_id, $account->id_telegram);
             } else if ($task_code == 'tg_chat')
             {
-                $check = $this->check_tg_subscriber($tg_group_id, $account->id_telegram);
+                $check = $this->check_tg_subscriber($this->tg_group_id, $account->id_telegram);
             }
             else 
                 $check = true;
@@ -241,8 +243,12 @@ class ClaimerApiController extends Controller
                             $task_code  => 1,
                         ]);
                 }
+
+                return response()->json(['message' => 'Task completed!'], 200);
             }
-        }
+            else return response()->json(['message' => 'Task was not completed'], 400);
+
+        } else return response()->json(['message' => 'Invalid request'], 404);
     }
 
 
