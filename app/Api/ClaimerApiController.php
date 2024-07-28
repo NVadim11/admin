@@ -157,13 +157,13 @@ class ClaimerApiController extends Controller
         curl_close($ch);
 
         if ($chat_member === FALSE) {
-       //     echo("Failed to get chat member info from API: $api_url");
+            echo("Failed to get chat member info from API: $api_url");
            return false;
         }
 
         //echo("Chat member API response: ");
         
-
+        var_dump($chat_member);
         $chat_member_data = json_decode($chat_member, true);
 
         if (isset($chat_member_data['result']['status']) &&
@@ -172,11 +172,11 @@ class ClaimerApiController extends Controller
                 $chat_member_data['result']['status'] == 'creator')) {
 
 
-            //$subscriber_info = $user_id . ' ' . $username . PHP_EOL;
+            $subscriber_info = $user_id . ' ' . $username . PHP_EOL;
             return true;
             
         } else {
-         //   echo 'status unavaliable';
+            echo 'status unavaliable';
         }
         return false;
     }
