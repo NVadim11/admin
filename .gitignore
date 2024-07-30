@@ -1,6 +1,7 @@
 composer.lock
 .idea
 .vscode
+.DS_Store
 vendor
 /vendor
 /node_modules

@@ -41,3 +41,5 @@ Route::post('pass-partners-quest', [\App\Api\PartnersQuestsApiController::class,
 Route::post('claimer', [\App\Api\ClaimerApiController::class, 'index']);
 Route::post('check-task', [\App\Api\ClaimerApiController::class, 'check_task']);
 Route::get('test', [\App\Api\ClaimerApiController::class, 'test']);
+
+Route::get('projects', [\App\Api\ProjectsApiController::class, 'index']);

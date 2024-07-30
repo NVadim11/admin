@@ -50,6 +50,7 @@ class ModulesRepository
             'accesses' => ['name' => 'Profiles', 'icon' => 'profile-user'],
             'tools' => ['name' => 'Tools', 'icon' => 'gear'],
             'referrals' => ['name' => 'Referrals', 'icon' => 'briefcase'],
+            'projects' => ['name' => 'Projects', 'icon' => 'some-files'],
         ];
 
         if($short){
