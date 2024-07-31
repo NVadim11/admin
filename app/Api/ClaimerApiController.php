@@ -89,6 +89,7 @@ class ClaimerApiController extends Controller
                     
                     $account->wallet_balance = $account->wallet_balance + $claimer_bonus;
                     $account->update_balance_at = Carbon::now();
+                    $account->updated_at = Carbon::now();
                     $account->claimer_timer = $currentTime + $claimer_period;
 
                     // Savig account 
