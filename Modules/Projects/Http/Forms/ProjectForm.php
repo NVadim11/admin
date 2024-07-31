@@ -16,6 +16,12 @@ class ProjectForm extends Form
             ->add('image', 'image', [
                 'label' => 'Image'
             ])
+            ->add('vote_total', 'text', [
+                'label' => 'Votes Total'
+            ])
+            ->add('vote_24', 'text', [
+                'label' => 'Votes 24'
+            ])
             ->add('vis', 'select', [
                 'label' => 'Display',
                 'choices' => [

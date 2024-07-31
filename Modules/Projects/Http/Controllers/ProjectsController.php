@@ -28,6 +28,14 @@ class ProjectsController extends CrudController
                 'name' => 'Name',
                 'type' => 'text'
             ],
+            'vote_total' => [
+                'name' => 'Votes Total',
+                'type' => 'text'
+            ],
+            'vote_24' => [
+                'name' => 'Votes 24',
+                'type' => 'text'
+            ],
             'vis' => [
                 'name' => 'Display',
                 'type' => 'option',
