@@ -29,6 +29,7 @@ class ClaimerApiController extends Controller
             return response()->json(['message' => 'token invalid'], 404);
         }
 
+        /*
         $validator = Validator::make($request->all(), [
             'token' => 'required',
             'wallet_address' => 'min:10|max:100',
@@ -38,6 +39,7 @@ class ClaimerApiController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 404);
         }
+            */
 
         $wallet_address = $request->post('wallet_address');
         $id_telegram = $request->post('id_telegram');
@@ -228,6 +230,7 @@ class ClaimerApiController extends Controller
             return response()->json(['message' => 'token invalid'], 401);
         }
 
+        /*
         $validator = Validator::make($request->all(), [
             'token' => 'required',
             'wallet_address' => 'min:10|max:100',
@@ -237,6 +240,7 @@ class ClaimerApiController extends Controller
         if ($validator->fails()) {
             return response()->json($validator->errors(), 401);
         }
+            */
         $redis = new RedisService();
         $wallet_address = $request->post('wallet_address');
         $id_telegram = $request->post('id_telegram');
