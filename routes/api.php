@@ -44,4 +44,4 @@ Route::get('test', [\App\Api\ClaimerApiController::class, 'test']);
 
 Route::get('projects', [\App\Api\ProjectsApiController::class, 'index']);
 
-Route::get('votes', [\App\Api\VotesApiController::class, 'index']);
+Route::post('votes', [\App\Api\VotesApiController::class, 'index']);
