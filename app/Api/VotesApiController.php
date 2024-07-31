@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
 use Modules\ProjectVote\Models\ProjectVote;
+use Modules\Projects\Entities\Project;
 
 class VotesApiController extends Controller
 {
