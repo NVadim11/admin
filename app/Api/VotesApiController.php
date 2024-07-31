@@ -45,7 +45,7 @@ class VotesApiController extends Controller
         {
             $project = Project::find($projectId);
             if ($project) { 
-                if ($account->wallet_account > 0)
+                if ($account->wallet_balance > 0)
                 {
                     
                     $project_vote = ProjectVote::create([
@@ -64,7 +64,7 @@ class VotesApiController extends Controller
                         $project->vote_total = $project->vote_total + 1;
                         $project->save();
 
-                        $account->wallet_account -= 1;
+                        $account->wallet_balance -= 1;
                         $account->update_balance_at = Carbon::now();
 
                         // Savig account 
@@ -78,7 +78,7 @@ class VotesApiController extends Controller
                             DB::table('accounts')
                                 ->where('id_telegram', $account->id_telegram)
                                 ->update([
-                                    "wallet_account"  => $account->wallet_account,
+                                    "wallet_balance"  => $account->wallet_balance,
                                     'update_balance_at' => $account->update_balance_at,
                                 ]);
                             $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
