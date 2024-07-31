@@ -43,5 +43,6 @@ Route::post('check-task', [\App\Api\ClaimerApiController::class, 'check_task']);
 Route::get('test', [\App\Api\ClaimerApiController::class, 'test']);
 
 Route::get('projects', [\App\Api\ProjectsApiController::class, 'index']);
+Route::get('ratings', [\App\Api\ProjectsApiController::class, 'ratings']);
 
 Route::post('votes', [\App\Api\VotesApiController::class, 'index']);

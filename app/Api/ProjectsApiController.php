@@ -24,4 +24,33 @@ class ProjectsApiController extends Controller
 
         return response()->json(404);
     }
+
+    public function ratings()
+    {
+        $projects = Project::where('vis', 1)
+            ->orderByDesc('vote_total')
+            ->where('vote_total', '>', 0)
+            ->limit(100)
+            ->get();
+
+        if($projects->isEmpty()) {
+            return response()->json(['message' => 'No projects found'], 404);
+        }
+
+        $res = $projects->map(function ($project, $index) {
+            return [
+                'position' => $index + 1,
+                'name' => $project->name,
+                'image' => $project->image,
+                'vote_total' => $project->wallet_address,
+                'vote_24' => $project->wallet_balance,
+                'tokenName' => $project->referral_balance,
+                'contract' => $project->contract,
+                'projectLink' => $project->projectLink,
+                'taskLink' => $project->taskLink,
+            ];
+        });
+
+        return response()->json($res, 201);
+    }
 }
