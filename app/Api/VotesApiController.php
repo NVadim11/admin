@@ -40,6 +40,7 @@ class VotesApiController extends Controller
         $account = $this->getAccount($id_telegram, $wallet_address);
         $client_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         $client_ip = $this->getClientIpInfo();
+        $redis = new RedisService();
         
         if ($account)
         {
