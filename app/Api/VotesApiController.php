@@ -52,8 +52,8 @@ class VotesApiController extends Controller
                         'project_id' => $project->id,
                         'client_id' => $account->id_telegram,
                         'client_ip' => $client_ip,
-                        'client_agent' => $client_agent,
-                        'user_id' => $account->id_telegram
+                        'client_agent' => $client_agent
+                        //'user_id' => $account->id_telegram
                         ]);
                     
                     if ($project_vote) {
