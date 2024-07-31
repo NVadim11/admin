@@ -1,5 +1,5 @@
 <?php
-namespace App\Models;
+namespace Modules\ProjectVote\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
