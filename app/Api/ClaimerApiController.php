@@ -88,7 +88,7 @@ class ClaimerApiController extends Controller
                 if ($currentTime > $claimerTime) {
                     
                     $account->wallet_balance = $account->wallet_balance + $claimer_bonus;
-                    $account->updated_at = Carbon::now();
+                    $account->update_balance_at = Carbon::now();
                     $account->claimer_timer = $currentTime + $claimer_period;
 
                     // Savig account 
@@ -135,7 +135,7 @@ class ClaimerApiController extends Controller
                         'claimer_timer'=>$account->claimer_timer], 200);
 
                 } Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
-                return response()->json(['message' => 'claimer not ready'], 404);
+                return response()->json(['message' => 'Claimer is not ready. Please try again later.'], 404);
             }
             else {
                 Log::channel('update_balance_log')->debug("account not found");
