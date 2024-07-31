@@ -41,7 +41,7 @@ class VotesApiController extends Controller
         $client_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         $client_ip = $this->getClientIpInfo();
         $redis = new RedisService();
-        
+
         if ($account)
         {
             $project = Project::find($projectId);
@@ -85,7 +85,7 @@ class VotesApiController extends Controller
                             $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
                         }
 
-                        return response()->json(['message' => 'ok', 'success' => true], 200);
+                        return response()->json(['message' => 'ok', 'success' => true, 'votes_total'=>$project->vote_total], 200);
 
                     } else return response()->json(['message' => 'Your vote was not counted. Please try again.'], 400);
                 }
