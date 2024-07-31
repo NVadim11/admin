@@ -2,6 +2,7 @@
 
 namespace Modules\Projects\Entities;
 
+use App\Services\RedisService;
 use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
@@ -15,6 +16,10 @@ class Project extends Model
         'image',
         'vote_total',
         'vote_24',
+        'tokenName',
+        'contract',
+        'projectLink',
+        'taskLink',
         'vis'
     ];
 
@@ -38,5 +43,29 @@ class Project extends Model
     public function activeTasks()
     {
         return $this->hasMany(ProjectTask::class)->where('vis', 1)->orderBy('pos', 'ASC');
+    }
+
+    public static function boot()
+    {
+        parent::boot();
+
+        self::created(function($model){
+            if ($model->isDirty()) {
+                $redis = new RedisService();
+                $redis->deleteIfExists('projects_list');
+            }
+        });
+
+        self::updating(function($model){
+            if ($model->isDirty()) {
+                $redis = new RedisService();
+                $redis->deleteIfExists('projects_list');
+            }
+        });
+
+        self::deleted(function($model){
+            $redis = new RedisService();
+            $redis->deleteIfExists('projects_list');
+        });
     }
 }

@@ -2,7 +2,6 @@
 
 namespace Modules\Projects\Http\Controllers;
 
-use App\Services\RedisService;
 use Illuminate\Http\Request;
 use Modules\Core\Http\Controllers\CrudController;
 use Modules\Projects\Entities\Project;
@@ -34,6 +33,22 @@ class ProjectsController extends CrudController
             ],
             'vote_24' => [
                 'name' => 'Votes 24',
+                'type' => 'text'
+            ],
+            'tokenName' => [
+                'name' => 'Token Name',
+                'type' => 'text'
+            ],
+            'contract' => [
+                'name' => 'Contract',
+                'type' => 'text'
+            ],
+            'projectLink' => [
+                'name' => 'Project Link',
+                'type' => 'text'
+            ],
+            'taskLink' => [
+                'name' => 'Task Link',
                 'type' => 'text'
             ],
             'vis' => [
@@ -98,8 +113,6 @@ class ProjectsController extends CrudController
     {
 		$page = $request->post('page') ? $request->post('page') : 1;
         $this->crudService->update($id);
-        $redis = new RedisService();
-        $redis->deleteIfExists('projects_list');
 
         return $this->redirectToAction('index', 'page=' . $page);
     }
@@ -108,8 +121,6 @@ class ProjectsController extends CrudController
     {
         $this->crudService->getItemById($id);
         $this->crudService->destroy($id);
-        $redis = new RedisService();
-        $redis->deleteIfExists('projects_list');
 
         return $this->redirectToAction('index', $this->action_url_params);
     }
@@ -121,7 +132,5 @@ class ProjectsController extends CrudController
 		$value = $request->get('value');
 		$model->$name = $value;
 		$model->save();
-        $redis = new RedisService();
-        $redis->deleteIfExists('projects_list');
 	}
 }
