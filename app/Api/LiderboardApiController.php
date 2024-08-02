@@ -144,11 +144,12 @@ class LiderboardApiController extends Controller
                               FROM project_votes
                               GROUP BY client_id
                           ) AS subquery
-                          WHERE subquery.total_votes > VotesSummary.total_votes) AS rank")
+                          WHERE subquery.total_votes > VotesSummary.total_votes) AS `rank`")
                     )
                     ->where('client_id', $userId)
                     ->orderBy('rank')
                     ->first();
+
 
                 $accounts = ProjectVote::select('project_votes.client_id')
                     ->selectRaw('accounts.username')
