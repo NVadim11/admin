@@ -46,43 +46,52 @@ return [
         ],
 
        'mysql' => [
-        'driver' => 'mysql',
-        'host' => env('DB_HOST', '127.0.0.1'),
-        'port' => env('DB_PORT', '3306'),
-        'database' => env('DB_DATABASE', 'forge'),
-        'username' => env('DB_USERNAME', 'forge'),
-        'password' => env('DB_PASSWORD', ''),
-        'charset' => 'utf8mb4',
-        'collation' => 'utf8mb4_unicode_ci',
-        'prefix' => '',
-        'strict' => true,
-        'engine' => null,
-        'options' => [
-            PDO::ATTR_PERSISTENT => true, // Включить использование постоянных соединений
-            PDO::ATTR_EMULATE_PREPARES => true, // Включить эмуляцию подготовленных выражений
-            PDO::ATTR_TIMEOUT => 10, // Установить таймаут подключения
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Режим обработки ошибок
-        ],
-        'max_connections' => 200, // Максимальное количество соединений
-        'write' => [
-           'host' => [
-               env('DB_WRITE_HOST', '127.0.0.1'),
-           ],
-           'username' => env('DB_WRITE_USERNAME', 'forge'),
-           'password' => env('DB_WRITE_PASSWORD', ''),
-           'database' => env('DB_WRITE_DATABASE', 'forge'),
-        ],
-        'read' => [
-           'host' => [
-               env('DB_READ_HOST', '127.0.0.1'),
-           ],
-           'username' => env('DB_READ_USERNAME', 'forge'),
-           'password' => env('DB_READ_PASSWORD', ''),
-           'database' => env('DB_READ_DATABASE', 'forge'),
-        ],
-
-        'sticky' => true,
+    'driver' => 'mysql',
+    'host' => env('DB_HOST', '127.0.0.1'),
+    'port' => env('DB_PORT', '3306'),
+    'database' => env('DB_DATABASE', 'forge'),
+    'username' => env('DB_USERNAME', 'forge'),
+    'password' => env('DB_PASSWORD', ''),
+    'charset' => 'utf8mb4',
+    'collation' => 'utf8mb4_general_ci',
+    'prefix' => '',
+    'strict' => true,
+    'engine' => null,
+    'options' => [
+        PDO::ATTR_PERSISTENT => true, // Включить использование постоянных соединений
+        PDO::ATTR_EMULATE_PREPARES => true, // Включить эмуляцию подготовленных выражений
+        PDO::ATTR_TIMEOUT => 10, // Установить таймаут подключения
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, // Режим обработки ошибок
     ],
+    'max_connections' => 200, // Максимальное количество соединений
+
+    // Настройки для записи
+    'write' => [
+        'host' => [
+            env('DB_WRITE_HOST', '127.0.0.1'),
+        ],
+        'username' => env('DB_WRITE_USERNAME', 'forge'),
+        'password' => env('DB_WRITE_PASSWORD', ''),
+        'database' => env('DB_WRITE_DATABASE', 'forge'),
+        'charset' => 'utf8mb4', // Кодировка для соединений на запись
+        'collation' => 'utf8mb4_general_ci', // Сортировка для соединений на запись
+    ],
+
+    // Настройки для чтения
+    'read' => [
+        'host' => [
+            env('DB_READ_HOST', '127.0.0.1'),
+        ],
+        'username' => env('DB_READ_USERNAME', 'forge'),
+        'password' => env('DB_READ_PASSWORD', ''),
+        'database' => env('DB_READ_DATABASE', 'forge'),
+        'charset' => 'utf8mb4', // Кодировка для соединений на чтение
+        'collation' => 'utf8mb4_general_ci', // Сортировка для соединений на чтение
+    ],
+
+    'sticky' => true, // Использовать одно и то же соединение для запросов записи и чтения
+],
+
 
         'mysql_testing' => [
             'driver'    => 'mysql',
