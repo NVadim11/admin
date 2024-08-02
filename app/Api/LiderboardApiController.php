@@ -133,22 +133,15 @@ class LiderboardApiController extends Controller
             }
 
             if ($current) {
-                $position = DB::table(DB::raw("(SELECT client_id, COUNT(id) AS total_votes FROM project_votes GROUP BY client_id) AS VotesSummary"))
-                    ->select(
-                        'client_id',
-                        DB::raw("(SELECT username FROM accounts WHERE id_telegram = VotesSummary.client_id) AS username"),
-                        'total_votes',
-                        DB::raw("(SELECT COUNT(*) + 1 
-                          FROM (
-                              SELECT COUNT(id) AS total_votes
-                              FROM project_votes
-                              GROUP BY client_id
-                          ) AS subquery
-                          WHERE subquery.total_votes > VotesSummary.total_votes) AS `rank`")
-                    )
-                    ->where('client_id', $userId)
-                    ->orderBy('rank')
-                    ->first();
+                $position = DB::select("SELECT client_id, 
+	                (SELECT username FROM accounts WHERE id_telegram = VotesSummary.client_id) AS username, total_votes,
+	                    (SELECT COUNT(*) + 1
+	                        FROM (SELECT COUNT(id) AS total_votes FROM project_votes GROUP BY client_id) AS subquery
+	                        WHERE subquery.total_votes > VotesSummary.total_votes) AS `rank`
+                            FROM (SELECT client_id, COUNT(id) AS total_votes FROM project_votes GROUP BY client_id) AS VotesSummary
+                        WHERE 
+                            client_id = " .$userId . "
+                        ORDER BY `rank` ASC LIMIT 1");
 
 
                 $accounts = ProjectVote::select('project_votes.client_id')
@@ -163,7 +156,7 @@ class LiderboardApiController extends Controller
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
                         $cur_pos = $pos + 1;
-                        if ($cur_pos == $position->rank && $position->rank <= 100) {
+                        if ($cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
                             $res[] = array(
                                 'id' => $account->id,
                                 'username' => $account->username,
@@ -184,7 +177,7 @@ class LiderboardApiController extends Controller
                         }
                     }
 
-                    if ($position && $position->rank > 100) {
+                    if ($position && $position[0]->rank > 100) {
                         $res[] = array(
                             'id' => $current->id,
                             'username' => $current->username,
