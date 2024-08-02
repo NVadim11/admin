@@ -42,7 +42,7 @@ class LiderboardApiController extends Controller
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
                         $cur_pos = $pos + 1;
-                        if ($cur_pos == $position[0]->rank && $position[0]->rank <= 10) {
+                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 10) {
                             $res[] = array(
                                 'id' => $account->id,
                                 'username' => $account->username,
@@ -156,7 +156,7 @@ class LiderboardApiController extends Controller
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
                         $cur_pos = $pos + 1;
-                        if ($cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
+                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
                             $res[] = array(
                                 'id' => $account->id,
                                 'username' => $account->username,
