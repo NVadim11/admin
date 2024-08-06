@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\DailyQuests\Entities\AccountDailyQuest;
 use Modules\PartnersQuests\Entities\AccountPartnersQuest;
+use Modules\Projects\Entities\AccountProjectTask;
 use Modules\ReferralTransactions\Entities\AccountReferralTransaction;
 
 class Account extends Model
@@ -113,6 +114,11 @@ class Account extends Model
     public function partners_quests()
     {
         return $this->hasMany(AccountPartnersQuest::class)->with('partners_quest');
+    }
+
+    public function projects_tasks()
+    {
+        return $this->hasMany(AccountProjectTask::class);
     }
 
     public function referral_template()

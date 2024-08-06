@@ -59,7 +59,7 @@ class DailyQuestsApiController extends Controller
             $account->save();
         });
 
-        $account = Account::with(['daily_quests', 'partners_quests'])->find($userId);
+        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($userId);
 
         if($account->id_telegram) {
             $redis = new RedisService();

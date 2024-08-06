@@ -53,7 +53,7 @@ class PartnersQuestsApiController extends Controller
             $account->save();
         });
 
-        $updatedAccount = Account::with(['daily_quests', 'partners_quests'])->find($request->post('user_id'));
+        $updatedAccount = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('user_id'));
 
         if($updatedAccount->id_telegram) {
             $redis = new RedisService();
