@@ -25,11 +25,12 @@ class ProjectsApiController extends Controller
         return response()->json(404);
     }
 
-    public function ratings()
+    public function top_projects()
     {
-        $projects = Project::where('vis', 1)
-            ->orderByDesc('vote_total')
+        $projects = Project::with(['activeTasks:id,project_id,name,link,reward'])
+            ->where('vis', 1)
             ->where('vote_total', '>', 0)
+            ->orderByDesc('vote_total')
             ->limit(100)
             ->get();
 
@@ -37,20 +38,104 @@ class ProjectsApiController extends Controller
             return response()->json(['message' => 'No projects found'], 404);
         }
 
-        $res = $projects->map(function ($project, $index) {
+        $data = $projects->map(function($project, $index) {
             return [
-                'position' => $index + 1,
+                'id' => $project->id,
                 'name' => $project->name,
                 'image' => $project->image,
+                'position' => $index + 1,
                 'vote_total' => $project->vote_total,
+                'tokenName' => $project->tokenName,
+                'contract' => $project->contract,
+                'projectLink' => $project->projectLink,
+                'active_tasks' => $project->activeTasks->map(function($task) {
+                    return [
+                        'id' => $task->id,
+                        'project_id' => $task->project_id,
+                        'name' => $task->name,
+                        'link' => $task->link,
+                        'reward' => $task->reward
+                    ];
+                })
+            ];
+        });
+
+        return response()->json($data, 201);
+    }
+
+    public function top_daily_projects()
+    {
+        $projects = Project::with(['activeTasks:id,project_id,name,link,reward'])
+            ->where('vis', 1)
+            ->where('vote_24', '>', 0)
+            ->orderByDesc('vote_24')
+            ->limit(100)
+            ->get();
+
+        if($projects->isEmpty()) {
+            return response()->json(['message' => 'No projects found'], 404);
+        }
+
+        $data = $projects->map(function($project, $index) {
+            return [
+                'id' => $project->id,
+                'name' => $project->name,
+                'image' => $project->image,
+                'position' => $index + 1,
                 'vote_24' => $project->vote_24,
                 'tokenName' => $project->tokenName,
                 'contract' => $project->contract,
                 'projectLink' => $project->projectLink,
-                'taskLink' => $project->taskLink,
+                'active_tasks' => $project->activeTasks->map(function($task) {
+                    return [
+                        'id' => $task->id,
+                        'project_id' => $task->project_id,
+                        'name' => $task->name,
+                        'link' => $task->link,
+                        'reward' => $task->reward
+                    ];
+                })
             ];
         });
 
-        return response()->json($res, 201);
+        return response()->json($data, 201);
+    }
+
+    public function top_new_projects()
+    {
+        $projects = Project::with(['activeTasks:id,project_id,name,link,reward'])
+            ->where('vis', 1)
+            ->where('vote_total', '>', 0)
+            ->orderByDesc('created_at')
+            ->limit(100)
+            ->get();
+
+        if($projects->isEmpty()) {
+            return response()->json(['message' => 'No projects found'], 404);
+        }
+
+        $data = $projects->map(function($project, $index) {
+            return [
+                'id' => $project->id,
+                'name' => $project->name,
+                'image' => $project->image,
+                'position' => $index + 1,
+                'vote_total' => $project->vote_total,
+                'tokenName' => $project->tokenName,
+                'contract' => $project->contract,
+                'projectLink' => $project->projectLink,
+                'active_tasks' => $project->activeTasks->map(function($task) {
+                    return [
+                        'id' => $task->id,
+                        'project_id' => $task->project_id,
+                        'name' => $task->name,
+                        'link' => $task->link,
+                        'reward' => $task->reward
+                    ];
+                })
+            ];
+        });
+
+        return response()->json($data, 201);
     }
 }
