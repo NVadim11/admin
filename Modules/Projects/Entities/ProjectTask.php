@@ -10,7 +10,7 @@ class ProjectTask extends Model
     use HasFactory;
 
 	protected $table = "projects_tasks";
-    protected $fillable = ['name', 'link', 'reward', 'vis'];
+    protected $fillable = ['name', 'task_descr', 'link', 'reward', 'vis'];
 	protected $guarded = ['id'];
     public $timestamps = true;
 

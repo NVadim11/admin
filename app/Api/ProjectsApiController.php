@@ -53,6 +53,7 @@ class ProjectsApiController extends Controller
                         'id' => $task->id,
                         'project_id' => $task->project_id,
                         'name' => $task->name,
+                        'task_descr' => $task->task_descr,
                         'link' => $task->link,
                         'reward' => $task->reward
                     ];
@@ -91,6 +92,7 @@ class ProjectsApiController extends Controller
                         'id' => $task->id,
                         'project_id' => $task->project_id,
                         'name' => $task->name,
+                        'task_descr' => $task->task_descr,
                         'link' => $task->link,
                         'reward' => $task->reward
                     ];
@@ -129,6 +131,7 @@ class ProjectsApiController extends Controller
                         'id' => $task->id,
                         'project_id' => $task->project_id,
                         'name' => $task->name,
+                        'task_descr' => $task->task_descr,
                         'link' => $task->link,
                         'reward' => $task->reward
                     ];
