@@ -31,6 +31,10 @@ class ProjectsTasksController extends ProjectsCrudController
                 'name' => 'Reward',
                 'type' => 'text'
             ],
+            'task_descr' => [
+                'name' => 'Task description',
+                'type' => 'textarea'
+            ],
             'vis' => [
                 'name' => 'Display',
                 'type' => 'option',

@@ -20,6 +20,9 @@ class ProjectsTaskForm extends Form
                 'rules' => 'required|regex:/^[0-9]+$/u',
                 'label' => 'Reward'
             ])
+            ->add('task_descr', 'textarea', [
+                'label' => 'Task description'
+            ])
             ->add('vis', 'select', [
                 'label' => 'Display',
                 'choices' => [
