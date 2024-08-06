@@ -13,6 +13,8 @@
 
 Route::get('liders', [\App\Api\LiderboardApiController::class, 'liders']);
 Route::get('liderbord/{user}', [\App\Api\LiderboardApiController::class, 'index']);
+Route::get('topvoters/{user}', [\App\Api\LiderboardApiController::class, 'topvoters']);
+Route::get('topreferrals/{user}', [\App\Api\LiderboardApiController::class, 'topreferrals']);
 
 Route::get('referrals/{user}', [\App\Api\ReferralApiController::class, 'index']);
 
