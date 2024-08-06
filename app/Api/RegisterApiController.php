@@ -134,7 +134,7 @@ class RegisterApiController extends Controller
             $account->save();
 
             $tasks->makeTasks($account);
-            $account = Account::with(['daily_quests', 'partners_quests'])->find($account->id);
+            $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($account->id);
             $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
 
             DB::commit();

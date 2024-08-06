@@ -45,8 +45,8 @@ Route::post('check-task', [\App\Api\ClaimerApiController::class, 'check_task']);
 Route::get('test', [\App\Api\ClaimerApiController::class, 'test']);
 
 Route::get('projects', [\App\Api\ProjectsApiController::class, 'index']);
-Route::get('top-projects ', [\App\Api\ProjectsApiController::class, 'top_projects']);
-Route::get('top-daily-projects ', [\App\Api\ProjectsApiController::class, 'top_daily_projects']);
-Route::get('top-new-projects ', [\App\Api\ProjectsApiController::class, 'top_new_projects']);
+Route::get('top-projects', [\App\Api\ProjectsApiController::class, 'top_projects']);
+Route::get('top-daily-projects', [\App\Api\ProjectsApiController::class, 'top_daily_projects']);
+Route::get('top-new-projects', [\App\Api\ProjectsApiController::class, 'top_new_projects']);
 
 Route::post('votes', [\App\Api\VotesApiController::class, 'index']);

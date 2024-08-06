@@ -81,7 +81,7 @@ class ApiController extends Controller
             $startTime = microtime(true);
 
             // Refresh account with updated relations
-            $account =  Account::with(['daily_quests', 'partners_quests'])->where('wallet_address', $wallet_address)->first();
+            $account =  Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->where('wallet_address', $wallet_address)->first();
 
             $endTime = microtime(true);
             $executionTime = ($endTime - $startTime) * 1000; // Время выполнения в миллисекундах
@@ -154,7 +154,7 @@ class ApiController extends Controller
                 //log
                 $startTime = microtime(true);
 
-                $account = Account::with(['daily_quests', 'partners_quests'])
+                $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
                     ->where('id_telegram', $id)->first();
 
                 $endTime = microtime(true);
@@ -187,7 +187,7 @@ class ApiController extends Controller
         }
 
         $account = Account::where('wallet_address', $wallet_address)
-            ->with(['daily_quests', 'partners_quests'])
+            ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
             ->first();
 
         if (!$account) {
@@ -267,11 +267,11 @@ class ApiController extends Controller
         $account = null;
         if ($walletAddress) {
             $account = Account::where('wallet_address', $walletAddress)
-                ->with(['daily_quests', 'partners_quests'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
                 ->first();
         } elseif ($idTelegram) {
             $account = Account::where('id_telegram', $idTelegram)
-                ->with(['daily_quests', 'partners_quests'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
                 ->first();
         }
 
@@ -398,7 +398,7 @@ class ApiController extends Controller
             return response()->json(['message' => 'token invalid'], 404);
         }
 
-        $account = Account::with(['daily_quests', 'partners_quests'])->find($request->post('user_id'));
+        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('user_id'));
 
         if (!$account) {
             return response()->json(['message' => 'user not found'], 404);
@@ -455,11 +455,11 @@ class ApiController extends Controller
         if($request->post('wallet_address') && $request->post('id_telegram')) {
 
             $account = Account::where('id_telegram', $request->post('id_telegram'))
-                ->with(['daily_quests', 'partners_quests'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
                 ->first();
 
             $exist = Account::where('wallet_address', $request->post('wallet_address'))
-                ->with(['daily_quests', 'partners_quests'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
                 ->first();
 
             if(!$account) {
@@ -482,7 +482,7 @@ class ApiController extends Controller
                 $account->save();
 
                 $tasks->makeTasks($account);
-                $account = Account::with(['daily_quests', 'partners_quests'])->find($account->id);
+                $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($account->id);
 
                 $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
 
@@ -549,7 +549,7 @@ class ApiController extends Controller
                     $exist->save();
 
                     $tasks->makeTasks($exist);
-                    $exist = Account::with(['daily_quests', 'partners_quests'])->find($exist->id);
+                    $exist = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($exist->id);
 
                     $redis->updateIfNotSet($exist->id_telegram, $exist->toJson(), $exist->timezone);
                 } else {

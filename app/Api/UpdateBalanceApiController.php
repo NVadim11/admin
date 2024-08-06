@@ -199,7 +199,7 @@ class UpdateBalanceApiController extends Controller
                                     //log
                                     $startTime = microtime(true);
 
-                                    $referral = Account::with(['daily_quests', 'partners_quests'])
+                                    $referral = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
                                         ->find($account->parent_id);
 
                                     $endTime = microtime(true);
