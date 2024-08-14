@@ -8,7 +8,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
-use Modules\PartnersQuests\Entities\AccountPartnersQuest;
 use Modules\Projects\Entities\AccountProjectTask;
 use Modules\Projects\Entities\Project;
 use Modules\Projects\Entities\ProjectTask;
@@ -149,7 +148,7 @@ class ProjectsApiController extends Controller
         return response()->json($data, 201);
     }
 
-    public function pass_projects_quest(Request $request)
+    public function pass_project_task(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required',
