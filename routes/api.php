@@ -48,5 +48,6 @@ Route::get('projects', [\App\Api\ProjectsApiController::class, 'index']);
 Route::get('top-projects', [\App\Api\ProjectsApiController::class, 'top_projects']);
 Route::get('top-daily-projects', [\App\Api\ProjectsApiController::class, 'top_daily_projects']);
 Route::get('top-new-projects', [\App\Api\ProjectsApiController::class, 'top_new_projects']);
+Route::post('pass-project-task', [\App\Api\ProjectsApiController::class, 'pass_project_task']);
 
 Route::post('votes', [\App\Api\VotesApiController::class, 'index']);
