@@ -1,0 +1,16 @@
+{
+    "name": "ReferralTransactions",
+    "alias": "referral_transactions",
+    "description": "",
+    "keywords": [],
+    "active": 1,
+    "order": 10,
+    "providers": [
+        "Modules\\ReferralTransactions\\Providers\\ReferralTransactionsServiceProvider"
+    ],
+    "aliases": {},
+    "files": [
+        "start.php"
+    ],
+    "requires": []
+}

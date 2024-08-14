@@ -1,0 +1,38 @@
+.iritable{width:100%}.iritable th{font-weight:bold;font-size:18px;color:#024055;padding:10px 15px}.iritable td{font-size:18px;text-align:center;color:#024055;border-top:1px solid #dfeded;padding:10px 15px}.iritable p{font-size:18px !important;text-align:left !important;color:#024055 !important}.iritable tr:hover td{background:#F4FAFA}
+
+
+@font-face {
+  font-family: "Muller";
+  font-style: normal;
+  font-weight: bold;
+  src: url("../fonts/MullerBold/MullerBold.woff2") format("woff2"),
+  url("../fonts/MullerBold/MullerBold.woff") format("woff");
+}
+@font-face {
+  font-family: "Muller";
+  font-style: normal;
+  font-weight: 800;
+  src: url("../fonts/MullerExtrabold/MullerExtraBold.woff2") format("woff2"),
+  url("../fonts/MullerExtrabold/MullerExtraBold.woff") format("woff");
+}
+
+
+
+@media(max-width: 768px) {
+	.sanatorium-price {
+		position: relative;
+		right: auto;
+		bottom: auto;
+	}
+}
+
+.block{
+  margin-bottom: 100px;
+  margin-top: 100px;
+}
+@media(max-width: 768px) {
+.block{
+  margin-bottom: 60px;
+  margin-top: 60px;
+}
+}

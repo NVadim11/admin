@@ -1,0 +1,2 @@
+{{ htmlentities($value) }}
+<input class="inp" id="{{ $model->id }}" style="width:40px; display:none; font-size:11px; text-align:center;" type="text" value="{{ $model->index_pos }}" rel="{{ $table }}" cat="" cat_val="" />

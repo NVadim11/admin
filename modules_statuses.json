@@ -1,0 +1,8 @@
+{
+    "Core": true,
+    "Accounts": true,
+    "DailyQuests": true,
+    "PartnersQuests": true,
+    "ReferralTransactions": true,
+    "Projects": true
+}

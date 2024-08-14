@@ -1,0 +1,1 @@
+<span data-type="date" data-name="{{ $name }}" data-pk="{{ $model->id }}" data-url="{{ action($controller.'@ajaxUpdate', ['id' => $model->id]) }}" class="editable-date editable">{{ $value ? date('d.m.Y H:i:s', $value) : '' }}</span>
