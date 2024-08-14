@@ -83,7 +83,7 @@ class ClaimerApiController extends Controller
             if ($account) {
                 $currentTime = time();
                 $claimerTime = (isset($account->claimer_timer)) ? $account->claimer_timer : 0;
-                $claimer_bonus = ($claimerTime == 0) ? 3 : $claimer_bonus;
+                //$claimer_bonus = ($claimerTime == 0) ? 3 : $claimer_bonus;
 
                 if ($currentTime > $claimerTime) {
                     
@@ -227,6 +227,8 @@ class ClaimerApiController extends Controller
 
     public function check_task(Request $request)
     {
+        $task_bonus = 1;
+
         if (!checkToken($request->post('token'))) {
             return response()->json(['message' => 'token invalid'], 401);
         }
@@ -264,6 +266,10 @@ class ClaimerApiController extends Controller
             if ($check)
             {
                 $account->$task_code = 1;
+                $account->wallet_balance = $account->wallet_balance + $task_bonus;
+                $account->update_balance_at = Carbon::now();
+                $account->updated_at = Carbon::now();
+
                 // Savig account 
                 // -- if account from DB
                 if ($account instanceof Account) {
@@ -276,11 +282,18 @@ class ClaimerApiController extends Controller
                         ->where('id_telegram', $account->id_telegram)
                         ->update([
                             $task_code  => 1,
+                            'wallet_balance' => $account->wallet_balance,
+                            'update_balance_at' => $account->update_balance_at,
+                            'updated_at' => $account->updated_at,
                         ]);
                     $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
                 }
 
-                return response()->json(['message' => 'Task completed!', 'success'=>true], 200);
+                return response()->json([
+                    'message' => 'Task completed!', 
+                    'success'=> true,
+                    'user_balance' => $account->wallet_balance
+                ], 200);
             }
             else return response()->json(['message' => 'Task was not completed'], 400);
 

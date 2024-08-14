@@ -17,6 +17,7 @@ class VotesApiController extends Controller
 {
     public function index(Request $request)
     {
+        $vote_period = 1; //in hours
         /*
         if(!checkToken($request->post('token'))) {
             return response()->json(['message' => 'token invalid'], 404);
@@ -46,6 +47,15 @@ class VotesApiController extends Controller
         {
             $project = Project::find($projectId);
             if ($project) { 
+
+                $last_user_vote = ProjectVote::where([
+                    'project_id' => $project->id,
+                    'client_id' => $account->id_telegram
+                ])->where('created_at', '>=', Carbon::now()->subHours($vote_period))->count();
+
+                if ($last_user_vote)
+                    return response()->json(['message' => "Your vote was not counted. You can vote once every $vote_period hour for a project. Please try again later."], 400);
+
                 if ($account->wallet_balance > 0)
                 {
                     
@@ -85,7 +95,13 @@ class VotesApiController extends Controller
                             $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
                         }
 
-                        return response()->json(['message' => 'ok', 'success' => true, 'votes_total'=>$project->vote_total], 200);
+                        return response()->json([
+                            'message' => 'ok', 
+                            'success' => true, 
+                            'votes_total'=> $project->vote_total,
+                            'user_balance' => $account->wallet_balance,
+                            'vote_timer' => $vote_period*60*60 //in seconds
+                        ], 200);
 
                     } else return response()->json(['message' => 'Your vote was not counted. Please try again.'], 400);
                 }
