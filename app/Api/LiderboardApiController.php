@@ -36,7 +36,7 @@ class LiderboardApiController extends Controller
                 $accounts = Account::select('id', 'username', 'wallet_address', 'id_telegram', 'wallet_balance')
                     ->orderByRaw("wallet_balance DESC")
                     ->whereRaw('wallet_balance > 0')
-                    ->limit(10)
+                    ->limit(100)
                     ->get();
 
                 if ($accounts) {
