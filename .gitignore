@@ -9,12 +9,7 @@ vendor
 /storage/*.key
 /storage/*.sqlite
 /storage/*.sqlite-journal
-/storage/debugbar
-/storage/framework/cache/data
-/storage/framework/sessions
 /storage/framework/testing
-/storage/framework/views
-/storage/logs
 .env
 .env.backup
 Homestead.json
