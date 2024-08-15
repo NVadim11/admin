@@ -56,4 +56,16 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 <p>php -d memory_limit=-1 composer.phar install</p>
 <p>make blank database and set credentials to env</p>
+<p>php artisan migrate --path="/database/Migrations"</p>
 <p>php artisan migrate</p>
+<p>mkdir -p storage/framework/views</p>
+
+## Clear cache
+
+<p>
+php artisan cache:clear && \ <br />
+php artisan view:clear && \ <br />
+php artisan route:clear && \ <br />
+php artisan clear-compiled && \ <br />
+php artisan config:cache
+</p>
