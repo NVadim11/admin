@@ -59,6 +59,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 <p>php artisan migrate --path="/database/Migrations"</p>
 <p>php artisan migrate</p>
 <p>mkdir -p storage/framework/views</p>
+<p>mkdir -p storage/framework/cache/data</p>
 
 ## Clear cache
 
