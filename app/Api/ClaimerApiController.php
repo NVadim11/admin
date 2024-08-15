@@ -8,7 +8,6 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
 
 class ClaimerApiController extends Controller
@@ -87,7 +86,7 @@ class ClaimerApiController extends Controller
 
                 if ($currentTime > $claimerTime) {
                     
-                    $account->wallet_balance = $account->wallet_balance + $claimer_bonus;
+                    $account->wallet_balance = $account->wallet_balance + ($account->claimer_value ?? $claimer_bonus);
                     $account->update_balance_at = Carbon::now();
                     $account->updated_at = Carbon::now();
                     $account->claimer_timer = $currentTime + $claimer_period;

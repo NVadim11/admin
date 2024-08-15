@@ -45,7 +45,9 @@ class Account extends Model
                             'active_referrals_count',
                             'active_referral',
                             'sessions',
-                            'timezone'
+                            'timezone',
+                            'claimer_timer',
+                            'claimer_value'
                         ];
 
     protected $appends = ['tap_value', 'tap_boost_value', 'max_energy', 'call_down_minutes'];

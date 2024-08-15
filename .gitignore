@@ -4,7 +4,6 @@ composer.lock
 .DS_Store
 vendor
 /vendor
-/node_modules
 /public/storage
 /storage/*.key
 /storage/*.sqlite
