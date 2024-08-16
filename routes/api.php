@@ -23,6 +23,7 @@ Route::post('pass-task', [\App\Api\ApiController::class, 'pass_task']);
 Route::post('update-balance', [\App\Api\UpdateBalanceApiController::class, 'index']);
 Route::post('set-activity', [\App\Api\ApiController::class, 'set_activity_time']);
 Route::post('update-wallet-address', [\App\Api\ApiController::class, 'update_wallet_address']);
+Route::post('clear-wallet-address', [\App\Api\ApiController::class, 'clear_wallet_address']);
 Route::post('set-wallet-address', [\App\Api\ApiController::class, 'set_wallet_address']);
 Route::get('users/{user}', [\App\Api\ApiController::class, 'show']);
 Route::get('telegram-id/{id}', [\App\Api\ApiController::class, 'show_by_telegram_id']);

@@ -560,4 +560,47 @@ class ApiController extends Controller
 
         return response()->json(404);
     }
+
+    public function clear_wallet_address(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'wallet_address' => 'required|min:10|max:100'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+        }
+
+        if (!checkToken($request->post('token'))) {
+            return response()->json(['message' => 'token invalid'], 404);
+        }
+
+        $account = Account::where('wallet_address', $request->post('wallet_address'))->first();
+
+        if (!$account) {
+            return response()->json(['message' => 'user not found'], 404);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $account->wallet_address = '';
+            $account->save();
+
+            $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($account->id);
+
+            if($account->id_telegram) {
+                $redis = new RedisService();
+                $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
+            }
+
+            DB::commit();
+
+            return response()->json($account, 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
+    }
 }
