@@ -32,17 +32,17 @@ class LiderboardApiController extends Controller
             }
 
             if ($current) {
-                $position = DB::select("SELECT id, username, wallet_balance, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.wallet_balance > a1.wallet_balance ) AS 'rank' FROM accounts AS a1 WHERE id = " . $current->id);
+                $position = DB::select("SELECT id, id_telegram, username, wallet_balance, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.wallet_balance > a1.wallet_balance ) AS 'rank' FROM accounts AS a1 WHERE id = " . $current->id);
                 $accounts = Account::select('id', 'username', 'wallet_address', 'id_telegram', 'wallet_balance')
+                    ->where('wallet_balance', '>', 0)
                     ->orderByRaw("wallet_balance DESC")
-                    ->whereRaw('wallet_balance > 0')
                     ->limit(100)
                     ->get();
 
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
                         $cur_pos = $pos + 1;
-                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 10) {
+                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
                             $res[] = array(
                                 'id' => $account->id,
                                 'username' => $account->username,
@@ -63,7 +63,7 @@ class LiderboardApiController extends Controller
                         }
                     }
 
-                    if ($position && $position[0]->rank > 10) {
+                    if ($position && $position[0]->rank > 100) {
                         $res[] = array(
                             'id' => $current->id,
                             'username' => $current->username,
