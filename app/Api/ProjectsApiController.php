@@ -168,7 +168,9 @@ class ProjectsApiController extends Controller
         $id_telegram = $request->post('id_telegram');
 
         $projectTask = ProjectTask::find($projectsTaskId);
-        $account = Account::find($id_telegram, ['id_telegram', 'wallet_balance']);
+        $account = Account::where('id_telegram', $id_telegram)
+            ->select('id_telegram', 'wallet_balance')
+            ->first();
 
         if (!$projectTask) {
             return response()->json(['message' => 'Project task not found'], 404);
@@ -192,7 +194,11 @@ class ProjectsApiController extends Controller
             $account->save();
         });
 
-        $updatedAccount = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($id_telegram);
+        $updatedAccount = Account::with([
+            'daily_quests',
+            'partners_quests',
+            'projects_tasks:account_id,projects_task_id'
+        ])->where('id_telegram', $id_telegram)->first();
 
         if ($updatedAccount->id_telegram) {
             $redis = new RedisService();
