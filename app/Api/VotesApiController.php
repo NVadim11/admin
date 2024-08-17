@@ -17,7 +17,7 @@ class VotesApiController extends Controller
 {
     public function index(Request $request)
     {
-        $vote_period = 1; //in hours
+        $vote_period = 0,06; //in hours
         /*
         if(!checkToken($request->post('token'))) {
             return response()->json(['message' => 'token invalid'], 404);
@@ -26,7 +26,7 @@ class VotesApiController extends Controller
 
         $validator = Validator::make($request->all(), [
             //'token' => 'required',
-            'wallet_address' => 'min:10|max:100',
+            //'wallet_address' => 'min:10|max:100',
             'id_telegram' => 'min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
             'project_id' => 'integer'
         ]);
@@ -35,10 +35,10 @@ class VotesApiController extends Controller
             return response()->json($validator->errors(), 422);
         }
 
-        $wallet_address = $request->post('wallet_address');
+        //$wallet_address = $request->post('wallet_address');
         $id_telegram = $request->post('id_telegram');
         $projectId = $request->post('project_id');
-        $account = $this->getAccount($id_telegram, $wallet_address);
+        $account = $this->getAccount($id_telegram, null); // allowing to vote without wallet
         $client_agent = $_SERVER['HTTP_USER_AGENT'] ?? '';
         $client_ip = $this->getClientIpInfo();
         $redis = new RedisService();
@@ -107,7 +107,7 @@ class VotesApiController extends Controller
                 }
                 else return response()->json(['message' => 'Not enough $hit points in the account'], 404);
 
-            } else return response()->json(['message' => 'Not found'], 404);
+            } else return response()->json(['message' => 'Project was not found'], 404);
         }
         else return response()->json(['message' => 'Not found'], 404);
 

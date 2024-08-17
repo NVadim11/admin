@@ -9,6 +9,9 @@ vendor
 /storage/*.sqlite
 /storage/*.sqlite-journal
 /storage/framework/testing
+/storage/framework/views
+/storage/framework/cache
+/storage/framework/sessions
 .env
 .env.backup
 Homestead.json
