@@ -1,0 +1,68 @@
+image: atlassian/default-image:4
+
+definitions:
+  steps:
+  - step: &build
+      name: build
+      tags:
+      - docker
+      - theshit
+      script:
+      - |
+        echo "Prepare step"
+        export DEBIAN_FRONTEND=noninteractive
+        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+        apt update && apt install -y awscli
+        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 670285250765.dkr.ecr.eu-central-1.amazonaws.com
+        echo "Build docker image"
+        export TAG="$(echo $BITBUCKET_BRANCH | tr '\/' '-')-$(echo $BITBUCKET_COMMIT | cut -c1-7)"
+        docker build -t 670285250765.dkr.ecr.eu-central-1.amazonaws.com/theshit/admin:$TAG .
+        echo "Push docker image"
+        docker push 670285250765.dkr.ecr.eu-central-1.amazonaws.com/theshit/admin:$TAG
+      services:
+      - docker
+
+  - step: &deploy
+      trigger: manual
+      tags:
+      - docker
+      - theshit
+      script:
+      - |
+        echo $SSH_KEY | base64 -d > theshit.pem && chmod 600 theshit.pem
+        export TAG="$(echo $BITBUCKET_BRANCH | tr '\/' '-')-$(echo $BITBUCKET_COMMIT | cut -c1-7)"
+        ssh -t -i theshit.pem -o StrictHostKeychecking=no -o UserKnownHostsFile=/dev/null ubuntu@$BACKEND_IP \
+        << EOF
+        export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+        export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+        aws ecr get-login-password --region eu-central-1 | docker login --username AWS --password-stdin 670285250765.dkr.ecr.eu-central-1.amazonaws.com
+        docker pull 670285250765.dkr.ecr.eu-central-1.amazonaws.com/theshit/admin:$TAG
+        echo "Deploy admin"
+        docker rm -f admin || true
+        docker run --network=host --name=admin -d \
+               -v /home/ubuntu/theshit_php/.env:/home/ubuntu/theshit_php/.env \
+               -v /home/ubuntu/theshit_php/storage/logs/:/home/ubuntu/theshit_php/storage/logs/ \
+               -v /home/ubuntu/theshit_php/public/uploads/files:/home/ubuntu/theshit_php/public/uploads/files \
+               -v /home/ubuntu/theshit_php/public/uploads/images/:/home/ubuntu/theshit_php/public/uploads/images/ \
+               -it 670285250765.dkr.ecr.eu-central-1.amazonaws.com/theshit/admin:$TAG
+
+        EOF
+        echo "Deploy done"
+
+pipelines:
+  default:
+    - step: *build
+    - step:
+        <<: *deploy
+        name: Deploy to dev
+        deployment: Dev
+
+  tags::
+    'v*.*.*':
+    - step: *build
+    - step:
+        <<: *deploy
+        name: Deploy to prod
+        deployment: Prod
+
