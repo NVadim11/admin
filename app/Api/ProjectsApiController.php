@@ -169,7 +169,7 @@ class ProjectsApiController extends Controller
 
         $projectTask = ProjectTask::find($projectsTaskId);
         $account = Account::where('id_telegram', $id_telegram)
-            ->select('id_telegram', 'wallet_balance')
+            ->select('id', 'id_telegram', 'wallet_balance')
             ->first();
 
         if (!$projectTask) {
