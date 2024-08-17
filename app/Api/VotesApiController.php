@@ -17,7 +17,7 @@ class VotesApiController extends Controller
 {
     public function index(Request $request)
     {
-        $vote_period = 0,06; //in hours
+        $vote_period = 1; //in hours
         /*
         if(!checkToken($request->post('token'))) {
             return response()->json(['message' => 'token invalid'], 404);
