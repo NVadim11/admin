@@ -137,7 +137,7 @@ class ClaimerApiController extends Controller
                 } 
                 Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
                 return response()->json([
-                    'message' => 'Claimer is not ready. Please try again later.'
+                    'message' => 'Claimer is not ready. Please try again later.',
                     'error_code' => 'claimer_not_ready',
                     'claimer_timer' => $account->claimer_timer
                 ], 400);
