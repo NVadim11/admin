@@ -17,7 +17,7 @@ class ClaimerApiController extends Controller
     public $tg_chat_id = -1002216416628;
 
     public $claimer_bonus = 1;
-    public $claimer_period = 10;
+    public $claimer_period = 60*60;
 
     public function index(Request $request)
     {
