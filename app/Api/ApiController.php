@@ -571,7 +571,7 @@ class ApiController extends Controller
     public function clear_wallet_address(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'token' => 'required',
+//            'token' => 'required',
             'wallet_address' => 'min:10|max:100'
         ]);
 
@@ -579,9 +579,9 @@ class ApiController extends Controller
             return response()->json($validator->errors(), 404);
         }
 
-        if (!checkToken($request->post('token'))) {
-            return response()->json(['message' => 'token invalid'], 404);
-        }
+//        if (!checkToken($request->post('token'))) {
+//            return response()->json(['message' => 'token invalid'], 404);
+//        }
 
         $account = Account::where('wallet_address', $request->post('wallet_address'))->first();
 
@@ -592,7 +592,7 @@ class ApiController extends Controller
         try {
             DB::beginTransaction();
 
-            $account->wallet_address = '';
+            $account->wallet_address = NULL;
             $account->save();
 
             $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($account->id);
