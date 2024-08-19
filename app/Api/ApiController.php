@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Modules\Accounts\Entities\Account;
 use Modules\DailyQuests\Entities\DailyQuest;
 use Modules\PartnersQuests\Entities\PartnersQuest;
@@ -384,10 +385,21 @@ class ApiController extends Controller
 
     public function update_wallet_address(Request $request)
     {
+        $account = Account::where('id_telegram', $request->post('id_telegram'))->first();
+
+        if (!$account) {
+            return response()->json(['message' => 'telegram account not found'], 404);
+        }
+
         $validator = Validator::make($request->all(), [
             'token' => 'required',
-            'wallet_address' => 'required|unique:accounts|min:10|max:100',
-            'user_id' => 'required|regex:/^[0-9]+$/u'
+            'wallet_address' => [
+                'required',
+                'min:10',
+                'max:100',
+                Rule::unique('accounts')->ignore($account->id, 'id'),
+            ],
+            'id_telegram' => 'min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
         ]);
 
         if ($validator->fails()) {
@@ -398,28 +410,23 @@ class ApiController extends Controller
             return response()->json(['message' => 'token invalid'], 404);
         }
 
-        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('user_id'));
-
-        if (!$account) {
-            return response()->json(['message' => 'user not found'], 404);
-        }
-
-//        if ($account->update_wallet_at && (time() < $account->update_wallet_at)) {
-//            return response()->json(['message' => 'error, try again later'], 404);
-//        }
-
         try {
             DB::beginTransaction();
 
             $redis = new RedisService();
             $currentDateTime = new \DateTime();
-            $currentDateTime->add(new \DateInterval('PT72H'));
+        //    $currentDateTime->add(new \DateInterval('PT72H'));
 
             $account->update_wallet_at = $currentDateTime->getTimestamp();
             $account->wallet_address = $request->post('wallet_address');
+
+            if ($account->is_wallet_connected == 0) {
+                $account->is_wallet_connected = 1;
+            }
+
             $account->save();
 
-            if($account->id_telegram) {
+            if ($account->id_telegram) {
                 $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
             }
 
@@ -565,7 +572,7 @@ class ApiController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required',
-            'wallet_address' => 'required|min:10|max:100'
+            'wallet_address' => 'min:10|max:100'
         ]);
 
         if ($validator->fails()) {
