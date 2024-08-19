@@ -134,8 +134,13 @@ class ClaimerApiController extends Controller
                         'claimer_bonus' => $this->claimer_bonus,
                         'claimer_timer'=>$account->claimer_timer], 200);
 
-                } Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
-                return response()->json(['message' => 'Claimer is not ready. Please try again later.'], 404);
+                } 
+                Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
+                return response()->json([
+                    'message' => 'Claimer is not ready. Please try again later.',
+                    'error_code' => 'claimer_not_ready',
+                    'claimer_timer' => $account->claimer_timer
+                ], 400);
             }
             else {
                 Log::channel('update_balance_log')->debug("account not found");
