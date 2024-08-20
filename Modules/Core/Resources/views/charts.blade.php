@@ -509,7 +509,7 @@
                                         },
                                         yaxis: {
                                             min: 0,
-                                            max: {{ $maxValueDays + 150 }},
+                                            max: {{ $maxValueDays }},
                                             tickAmount: 6,
                                             labels: {
                                                 style: { colors: [r], fontSize: "10px" },
