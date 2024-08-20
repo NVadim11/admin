@@ -232,7 +232,7 @@ class ProjectsController extends CrudController
             $votesCount = DB::selectOne('
                 SELECT COUNT(CASE WHEN client_id IS NOT NULL THEN 1 END) as count 
                 FROM project_votes 
-                WHERE id = ' . $id . ' 
+                WHERE project_id = ' . $id . ' 
                 AND created_at BETWEEN ? AND ?
             ', [$startOfDay, $endOfDay])->count;
 
