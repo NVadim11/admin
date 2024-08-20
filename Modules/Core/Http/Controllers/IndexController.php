@@ -72,23 +72,23 @@ class IndexController extends Controller
                     break;
             }
 
-            $telegramCount = DB::selectOne('
+            $usersCount = DB::selectOne('
                 SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count 
                 FROM accounts 
                 WHERE created_at BETWEEN ? AND ?
             ', [$startOfDay, $endOfDay])->count;
 
-            $webCount = DB::selectOne('
-                SELECT COUNT(CASE WHEN id_telegram IS NULL THEN 1 END) as count 
-                FROM accounts 
+            $votesCount = DB::selectOne('
+                SELECT COUNT(CASE WHEN client_id IS NOT NULL THEN 1 END) as count 
+                FROM project_votes 
                 WHERE created_at BETWEEN ? AND ?
             ', [$startOfDay, $endOfDay])->count;
 
             $days[] = [
                 'date' => $formattedDate,
                 'day' => $formattedDay,
-                'telegram' => $telegramCount,
-                'web' => $webCount
+                'telegram' => $usersCount,
+                'votes' => $votesCount
             ];
 
             switch($period) {
@@ -106,83 +106,6 @@ class IndexController extends Controller
                     break;
             }
         }
-
-        $date = Carbon::now();
-        $days_count = 14;
-        $gaming = [];
-
-        for ($i = 0; $i < $days_count; $i++) {
-            $startOfDay = $date->startOfDay()->timestamp;
-            $endOfDay = $date->endOfDay()->timestamp;
-            $formattedDate = $date->format('Y-m-d');
-            $formattedDay = $date->format('d M');
-
-            // Запрос для Telegram пользователей
-            $telegramCount = DB::selectOne('
-                SELECT COUNT(id) as count 
-                FROM accounts 
-                WHERE id_telegram IS NOT NULL  
-                AND update_balance_at BETWEEN ? AND ?
-            ', [$startOfDay, $endOfDay])->count;
-
-            // Запрос для Web пользователей
-            $webCount = DB::selectOne('
-                SELECT COUNT(id) as count 
-                FROM accounts 
-                WHERE id_telegram IS NULL 
-                AND update_balance_at BETWEEN ? AND ?
-            ', [$startOfDay, $endOfDay])->count;
-
-            $gaming[] = [
-                'date' => $formattedDate,
-                'day' => $formattedDay,
-                'telegram' => $telegramCount,
-                'web' => $webCount
-            ];
-
-            // Переход на предыдущий день
-            $date->subDay();
-        }
-
-//        $date = Carbon::now();
-//        $days_count = 14;
-//        $players = [];
-//
-//        for ($i = 0; $i < $days_count; $i++) {
-//            $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-//            $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
-//            $startOfDayTime = $date->startOfDay()->timestamp;
-//            $formattedDate = $date->format('Y-m-d');
-//            $formattedDay = $date->format('d M');
-//
-//            // Запрос для Telegram пользователей
-//            $telegramCount = DB::selectOne('
-//                SELECT COUNT(id) as count
-//                FROM accounts
-//                WHERE id_telegram IS NOT NULL
-//                AND update_balance_at > ?
-//                AND id in (SELECT account_id from accounts_daily_quests where created_at BETWEEN ? AND ?)
-//            ', [$startOfDayTime, $startOfDay, $endOfDay])->count;
-//
-//            // Запрос для Web пользователей
-//            $webCount = DB::selectOne('
-//                SELECT COUNT(id) as count
-//                FROM accounts
-//                WHERE id_telegram IS NULL
-//                AND update_balance_at > ?
-//                AND id in (SELECT account_id from accounts_daily_quests where created_at BETWEEN ? AND ?)
-//            ', [$startOfDayTime, $startOfDay, $endOfDay])->count;
-//
-//            $players[] = [
-//                'date' => $formattedDate,
-//                'day' => $formattedDay,
-//                'telegram' => $telegramCount,
-//                'web' => $webCount
-//            ];
-//
-//            // Переход на предыдущий день
-//            $date->subDay();
-//        }
 
         $currentTime = time();
         $callDownAccounts = DB::selectOne('
@@ -219,35 +142,33 @@ class IndexController extends Controller
         ')->count;
 
         $today = Carbon::today();
-        $startOfDay = $today->startOfDay()->timestamp;
-        $endOfDay = $today->endOfDay()->timestamp;
+        $startOfDay = $today->startOfDay()->format('Y-m-d H:i:s');
+        $endOfDay = $today->endOfDay()->format('Y-m-d H:i:s');
 
         $nowPlaying = DB::selectOne('
             SELECT COUNT(id) as count 
-            FROM accounts 
-            WHERE update_balance_at BETWEEN ? AND ?
+            FROM project_votes 
+            WHERE updated_at BETWEEN ? AND ?
         ', [$startOfDay, $endOfDay])->count;
 
-        $lastHour = Carbon::now()->subHour()->timestamp;
+        $lastHour = Carbon::now()->subHour()->format('Y-m-d H:i:s');
         $lastHourPlaying = DB::selectOne('
             SELECT COUNT(id) as count 
-            FROM accounts 
-            WHERE update_balance_at > ?
+            FROM project_votes 
+            WHERE updated_at > ?
         ', [$lastHour])->count;
 
-        $lastMinute = Carbon::now()->subMinute()->timestamp;
+        $lastMinute = Carbon::now()->subMinute()->format('Y-m-d H:i:s');
         $lastMinutePlaying = DB::selectOne('
             SELECT COUNT(id) as count 
-            FROM accounts 
-            WHERE update_balance_at > ?
+            FROM project_votes 
+            WHERE updated_at > ?
         ', [$lastMinute])->count;
 
         $neverPlaying = DB::selectOne('
             SELECT COUNT(id) as count 
             FROM accounts 
-            WHERE energy = 0 
-            AND wallet_balance = 0 
-            AND active_at IS NULL
+            WHERE id_telegram NOT IN (select client_id from project_votes)  
         ')->count;
 
         $hasWallet = DB::selectOne('
@@ -368,9 +289,7 @@ class IndexController extends Controller
             'lastMinutePlaying',
             'neverPlaying',
             'hasWallet',
-            'days',
-            'gaming',
-//            'players'
+            'days'
         ));
     }
 
