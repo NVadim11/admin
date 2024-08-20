@@ -3,6 +3,7 @@
 namespace Modules\Core\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
@@ -17,27 +18,66 @@ class IndexController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Settings $settings, FormBuilder $form_builder)
+    public function index(Settings $settings, FormBuilder $form_builder, Request $request)
     {
 
         $date = Carbon::now();
-        $days_count = 14;
+        $period = 'day';
         $days = [];
 
-        for ($i = 0; $i < $days_count; $i++) {
-            $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-            $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
-            $formattedDate = $date->format('Y-m-d');
-            $formattedDay = $date->format('d M');
+        if ($request->get('newPlayers')) {
+            $period = $request->get('newPlayers');
+        }
 
-            // Запрос для Telegram пользователей
+        switch($period) {
+            case "day":
+                $days_count = 24;
+                break;
+            case "week":
+                $days_count = 14;
+                break;
+            case "month":
+                $days_count = 31;
+                break;
+            case "year":
+                $days_count = 12;
+                break;
+        }
+
+        for ($i = 0; $i < $days_count; $i++) {
+            switch($period) {
+                case "day":
+                    $startOfDay = $date->copy()->format('Y-m-d H:00:00');
+                    $endOfDay = $date->format('Y-m-d H:59:59');
+                    $formattedDate = $date->format('d M H:00');
+                    $formattedDay = $date->format('d M H:00');
+                    break;
+                case "week":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "month":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "year":
+                    $startOfDay = $date->startOfDay()->format('Y-m-01');
+                    $endOfDay = $date->endOfDay()->format('Y-m-31');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('M');
+                    break;
+            }
+
             $telegramCount = DB::selectOne('
                 SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count 
                 FROM accounts 
                 WHERE created_at BETWEEN ? AND ?
             ', [$startOfDay, $endOfDay])->count;
 
-            // Запрос для Web пользователей
             $webCount = DB::selectOne('
                 SELECT COUNT(CASE WHEN id_telegram IS NULL THEN 1 END) as count 
                 FROM accounts 
@@ -51,8 +91,20 @@ class IndexController extends Controller
                 'web' => $webCount
             ];
 
-            // Переход на предыдущий день
-            $date->subDay();
+            switch($period) {
+                case "day":
+                    $date->subHour();
+                    break;
+                case "week":
+                    $date->subDay();
+                    break;
+                case "month":
+                    $date->subDay();
+                    break;
+                case "year":
+                    $date->subMonth();
+                    break;
+            }
         }
 
         $date = Carbon::now();

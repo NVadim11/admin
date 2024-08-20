@@ -269,6 +269,49 @@
     {{--                <span class="text-gray-400 pt-2 fw-semibold fs-6">75% activity growth</span>--}}
                 </h3>
                 <!--end::Title-->
+                <div class="card-toolbar">
+                    <!--begin::Menu-->
+                    <button class="btn btn-icon btn-color-gray-400 btn-active-color-primary justify-content-end" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end" data-kt-menu-overflow="true">
+                        <i class="ki-outline ki-calendar fs-2qx"></i>
+                    </button>
+                    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px" data-kt-menu="true" style="">
+                        <!--begin::Menu item-->
+                        <div class="menu-item px-3">
+                            <div class="menu-content fs-6 text-dark fw-bold px-3 py-4">Settings</div>
+                        </div>
+                        <!--end::Menu item-->
+                        <!--begin::Menu separator-->
+                        <div class="separator mb-3 opacity-75"></div>
+                        <!--end::Menu separator-->
+                        <!--begin::Menu item-->
+                        <div class="menu-item px-3">
+                            <a href="{{ route('admin.index', ['newPlayers' => 'day', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'day' || !request()->get('newPlayers') ? 'active' : '' }}">Day</a>
+                        </div>
+                        <!--end::Menu item-->
+                        <!--begin::Menu item-->
+                        <div class="menu-item px-3">
+                            <a href="{{ route('admin.index', ['newPlayers' => 'week', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'week' ? 'active' : '' }}">Week</a>
+                        </div>
+                        <!--end::Menu item-->
+                        <!--begin::Menu item-->
+                        <div class="menu-item px-3">
+                            <a href="{{ route('admin.index', ['newPlayers' => 'month', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'month' ? 'active' : '' }}">Month</a>
+                        </div>
+                        <!--end::Menu item-->
+                        <!--begin::Menu item-->
+                        <div class="menu-item px-3">
+                            <a href="{{ route('admin.index', ['newPlayers' => 'year', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'year' ? 'active' : '' }}">Year</a>
+                        </div>
+                        <!--end::Menu item-->
+                        <!--begin::Menu separator-->
+                        <div class="separator mt-3 opacity-75"></div>
+                        <!--end::Menu separator-->
+                    </div>
+                    <!--begin::Menu 2-->
+
+                    <!--end::Menu 2-->
+                    <!--end::Menu-->
+                </div>
             </div>
             <!--end::Header-->
             <!--begin::Body-->
@@ -404,6 +447,24 @@
 </div>
 
 @php
+    $period = 'day';
+    if (isset($_GET['newPlayers'])) {
+        $period = $_GET['newPlayers'];
+    }
+    switch($period) {
+        case "day":
+            $count = 24;
+            break;
+        case "week":
+            $count = 14;
+            break;
+        case "month":
+            $count = 31;
+            break;
+        case "year":
+            $count = 12;
+            break;
+    }
     $d = collect(array_reverse($days))->pluck('day')->toJson();
     $telegram = collect(array_reverse($days))->pluck('telegram')->toJson();
     $web = collect(array_reverse($days))->pluck('web')->toJson();
@@ -442,7 +503,7 @@
                                             categories: {!! $d !!},
                                             axisBorder: { show: !1 },
                                             axisTicks: { show: !1 },
-                                            tickAmount: 14,
+                                            tickAmount: {{ $count }},
                                             labels: { style: { colors: [r], fontSize: "10px" } },
                                             crosshairs: { show: !1 },
                                         },
