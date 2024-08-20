@@ -279,22 +279,22 @@
                         <!--end::Menu separator-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
-                            <a href="{{ route('admin.index', ['newPlayers' => 'day', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'day' || !request()->get('newPlayers') ? 'active' : '' }}">Day</a>
+                            <a href="{{ route('admin.index', ['new' => 'day', 'votes' => request()->get('votes') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('new') == 'day' || !request()->get('new') ? 'active' : '' }}">Day</a>
                         </div>
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
-                            <a href="{{ route('admin.index', ['newPlayers' => 'week', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'week' ? 'active' : '' }}">Week</a>
+                            <a href="{{ route('admin.index', ['new' => 'week', 'votes' => request()->get('votes') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('new') == 'week' ? 'active' : '' }}">Week</a>
                         </div>
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
-                            <a href="{{ route('admin.index', ['newPlayers' => 'month', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'month' ? 'active' : '' }}">Month</a>
+                            <a href="{{ route('admin.index', ['new' => 'month', 'votes' => request()->get('votes') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('new') == 'month' ? 'active' : '' }}">Month</a>
                         </div>
                         <!--end::Menu item-->
                         <!--begin::Menu item-->
                         <div class="menu-item px-3">
-                            <a href="{{ route('admin.index', ['newPlayers' => 'year', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'year' ? 'active' : '' }}">Year</a>
+                            <a href="{{ route('admin.index', ['new' => 'year', 'votes' => request()->get('votes') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('new') == 'year' ? 'active' : '' }}">Year</a>
                         </div>
                         <!--end::Menu item-->
                         <!--begin::Menu separator-->
@@ -361,22 +361,22 @@
                     <!--end::Menu separator-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-3">
-                        <a href="{{ route('admin.index', ['newPlayers' => 'day', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'day' || !request()->get('newPlayers') ? 'active' : '' }}">Day</a>
+                        <a href="{{ route('admin.index', ['votes' => 'day', 'new' => request()->get('new') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('votes') == 'day' || !request()->get('votes') ? 'active' : '' }}">Day</a>
                     </div>
                     <!--end::Menu item-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-3">
-                        <a href="{{ route('admin.index', ['newPlayers' => 'week', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'week' ? 'active' : '' }}">Week</a>
+                        <a href="{{ route('admin.index', ['votes' => 'week', 'new' => request()->get('new') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('votes') == 'week' ? 'active' : '' }}">Week</a>
                     </div>
                     <!--end::Menu item-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-3">
-                        <a href="{{ route('admin.index', ['newPlayers' => 'month', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'month' ? 'active' : '' }}">Month</a>
+                        <a href="{{ route('admin.index', ['votes' => 'month', 'new' => request()->get('new') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('votes') == 'month' ? 'active' : '' }}">Month</a>
                     </div>
                     <!--end::Menu item-->
                     <!--begin::Menu item-->
                     <div class="menu-item px-3">
-                        <a href="{{ route('admin.index', ['newPlayers' => 'year', 'playing' => request()->get('playing') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('newPlayers') == 'year' ? 'active' : '' }}">Year</a>
+                        <a href="{{ route('admin.index', ['votes' => 'year', 'new' => request()->get('new') ?? 'day']) }}" class="menu-link px-3 {{ request()->get('votes') == 'year' ? 'active' : '' }}">Year</a>
                     </div>
                     <!--end::Menu item-->
                     <!--begin::Menu separator-->
@@ -417,8 +417,8 @@
 
 @php
     $period = 'day';
-    if (isset($_GET['newPlayers'])) {
-        $period = $_GET['newPlayers'];
+    if (isset($_GET['new'])) {
+        $period = $_GET['new'];
     }
     switch($period) {
         case "day":
@@ -436,10 +436,11 @@
     }
     $d = collect(array_reverse($days))->pluck('day')->toJson();
     $telegram = collect(array_reverse($days))->pluck('telegram')->toJson();
-    $votes = collect(array_reverse($days))->pluck('votes')->toJson();
+    $vote_d = collect(array_reverse($votes))->pluck('day')->toJson();
+    $vote = collect(array_reverse($votes))->pluck('votes')->toJson();
 
     $maxValueDays = max(collect(array_reverse($days))->pluck('telegram')->toArray());
-    $maxValueVotes = max(collect(array_reverse($days))->pluck('votes')->toArray());
+    $maxValueVotes = max(collect(array_reverse($votes))->pluck('votes')->toArray());
 
 @endphp
 @push('scripts')
@@ -520,14 +521,14 @@
                                     o = KTUtil.getCssVariableValue("--bs-border-dashed-color"),
                                     i = {
                                         series: [
-                                            { name: "Votes", data: {{ $votes }} },
+                                            { name: "Votes", data: {{ $vote }} },
                                         ],
                                         chart: { fontFamily: "inherit", type: "bar", stacked: !0, height: l, toolbar: { show: !1 } },
                                         plotOptions: { bar: { columnWidth: "35%", barHeight: "70%", borderRadius: [6, 6] } },
                                         legend: { show: !1 },
                                         dataLabels: { enabled: !1 },
                                         xaxis: {
-                                            categories: {!! $d !!},
+                                            categories: {!! $vote_d !!},
                                             axisBorder: { show: !1 },
                                             axisTicks: { show: !1 },
                                             tickAmount: 31,

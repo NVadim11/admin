@@ -25,8 +25,8 @@ class IndexController extends Controller
         $period = 'day';
         $days = [];
 
-        if ($request->get('newPlayers')) {
-            $period = $request->get('newPlayers');
+        if ($request->get('new')) {
+            $period = $request->get('new');
         }
 
         switch($period) {
@@ -88,6 +88,84 @@ class IndexController extends Controller
                 'date' => $formattedDate,
                 'day' => $formattedDay,
                 'telegram' => $usersCount,
+                'votes' => $votesCount
+            ];
+
+            switch($period) {
+                case "day":
+                    $date->subHour();
+                    break;
+                case "week":
+                    $date->subDay();
+                    break;
+                case "month":
+                    $date->subDay();
+                    break;
+                case "year":
+                    $date->subMonth();
+                    break;
+            }
+        }
+
+        $period = 'day';
+        $votes = [];
+
+        if ($request->get('votes')) {
+            $period = $request->get('votes');
+        }
+
+        switch($period) {
+            case "day":
+                $days_count = 24;
+                break;
+            case "week":
+                $days_count = 14;
+                break;
+            case "month":
+                $days_count = 31;
+                break;
+            case "year":
+                $days_count = 12;
+                break;
+        }
+
+        for ($i = 0; $i < $days_count; $i++) {
+            switch($period) {
+                case "day":
+                    $startOfDay = $date->copy()->format('Y-m-d H:00:00');
+                    $endOfDay = $date->format('Y-m-d H:59:59');
+                    $formattedDate = $date->format('d M H:00');
+                    $formattedDay = $date->format('d M H:00');
+                    break;
+                case "week":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "month":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "year":
+                    $startOfDay = $date->startOfDay()->format('Y-m-01');
+                    $endOfDay = $date->endOfDay()->format('Y-m-31');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('M');
+                    break;
+            }
+
+            $votesCount = DB::selectOne('
+                SELECT COUNT(CASE WHEN client_id IS NOT NULL THEN 1 END) as count 
+                FROM project_votes 
+                WHERE created_at BETWEEN ? AND ?
+            ', [$startOfDay, $endOfDay])->count;
+
+            $votes[] = [
+                'date' => $formattedDate,
+                'day' => $formattedDay,
                 'votes' => $votesCount
             ];
 
@@ -289,7 +367,8 @@ class IndexController extends Controller
             'lastMinutePlaying',
             'neverPlaying',
             'hasWallet',
-            'days'
+            'days',
+            'votes'
         ));
     }
 
