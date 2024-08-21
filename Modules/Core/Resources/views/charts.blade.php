@@ -459,7 +459,7 @@
                                             { name: "Members", data: {{ $telegram }} },
                                         ],
                                         chart: { fontFamily: "inherit", type: "bar", stacked: !0, height: l, toolbar: { show: !1 } },
-                                        plotOptions: { bar: { columnWidth: "45%", barHeight: "70%", borderRadius: [6, 6] } },
+                                        plotOptions: { bar: { columnWidth: "35%", barHeight: "70%", borderRadius: [6, 6] } },
                                         legend: { show: !1 },
                                         dataLabels: { enabled: !1 },
                                         xaxis: {
@@ -467,7 +467,7 @@
                                             axisBorder: { show: !1 },
                                             axisTicks: { show: !1 },
                                             tickAmount: {{ $count }},
-                                            labels: { style: { colors: [r], fontSize: "10px" } },
+                                            labels: {style: { colors: [r], fontSize: "10px" },},
                                             crosshairs: { show: !1 },
                                         },
                                         yaxis: {
@@ -481,6 +481,27 @@
                                                 },
                                             },
                                         },
+                                        responsive: [
+                                            {
+                                                breakpoint: 768,
+                                                options: {
+                                                    xaxis: {
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: "7px"
+                                                            }
+                                                        }
+                                                    },
+                                                    yaxis: {
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: "7px"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ],
                                         fill: { opacity: 1 },
                                         states: { normal: { filter: { type: "none", value: 0 } }, hover: { filter: { type: "none", value: 0 } }, active: { allowMultipleDataPointsSelection: !1, filter: { type: "none", value: 0 } } },
                                         tooltip: {
@@ -546,6 +567,27 @@
                                                 },
                                             },
                                         },
+                                        responsive: [
+                                            {
+                                                breakpoint: 768,
+                                                options: {
+                                                    xaxis: {
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: "7px"
+                                                            }
+                                                        }
+                                                    },
+                                                    yaxis: {
+                                                        labels: {
+                                                            style: {
+                                                                fontSize: "7px"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        ],
                                         fill: { opacity: 1 },
                                         states: { normal: { filter: { type: "none", value: 0 } }, hover: { filter: { type: "none", value: 0 } }, active: { allowMultipleDataPointsSelection: !1, filter: { type: "none", value: 0 } } },
                                         tooltip: {
