@@ -2,6 +2,7 @@
 
 namespace Modules\Projects\Entities;
 
+use App\Services\RedisService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,8 +24,17 @@ class ProjectTask extends Model
     {
         parent::boot();
 
-        self::created(function($model){});
-        self::updated(function($model){});
-        self::deleted(function($model){});
+        self::created(function($model){
+            $redis = new RedisService();
+            $redis->deleteIfExists('projects_list');
+        });
+        self::updated(function($model){
+            $redis = new RedisService();
+            $redis->deleteIfExists('projects_list');
+        });
+        self::deleted(function($model){
+            $redis = new RedisService();
+            $redis->deleteIfExists('projects_list');
+        });
     }
 }
