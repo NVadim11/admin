@@ -2,6 +2,7 @@
 
 namespace Modules\PartnersQuests\Entities;
 
+use App\Services\RedisService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Accounts\Entities\Account;
@@ -30,8 +31,13 @@ class AccountPartnersQuest extends Model
         parent::boot();
 
         self::created(function($model){});
-        self::updated(function($model){});
-        self::deleted(function($model){});
+        self::updated(function($model){
+            $redis = new RedisService();
+            $redis->deleteIfExists($model->account()->id_telegram);
+        });
+        self::deleted(function($model){
+            $redis = new RedisService();
+            $redis->deleteIfExists($model->account()->id_telegram);
+        });
     }
 }
-

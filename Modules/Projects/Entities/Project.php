@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Project extends Model
 {
-    // Имя таблицы, можно опустить если имя соответствует конвенциям Laravel
     protected $table = "projects";
 
-    // Поля, которые могут быть заполнены массово
     protected $fillable = [
         'name',
         'image',
