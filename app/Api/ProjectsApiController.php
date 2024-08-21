@@ -166,15 +166,15 @@ class ProjectsApiController extends Controller
 
         $projectsTaskId = $request->post('projects_task_id');
         $id_telegram = $request->post('id_telegram');
-
-        $projectTask = ProjectTask::find($projectsTaskId);
-        $account = Account::where('id_telegram', $id_telegram)
-            ->select('id', 'id_telegram', 'wallet_balance')
-            ->first();
+        $projectTask = ProjectTask::where('id', $projectsTaskId)->first();
 
         if (!$projectTask) {
             return response()->json(['message' => 'Project task not found'], 404);
         }
+
+        $account = Account::where('id_telegram', $id_telegram)
+            ->select('id', 'id_telegram', 'wallet_balance')
+            ->first();
 
         if ($account === null) {
             return response()->json(['message' => 'User not found'], 404);
