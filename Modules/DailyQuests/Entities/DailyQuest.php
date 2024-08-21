@@ -23,4 +23,3 @@ class DailyQuest extends Model
         self::deleted(function($model){});
     }
 }
-

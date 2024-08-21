@@ -64,6 +64,7 @@ class Project extends Model
         });
 
         self::deleted(function($model){
+            $model->tasks()->delete();
             $redis = new RedisService();
             $redis->deleteIfExists('projects_list');
         });

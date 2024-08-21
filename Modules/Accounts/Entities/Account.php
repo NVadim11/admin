@@ -170,7 +170,14 @@ class Account extends Model
             }
         });
 
-        self::deleted(function($model){});
+        self::deleted(function($model){
+            $model->projects_tasks()->delete();
+            $model->partners_quests()->delete();
+            $model->daily_quests()->delete();
+
+            $redis = new RedisService();
+            $redis->deleteIfExists($model->id_telegram);
+        });
         self::updating(function($model){
             $redis = new RedisService();
             $redis->deleteIfExists($model->id_telegram);
