@@ -180,7 +180,9 @@ class ProjectsApiController extends Controller
             return response()->json(['message' => 'User not found'], 404);
         }
 
-        if (AccountProjectTask::where('projects_task_id', $projectsTaskId)->exists()) {
+        if (AccountProjectTask::where('projects_task_id', $projectsTaskId)
+            ->where('account_id', $account->id)
+            ->exists()) {
             return response()->json(['message' => 'Project task already passed'], 404);
         }
 
