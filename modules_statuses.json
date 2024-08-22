@@ -4,5 +4,6 @@
     "DailyQuests": true,
     "PartnersQuests": true,
     "ReferralTransactions": true,
-    "Projects": true
+    "Projects": true,
+    "Notifications": true
 }

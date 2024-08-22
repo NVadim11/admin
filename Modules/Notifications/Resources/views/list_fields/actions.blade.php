@@ -1,0 +1,1 @@
+<a class="btn btn-sm btn-icon btn-primary mt-3 mb-3" href="{{ action($controller.'@edit', $model->id) }}" title="{{__('Редактировать')}}"><i class="ki-outline ki-pencil fs-5 m-0"></i></a>
