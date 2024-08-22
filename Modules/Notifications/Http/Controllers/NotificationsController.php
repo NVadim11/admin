@@ -43,7 +43,7 @@ class NotificationsController extends CrudController
                     4 => 'Notify if no activity 2 days',
                     5 => 'Notify if no activity 4 days',
                     6 => 'Notify if no activity 6 days',
-                    7 => 'Notify if wallet not connected'
+                    7 => 'Notify if wallet not connected',
                 ]
             ],
             'link' => [
