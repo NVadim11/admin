@@ -22,14 +22,14 @@ class IndexController extends Controller
     {
 
         $date = Carbon::now();
-        $period = 'day';
+        $period_new = 'day';
         $days = [];
 
         if ($request->get('new')) {
-            $period = $request->get('new');
+            $period_new = $request->get('new');
         }
 
-        switch($period) {
+        switch($period_new) {
             case "day":
                 $days_count = 24;
                 break;
@@ -45,7 +45,7 @@ class IndexController extends Controller
         }
 
         for ($i = 0; $i < $days_count; $i++) {
-            switch($period) {
+            switch($period_new) {
                 case "day":
                     $startOfDay = $date->copy()->format('Y-m-d H:00:00');
                     $endOfDay = $date->format('Y-m-d H:59:59');
@@ -91,7 +91,7 @@ class IndexController extends Controller
                 'votes' => $votesCount
             ];
 
-            switch($period) {
+            switch($period_new) {
                 case "day":
                     $date->subHour();
                     break;
@@ -107,14 +107,14 @@ class IndexController extends Controller
             }
         }
 
-        $period = 'day';
+        $period_votes = 'day';
         $votes = [];
 
         if ($request->get('votes')) {
-            $period = $request->get('votes');
+            $period_votes = $request->get('votes');
         }
 
-        switch($period) {
+        switch($period_votes) {
             case "day":
                 $days_count = 24;
                 break;
@@ -130,7 +130,7 @@ class IndexController extends Controller
         }
 
         for ($i = 0; $i < $days_count; $i++) {
-            switch($period) {
+            switch($period_votes) {
                 case "day":
                     $startOfDay = $date->copy()->format('Y-m-d H:00:00');
                     $endOfDay = $date->format('Y-m-d H:59:59');
@@ -169,7 +169,7 @@ class IndexController extends Controller
                 'votes' => $votesCount
             ];
 
-            switch($period) {
+            switch($period_votes) {
                 case "day":
                     $date->subHour();
                     break;

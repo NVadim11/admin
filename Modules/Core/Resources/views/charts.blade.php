@@ -416,24 +416,44 @@
 </div>
 
 @php
-    $period = 'day';
+    $period_new = 'day';
     if (isset($_GET['new'])) {
-        $period = $_GET['new'];
+        $period_new = $_GET['new'];
     }
-    switch($period) {
+    switch($period_new) {
         case "day":
-            $count = 24;
+            $count_new = 24;
             break;
         case "week":
-            $count = 14;
+            $count_new = 14;
             break;
         case "month":
-            $count = 31;
+            $count_new = 31;
             break;
         case "year":
-            $count = 12;
+            $count_new = 12;
             break;
     }
+
+    $period_votes = 'day';
+    if (isset($_GET['new'])) {
+        $period_votes = $_GET['new'];
+    }
+    switch($period_votes) {
+        case "day":
+            $count_votes = 24;
+            break;
+        case "week":
+            $count_votes = 14;
+            break;
+        case "month":
+            $count_votes = 31;
+            break;
+        case "year":
+            $count_votes = 12;
+            break;
+    }
+
     $d = collect(array_reverse($days))->pluck('day')->toJson();
     $telegram = collect(array_reverse($days))->pluck('telegram')->toJson();
     $vote_d = collect(array_reverse($votes))->pluck('day')->toJson();
@@ -466,7 +486,7 @@
                                             categories: {!! $d !!},
                                             axisBorder: { show: !1 },
                                             axisTicks: { show: !1 },
-                                            tickAmount: {{ $count }},
+                                            tickAmount: {{ $count_new }},
                                             labels: {style: { colors: [r], fontSize: "10px" },},
                                             crosshairs: { show: !1 },
                                         },
@@ -552,7 +572,7 @@
                                             categories: {!! $vote_d !!},
                                             axisBorder: { show: !1 },
                                             axisTicks: { show: !1 },
-                                            tickAmount: 31,
+                                            tickAmount: {{ $count_votes }},
                                             labels: { style: { colors: [r], fontSize: "11px" } },
                                             crosshairs: { show: !1 },
                                         },
