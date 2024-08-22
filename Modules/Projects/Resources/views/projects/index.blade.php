@@ -249,7 +249,7 @@
 										categories: {!! $vote_d !!},
 										axisBorder: { show: !1 },
 										axisTicks: { show: !1 },
-										tickAmount: 31,
+										tickAmount: {{ $count }},
 										labels: { style: { colors: [r], fontSize: "11px" } },
 										crosshairs: { show: !1 },
 									},

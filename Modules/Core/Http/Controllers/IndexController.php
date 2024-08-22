@@ -78,17 +78,10 @@ class IndexController extends Controller
                 WHERE created_at BETWEEN ? AND ?
             ', [$startOfDay, $endOfDay])->count;
 
-            $votesCount = DB::selectOne('
-                SELECT COUNT(CASE WHEN client_id IS NOT NULL THEN 1 END) as count 
-                FROM project_votes 
-                WHERE created_at BETWEEN ? AND ?
-            ', [$startOfDay, $endOfDay])->count;
-
             $days[] = [
                 'date' => $formattedDate,
                 'day' => $formattedDay,
                 'telegram' => $usersCount,
-                'votes' => $votesCount
             ];
 
             switch($period_new) {
@@ -107,6 +100,7 @@ class IndexController extends Controller
             }
         }
 
+        $date = Carbon::now();
         $period_votes = 'day';
         $votes = [];
 
