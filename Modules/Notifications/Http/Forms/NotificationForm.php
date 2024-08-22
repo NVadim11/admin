@@ -21,9 +21,17 @@ class NotificationForm extends Form
             ->add('type', 'select', [
                 'label' => 'Display',
                 'choices' => [
-                    0 => 'Notify back to game after calldown',
-                    1 => 'Notify if never playing'
+                    0 => 'Notify if only registered but no activity',
+                    1 => 'Notify if shit claimer never never used',
+                    2 => 'Notify if shit claimer ready',
+                    3 => 'Notify if project ready to vote',
+                    4 => 'Notify if no activity 2 days',
+                    5 => 'Notify if no activity 4 days',
+                    6 => 'Notify if no activity 6 days',
                 ]
+            ])
+            ->add('link', 'text', [
+                'label' => 'Link'
             ])
             ->add('vis', 'select', [
                 'label' => 'Display',

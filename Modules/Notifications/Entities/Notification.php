@@ -10,7 +10,7 @@ class Notification extends Model
     use HasFactory;
 
 	protected $table = "notifications";
-	protected $fillable = ['name', 'message', 'image', 'type', 'vis'];
+	protected $fillable = ['name', 'message', 'image', 'type', 'link', 'vis'];
 	protected $guarded = ['id'];
 	public $timestamps = true;
 

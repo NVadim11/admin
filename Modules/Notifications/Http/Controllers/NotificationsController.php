@@ -36,9 +36,18 @@ class NotificationsController extends CrudController
                 'name' => 'Type',
                 'type' => 'option',
                 'choises' => [
-                    0 => 'Notify back to game after calldown',
-                    1 => 'Notify if never playing'
+                    0 => 'Notify if only registered but no activity',
+                    1 => 'Notify if shit claimer never never used',
+                    2 => 'Notify if shit claimer ready',
+                    3 => 'Notify if project ready to vote',
+                    4 => 'Notify if no activity 2 days',
+                    5 => 'Notify if no activity 4 days',
+                    6 => 'Notify if no activity 6 days'
                 ]
+            ],
+            'link' => [
+                'name' => 'Link',
+                'type' => 'text'
             ],
             'vis' => [
                 'name' => 'Display',

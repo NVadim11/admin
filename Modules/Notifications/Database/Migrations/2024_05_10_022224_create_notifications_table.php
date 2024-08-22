@@ -17,6 +17,7 @@ return new class extends Migration
             $table->longText('message')->nullable();
             $table->string('image', 255)->nullable();
             $table->tinyInteger('type')->default(0);
+            $table->string('link', 255)->nullable();
             $table->tinyInteger('vis')->default(1);
             $table->tinyInteger('pos')->default(0);
             $table->timestamps();
