@@ -2,6 +2,7 @@
 
 namespace Modules\Accounts\Entities;
 
+use App\Entities\NotificationStatuses;
 use App\Services\RedisService;
 use App\Services\ReferralsService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -179,6 +180,12 @@ class Account extends Model
             $redis->deleteIfExists($model->id_telegram);
         });
         self::updating(function($model){
+            if ($model->isDirty('claimer_timer')) {
+                NotificationStatuses::where('notification_type', 2)
+                    ->where('id_telegram', $model->id_telegram)
+                    ->delete();
+            }
+
             $redis = new RedisService();
             $redis->deleteIfExists($model->id_telegram);
         });
