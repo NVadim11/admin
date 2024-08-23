@@ -231,22 +231,14 @@
 								states: { normal: { filter: { type: "none", value: 0 } }, hover: { filter: { type: "none", value: 0 } }, active: { allowMultipleDataPointsSelection: !1, filter: { type: "none", value: 0 } } },
 								tooltip: {
 									style: { fontSize: "12px", borderRadius: 4 },
+									x: {
+										show: false // Убирает стрелку с подписью по оси X
+									},
 									y: {
 										formatter: function (e) {
 											return e > 0 ? e : Math.abs(e);
 										},
 									},
-									marker: {
-										show: false // Убираем маркер (точку) в тултипе
-									},
-									custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-										// Убираем стрелку с подписью
-										return `
-                                        <div class="apexcharts-tooltip">
-                                            <div class="apexcharts-tooltip-title">${series[seriesIndex][dataPointIndex]}</div>
-                                        </div>
-                                    `;
-									}
 								},
 								colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
 								grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
