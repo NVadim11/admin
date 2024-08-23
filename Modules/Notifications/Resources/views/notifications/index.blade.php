@@ -194,6 +194,9 @@
 									tickAmount: {{ $count }},
 									labels: { style: { colors: [r], fontSize: "10px" } },
 									crosshairs: { show: !1 },
+									tooltip: { // Отключаем тултип по оси X
+										enabled: false
+									}
 								},
 								yaxis: {
 									min: 0,
@@ -236,6 +239,9 @@
 											return e > 0 ? e : Math.abs(e);
 										},
 									},
+									x: {
+										show: false // Отключаем тултип по оси X
+									}
 								},
 								colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
 								grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
