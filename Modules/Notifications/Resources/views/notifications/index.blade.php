@@ -34,22 +34,22 @@
 						<!--end::Menu separator-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
-							<a href="/admin/notifications/?stat=day" class="menu-link px-3 {{ request()->get('stat') == 'day' || !request()->get('stat') ? 'active' : '' }}">Day</a>
+							<a href="/admin/notifications/?stat=minute" class="menu-link px-3 {{ request()->get('stat') == 'minute' || !request()->get('stat') ? 'active' : '' }}">Minute</a>
+						</div>
+						<!--end::Menu item-->
+						<!--begin::Menu item-->
+						<div class="menu-item px-3">
+							<a href="/admin/notifications/?stat=hour" class="menu-link px-3 {{ request()->get('stat') == 'hour' ? 'active' : '' }}">Hour</a>
+						</div>
+						<!--end::Menu item-->
+						<!--begin::Menu item-->
+						<div class="menu-item px-3">
+							<a href="/admin/notifications/?stat=day" class="menu-link px-3 {{ request()->get('stat') == 'day' ? 'active' : '' }}">Day</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
 							<a href="/admin/notifications/?stat=week" class="menu-link px-3 {{ request()->get('stat') == 'week' ? 'active' : '' }}">Week</a>
-						</div>
-						<!--end::Menu item-->
-						<!--begin::Menu item-->
-						<div class="menu-item px-3">
-							<a href="/admin/notifications/?stat=month" class="menu-link px-3 {{ request()->get('stat') == 'month' ? 'active' : '' }}">Month</a>
-						</div>
-						<!--end::Menu item-->
-						<!--begin::Menu item-->
-						<div class="menu-item px-3">
-							<a href="/admin/notifications/?stat=year" class="menu-link px-3 {{ request()->get('stat') == 'year' ? 'active' : '' }}">Year</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu separator-->
@@ -135,22 +135,22 @@
 @endsection
 
 @php
-	$period = 'day';
+	$period = 'minute';
 	if (isset($_GET['stat'])) {
 		$period = $_GET['stat'];
 	}
 	switch($period) {
-		case "day":
+		case "minute":
+			$count = 60;
+			break;
+		case "hour":
 			$count = 24;
 			break;
-		case "week":
+		case "day":
 			$count = 14;
 			break;
-		case "month":
-			$count = 31;
-			break;
-		case "year":
-			$count = 12;
+		case "week":
+			$count = 4;
 			break;
 	}
 
@@ -183,7 +183,7 @@
 									axisBorder: { show: !1 },
 									axisTicks: { show: !1 },
 									tickAmount: {{ $count }},
-									labels: { style: { colors: [r], fontSize: "11px" } },
+									labels: { style: { colors: [r], fontSize: "10px" } },
 									crosshairs: { show: !1 },
 								},
 								yaxis: {

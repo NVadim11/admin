@@ -76,7 +76,7 @@ class NotificationsController extends CrudController
         app()->setLocale(auth()->user()->locale ?? config('app.locale'));
 
         $date = Carbon::now();
-        $period = 'day';
+        $period = 'minute';
         $votes = [];
 
         if (Req::get('stat')) {
@@ -84,45 +84,49 @@ class NotificationsController extends CrudController
         }
 
         switch($period) {
-            case "day":
+            case "minute":
+                $days_count = 60;
+                break;
+            case "hour":
                 $days_count = 24;
                 break;
-            case "week":
+            case "day":
                 $days_count = 14;
                 break;
-            case "month":
-                $days_count = 31;
-                break;
-            case "year":
-                $days_count = 12;
+            case "week":
+                $days_count = 4;
                 break;
         }
 
         for ($i = 0; $i < $days_count; $i++) {
             switch($period) {
+                case "minute":
+                    $date = $date->copy();
+                    $startOfDay = $date->copy();
+                    $endOfDay = $date->copy()->subMinutes(60);
+                    $formattedDate = $startOfDay->format('d M H:i');
+                    $formattedDay = $endOfDay->format('d M H:i');
+
+                    break;
+                case "hour":
+                    $date = $date->copy();
+                    $startOfDay = $date->copy();
+                    $endOfDay = $date->copy()->subHours(24);
+                    $formattedDate = $startOfDay->format('d M H:i');
+                    $formattedDay = $endOfDay->format('d M H:00');
+                    break;
                 case "day":
-                    $startOfDay = $date->copy()->format('Y-m-d 00:00:00');
-                    $endOfDay = $date->format('Y-m-d 23:59:59');
-                    $formattedDate = $date->format('d M H:00');
-                    $formattedDay = $date->format('d M H:00');
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
                     break;
                 case "week":
-                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
-                    $formattedDate = $date->format('Y-m-d');
-                    $formattedDay = $date->format('d M');
-                    break;
-                case "month":
-                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
-                    $formattedDate = $date->format('Y-m-d');
-                    $formattedDay = $date->format('d M');
-                    break;
-                case "year":
-                    $startOfDay = $date->startOfDay()->format('Y-m-01');
-                    $endOfDay = $date->endOfDay()->format('Y-m-31');
-                    $formattedDate = $date->format('Y-m-d');
-                    $formattedDay = $date->format('M');
+                    $date = $date->copy();
+                    $startOfDay = $date->copy();
+                    $endOfDay = $date->copy()->subWeeks(4);
+                    $formattedDate = $startOfDay->format('d M');
+                    $formattedDay = $endOfDay->format('d M');
                     break;
             }
 
@@ -139,17 +143,17 @@ class NotificationsController extends CrudController
             ];
 
             switch($period) {
-                case "day":
+                case "minute":
+                    $date->subMinute();
+                    break;
+                case "hour":
                     $date->subHour();
                     break;
+                case "day":
+                    $date->subDay();
+                    break;
                 case "week":
-                    $date->subDay();
-                    break;
-                case "month":
-                    $date->subDay();
-                    break;
-                case "year":
-                    $date->subMonth();
+                    $date->subWeek();
                     break;
             }
         }
