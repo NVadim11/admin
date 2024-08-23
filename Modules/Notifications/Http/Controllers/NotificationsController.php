@@ -116,8 +116,8 @@ class NotificationsController extends CrudController
                     $formattedDay = $endOfDay->format('d M H:00');
                     break;
                 case "day":
-                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $startOfDay = $date->startOfDay();
+                    $endOfDay = $date->endOfDay();
                     $formattedDate = $date->format('Y-m-d');
                     $formattedDay = $date->format('d M');
                     break;
@@ -134,7 +134,7 @@ class NotificationsController extends CrudController
                 SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count
                 FROM notification_statuses 
                 WHERE created_at BETWEEN ? AND ?
-            ', [$startOfDay, $endOfDay])->count;
+            ', [$startOfDay->format('Y-m-d H:i:s'), $endOfDay->format('Y-m-d H:i:s')])->count;
 
             $votes[] = [
                 'date' => $formattedDate,
