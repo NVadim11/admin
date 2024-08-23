@@ -172,7 +172,7 @@
 							o = KTUtil.getCssVariableValue("--bs-border-dashed-color"),
 							i = {
 								series: [
-									{ name: "Votes", data: {{ $vote }} },
+									{ name: "Notifications", data: {{ $vote }} },
 								],
 								chart: { fontFamily: "inherit", type: "line", height: l, toolbar: { show: !1 } },
 								plotOptions: {
@@ -182,7 +182,7 @@
 									}
 								},
 								stroke: { // Настройка толщины линии
-									width: 1, // Установите толщину линии в 1 пиксель
+									width: 2, // Установите толщину линии в 2 пикселя
 									curve: 'smooth' // Для сглаживания линии, если требуется
 								},
 								legend: { show: !1 },
@@ -230,7 +230,12 @@
 								fill: { opacity: 1 },
 								states: { normal: { filter: { type: "none", value: 0 } }, hover: { filter: { type: "none", value: 0 } }, active: { allowMultipleDataPointsSelection: !1, filter: { type: "none", value: 0 } } },
 								tooltip: {
-									enabled: false, // Отключаем тултип
+									style: { fontSize: "12px", borderRadius: 4 },
+									y: {
+										formatter: function (e) {
+											return e > 0 ? e : Math.abs(e);
+										},
+									},
 								},
 								colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
 								grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
