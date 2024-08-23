@@ -236,6 +236,17 @@
 											return e > 0 ? e : Math.abs(e);
 										},
 									},
+									marker: {
+										show: false // Убираем маркер (точку) в тултипе
+									},
+									custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+										// Убираем стрелку с подписью
+										return `
+                                        <div class="apexcharts-tooltip">
+                                            <div class="apexcharts-tooltip-title">${series[seriesIndex][dataPointIndex]}</div>
+                                        </div>
+                                    `;
+									}
 								},
 								colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
 								grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
