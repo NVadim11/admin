@@ -4,6 +4,7 @@ namespace Modules\Notifications\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Request as Req;
 use Illuminate\Support\Facades\DB;
 use Modules\Core\Http\Controllers\CrudController;
 use Modules\Notifications\Entities\Notification;
@@ -72,37 +73,13 @@ class NotificationsController extends CrudController
     public function index(Request $request)
     {
         app()->setLocale(auth()->user()->locale ?? config('app.locale'));
-        $route = action($this->getActionRoute('store'), $this->action_url_params);
-        $this->page_size = isset($_GET['size']) ? $_GET['size'] : 10;
-        $items = $this->crudService->getItems($this->page_size);
 
-        $form = $this->crudService->createForm($route);
-
-        return view($this->templateIndex, [
-            'form' => $form,
-            'items' => $items,
-            'title' => $this->getTitle(),
-            'add_new_title' => $this->getTitle('create'),
-            'controller' => $this->getController(),
-            'fields' => $this->listFields(),
-            'sortable' => $this->isSortable,
-            'sortOrder' => $this->sortOrder,
-            'sortValue' => $this->sortValue,
-            'outlist' => $this->outlist
-        ]);
-    }
-
-    public function edit($id)
-    {
-        app()->setLocale(auth()->user()->locale ?? config('app.locale'));
-
-        $request = new Request();
         $date = Carbon::now();
         $period = 'day';
         $votes = [];
 
-        if ($request->get('stat')) {
-            $period = $request->get('stat');
+        if (Req::get('stat')) {
+            $period = Req::get('stat');
         }
 
         switch($period) {
@@ -123,8 +100,8 @@ class NotificationsController extends CrudController
         for ($i = 0; $i < $days_count; $i++) {
             switch($period) {
                 case "day":
-                    $startOfDay = $date->copy()->format('Y-m-d H:00:00');
-                    $endOfDay = $date->format('Y-m-d H:59:59');
+                    $startOfDay = $date->copy()->format('Y-m-d 00:00:00');
+                    $endOfDay = $date->format('Y-m-d 23:59:59');
                     $formattedDate = $date->format('d M H:00');
                     $formattedDay = $date->format('d M H:00');
                     break;
@@ -149,8 +126,8 @@ class NotificationsController extends CrudController
             }
 
             $votesCount = DB::selectOne('
-                SELECT COUNT(CASE WHEN client_id IS NOT NULL THEN 1 END) as count 
-                FROM project_votes 
+                SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count
+                FROM notification_statuses 
                 WHERE created_at BETWEEN ? AND ?
             ', [$startOfDay, $endOfDay])->count;
 
@@ -176,7 +153,112 @@ class NotificationsController extends CrudController
             }
         }
 
+        $route = action($this->getActionRoute('store'), $this->action_url_params);
+        $this->page_size = isset($_GET['size']) ? $_GET['size'] : 10;
+        $items = $this->crudService->getItems($this->page_size);
+
+        $form = $this->crudService->createForm($route);
+
+        return view($this->templateIndex, [
+            'form' => $form,
+            'items' => $items,
+            'title' => $this->getTitle(),
+            'add_new_title' => $this->getTitle('create'),
+            'controller' => $this->getController(),
+            'fields' => $this->listFields(),
+            'sortable' => $this->isSortable,
+            'sortOrder' => $this->sortOrder,
+            'sortValue' => $this->sortValue,
+            'outlist' => $this->outlist,
+            'votes' => $votes
+        ]);
+    }
+
+    public function edit($id)
+    {
+        app()->setLocale(auth()->user()->locale ?? config('app.locale'));
         $item = $this->crudService->getItemById($id);
+
+        $date = Carbon::now();
+        $period = 'day';
+        $votes = [];
+
+        if (Req::get('stat')) {
+            $period = Req::get('stat');
+        }
+
+        switch($period) {
+            case "day":
+                $days_count = 24;
+                break;
+            case "week":
+                $days_count = 14;
+                break;
+            case "month":
+                $days_count = 31;
+                break;
+            case "year":
+                $days_count = 12;
+                break;
+        }
+
+        for ($i = 0; $i < $days_count; $i++) {
+            switch($period) {
+                case "day":
+                    $startOfDay = $date->copy()->format('Y-m-d 00:00:00');
+                    $endOfDay = $date->format('Y-m-d 23:59:59');
+                    $formattedDate = $date->format('d M H:00');
+                    $formattedDay = $date->format('d M H:00');
+                    break;
+                case "week":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "month":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "year":
+                    $startOfDay = $date->startOfDay()->format('Y-m-01');
+                    $endOfDay = $date->endOfDay()->format('Y-m-31');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('M');
+                    break;
+            }
+
+            $votesCount = DB::selectOne('
+                SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count
+                FROM notification_statuses 
+                WHERE notification_type = ' . $item->type . ' 
+                AND created_at BETWEEN ? AND ?
+            ', [$startOfDay, $endOfDay])->count;
+
+            $votes[] = [
+                'date' => $formattedDate,
+                'day' => $formattedDay,
+                'votes' => $votesCount
+            ];
+
+            switch($period) {
+                case "day":
+                    $date->subHour();
+                    break;
+                case "week":
+                    $date->subDay();
+                    break;
+                case "month":
+                    $date->subDay();
+                    break;
+                case "year":
+                    $date->subMonth();
+                    break;
+            }
+        }
+
         $route = action($this->getActionRoute('update'), ['notification' => $id]);
         $form = $this->crudService->getEditForm($item, $route);
 		$page = isset($_GET['page']) ? $_GET['page'] : 1;

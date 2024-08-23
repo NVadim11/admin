@@ -14,7 +14,7 @@
 			<div class="card-header pt-5">
 				<!--begin::Title-->
 				<h3 class="card-title align-items-start flex-column">
-					<span class="card-label fw-bold text-dark">{{ $item->name }} Voting Activity</span>
+					<span class="card-label fw-bold text-dark">{{ $item->name }} — Notify Activity</span>
 					{{--                <span class="text-gray-400 pt-2 fw-semibold fs-6">75% activity growth</span>--}}
 				</h3>
 				<!--end::Title-->
@@ -34,22 +34,22 @@
 						<!--end::Menu separator-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
-							<a href="/admin/projects/{{ $item->id }}/edit?stat=day" class="menu-link px-3 {{ request()->get('stat') == 'day' || !request()->get('stat') ? 'active' : '' }}">Day</a>
+							<a href="/admin/notifications/{{ $item->id }}/edit?stat=day" class="menu-link px-3 {{ request()->get('stat') == 'day' || !request()->get('stat') ? 'active' : '' }}">Day</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
-							<a href="/admin/projects/{{ $item->id }}/edit?stat=week" class="menu-link px-3 {{ request()->get('stat') == 'week' ? 'active' : '' }}">Week</a>
+							<a href="/admin/notifications/{{ $item->id }}/edit?stat=week" class="menu-link px-3 {{ request()->get('stat') == 'week' ? 'active' : '' }}">Week</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
-							<a href="/admin/projects/{{ $item->id }}/edit?stat=month" class="menu-link px-3 {{ request()->get('stat') == 'month' ? 'active' : '' }}">Month</a>
+							<a href="/admin/notifications/{{ $item->id }}/edit?stat=month" class="menu-link px-3 {{ request()->get('stat') == 'month' ? 'active' : '' }}">Month</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
-							<a href="/admin/projects/{{ $item->id }}/edit?stat=year" class="menu-link px-3 {{ request()->get('stat') == 'year' ? 'active' : '' }}">Year</a>
+							<a href="/admin/notifications/{{ $item->id }}/edit?stat=year" class="menu-link px-3 {{ request()->get('stat') == 'year' ? 'active' : '' }}">Year</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu separator-->
@@ -124,7 +124,6 @@
 	$vote = collect(array_reverse($votes))->pluck('votes')->toJson();
 
 	$maxValueVotes = max(collect(array_reverse($votes))->pluck('votes')->toArray());
-
 @endphp
 @push('scripts')
 	<script>
