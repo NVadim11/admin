@@ -180,7 +180,7 @@ class Account extends Model
             $redis->deleteIfExists($model->id_telegram);
         });
         self::updating(function($model){
-            if ($model->isDirty('claimer_timer')) {
+            if ($model->isDirty('username')) {
                 NotificationStatuses::where('notification_type', 2)
                     ->where('id_telegram', $model->id_telegram)
                     ->delete();
