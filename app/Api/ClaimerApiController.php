@@ -2,6 +2,7 @@
 
 namespace App\Api;
 
+use App\Entities\NotificationStatuses;
 use App\Http\Controllers\Controller;
 use App\Services\RedisService;
 use Carbon\Carbon;
@@ -126,6 +127,10 @@ class ClaimerApiController extends Controller
                         Log::channel('update_balance_log')->debug("BOT — Save account to DB/Redis instance of Redis exec time: {$executionTime} ms");
                         //log
                     }
+
+                    NotificationStatuses::where('notification_type', 2)
+                        ->where('id_telegram', $account->id_telegram)
+                        ->delete();
 
                     return response()->json([
                         'message' => 'Claimed! New balacne: '.$account->wallet_balance, 
