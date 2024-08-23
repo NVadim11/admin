@@ -88,13 +88,13 @@ class NotificationsController extends CrudController
                 $days_count = 60;
                 break;
             case "hour":
-                $days_count = 24;
-                break;
-            case "day":
                 $days_count = 14;
                 break;
+            case "day":
+                $days_count = 24;
+                break;
             case "week":
-                $days_count = 4;
+                $days_count = 7;
                 break;
         }
 
@@ -103,29 +103,28 @@ class NotificationsController extends CrudController
                 case "minute":
                     $date = $date->copy();
                     $endOfDay = $date->copy();
-                    $startOfDay = $date->copy()->subMinutes(60);
+                    $startOfDay = $date->copy()->subMinutes($days_count);
                     $formattedDate = $startOfDay->format('d M H:i');
                     $formattedDay = $endOfDay->format('d M H:i');
                     break;
                 case "hour":
                     $date = $date->copy();
-                    $startOfDay = $date->copy();
-                    $endOfDay = $date->copy()->subHours(24);
+                    $endOfDay = $date->copy();
+                    $startOfDay = $date->copy()->subHours($days_count);
                     $formattedDate = $startOfDay->format('d M H:i');
-                    $formattedDay = $endOfDay->format('d M H:00');
+                    $formattedDay = $endOfDay->format('d M H:i');
                     break;
                 case "day":
-                    $startOfDay = $date->startOfDay();
-                    $endOfDay = $date->endOfDay();
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
                     $formattedDate = $date->format('Y-m-d');
                     $formattedDay = $date->format('d M');
                     break;
                 case "week":
-                    $date = $date->copy();
-                    $startOfDay = $date->copy();
-                    $endOfDay = $date->copy()->subWeeks(4);
-                    $formattedDate = $startOfDay->format('d M');
-                    $formattedDay = $endOfDay->format('d M');
+                    $startOfDay = $date->startOfDay()->format('Y-m-01');
+                    $endOfDay = $date->endOfDay()->format('Y-m-31');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('M');
                     break;
             }
 
@@ -133,7 +132,7 @@ class NotificationsController extends CrudController
                 SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count
                 FROM notification_statuses 
                 WHERE created_at BETWEEN ? AND ?
-            ', [$startOfDay->format('Y-m-d H:i:s'), $endOfDay->format('Y-m-d H:i:s')])->count;
+            ', [$startOfDay, $endOfDay])->count;
 
             $votes[] = [
                 'date' => $formattedDate,
