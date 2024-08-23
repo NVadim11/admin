@@ -230,15 +230,7 @@
 								fill: { opacity: 1 },
 								states: { normal: { filter: { type: "none", value: 0 } }, hover: { filter: { type: "none", value: 0 } }, active: { allowMultipleDataPointsSelection: !1, filter: { type: "none", value: 0 } } },
 								tooltip: {
-									style: { fontSize: "12px", borderRadius: 4 },
-									x: {
-										show: false // Убирает стрелку с подписью по оси X
-									},
-									y: {
-										formatter: function (e) {
-											return e > 0 ? e : Math.abs(e);
-										},
-									},
+									enabled: false, // Отключаем тултип
 								},
 								colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
 								grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
