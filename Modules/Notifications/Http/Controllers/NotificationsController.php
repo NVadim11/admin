@@ -2,6 +2,7 @@
 
 namespace Modules\Notifications\Http\Controllers;
 
+use App\Entities\NotificationStatuses;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Request as Req;
@@ -185,6 +186,10 @@ class NotificationsController extends CrudController
 
         if (Req::get('stat')) {
             $period = Req::get('stat');
+        }
+
+        if (Req::get('clear')) {
+            NotificationStatuses::where('notification_type', $item->type)->delete();
         }
 
         switch($period) {
