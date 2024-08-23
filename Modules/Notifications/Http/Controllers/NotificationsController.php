@@ -115,16 +115,18 @@ class NotificationsController extends CrudController
                     $formattedDay = $endOfDay->format('d M H:i');
                     break;
                 case "day":
-                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
-                    $formattedDate = $date->format('Y-m-d');
-                    $formattedDay = $date->format('d M');
+                    $date = $date->copy();
+                    $endOfDay = $date->copy();
+                    $startOfDay = $date->copy()->subDays($days_count);
+                    $formattedDate = $startOfDay->format('d M H');
+                    $formattedDay = $endOfDay->format('d M H');
                     break;
                 case "week":
-                    $startOfDay = $date->startOfDay()->format('Y-m-01');
-                    $endOfDay = $date->endOfDay()->format('Y-m-31');
-                    $formattedDate = $date->format('Y-m-d');
-                    $formattedDay = $date->format('M');
+                    $date = $date->copy();
+                    $endOfDay = $date->copy();
+                    $startOfDay = $date->copy()->subWeeks($days_count);
+                    $formattedDate = $startOfDay->format('d M');
+                    $formattedDay = $endOfDay->format('d M');
                     break;
             }
 
