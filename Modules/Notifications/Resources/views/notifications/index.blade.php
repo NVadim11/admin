@@ -161,105 +161,109 @@
 @endphp
 @push('scripts')
 	<script>
-    var KTChartsGameDynamics = (function () {
-        var e = { self: null, rendered: !1 },
-            t = function () {
-                var t = document.getElementById("kt_charts_game_dynamics");
-                if (t) {
-                    var a = t.hasAttribute("data-kt-negative-color") ? t.getAttribute("data-kt-negative-color") : KTUtil.getCssVariableValue("--bs-success"),
-                        l = parseInt(KTUtil.css(t, "height")),
-                        r = KTUtil.getCssVariableValue("--bs-gray-500"),
-                        o = KTUtil.getCssVariableValue("--bs-border-dashed-color"),
-                        i = {
-                            series: [
-                                { name: "Votes", data: {{ $vote }} },
-                            ],
-                            chart: { fontFamily: "inherit", type: "line", height: l, toolbar: { show: !1 } },
-                            plotOptions: {
-                                line: {
-                                    curve: 'smooth', // Установка сглаживания линии
-                                    dataLabels: { enabled: false }, // Отключаем метки данных
-                                }
-                            },
-                            legend: { show: !1 },
-                            dataLabels: { enabled: !1 },
-                            xaxis: {
-                                categories: {!! $vote_d !!},
-                                axisBorder: { show: !1 },
-                                axisTicks: { show: !1 },
-                                tickAmount: {{ $count }},
-                                labels: { style: { colors: [r], fontSize: "10px" } },
-                                crosshairs: { show: !1 },
-                            },
-                            yaxis: {
-                                min: 0,
-                                max: {{ $maxValueVotes }},
-                                tickAmount: 3,
-                                labels: {
-                                    style: { colors: [r], fontSize: "11px" },
-                                    formatter: function (e) {
-                                        return parseInt(e);
-                                    },
-                                },
-                            },
-                            responsive: [
-                                {
-                                    breakpoint: 768,
-                                    options: {
-                                        xaxis: {
-                                            labels: {
-                                                style: {
-                                                    fontSize: "7px"
-                                                }
-                                            }
-                                        },
-                                        yaxis: {
-                                            labels: {
-                                                style: {
-                                                    fontSize: "7px"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            ],
-                            fill: { opacity: 1 },
-                            states: { normal: { filter: { type: "none", value: 0 } }, hover: { filter: { type: "none", value: 0 } }, active: { allowMultipleDataPointsSelection: !1, filter: { type: "none", value: 0 } } },
-                            tooltip: {
-                                style: { fontSize: "12px", borderRadius: 4 },
-                                y: {
-                                    formatter: function (e) {
-                                        return e > 0 ? e : Math.abs(e);
-                                    },
-                                },
-                            },
-                            colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
-                            grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
-                            markers: {
-                                size: 2, // Размер маркеров (точек) на линии
-                                colors: [KTUtil.getCssVariableValue("--bs-primary")],
-                                strokeColor: KTUtil.getCssVariableValue("--bs-primary"),
-                                strokeWidth: 0.5,
-                                hover: {
-                                    size: 6,
-                                },
-                            },
-                        };
-                    (e.self = new ApexCharts(t, i)),
-                        setTimeout(function () {
-                            e.self.render(), (e.rendered = !0);
-                        }, 200);
-                }
-            };
-        return {
-            init: function () {
-                t(),
-                    KTThemeMode.on("kt.thememode.change", function () {
-                        e.rendered && e.self.destroy(), t();
-                    });
-            },
-        };
-    })();
+		var KTChartsGameDynamics = (function () {
+			var e = { self: null, rendered: !1 },
+				t = function () {
+					var t = document.getElementById("kt_charts_game_dynamics");
+					if (t) {
+						var a = t.hasAttribute("data-kt-negative-color") ? t.getAttribute("data-kt-negative-color") : KTUtil.getCssVariableValue("--bs-success"),
+							l = parseInt(KTUtil.css(t, "height")),
+							r = KTUtil.getCssVariableValue("--bs-gray-500"),
+							o = KTUtil.getCssVariableValue("--bs-border-dashed-color"),
+							i = {
+								series: [
+									{ name: "Votes", data: {{ $vote }} },
+								],
+								chart: { fontFamily: "inherit", type: "line", height: l, toolbar: { show: !1 } },
+								plotOptions: {
+									line: {
+										curve: 'smooth', // Установка сглаживания линии
+										dataLabels: { enabled: false }, // Отключаем метки данных
+									}
+								},
+								stroke: { // Настройка толщины линии
+									width: 1, // Установите толщину линии в 1 пиксель
+									curve: 'smooth' // Для сглаживания линии, если требуется
+								},
+								legend: { show: !1 },
+								dataLabels: { enabled: !1 },
+								xaxis: {
+									categories: {!! $vote_d !!},
+									axisBorder: { show: !1 },
+									axisTicks: { show: !1 },
+									tickAmount: {{ $count }},
+									labels: { style: { colors: [r], fontSize: "10px" } },
+									crosshairs: { show: !1 },
+								},
+								yaxis: {
+									min: 0,
+									max: {{ $maxValueVotes }},
+									tickAmount: 3,
+									labels: {
+										style: { colors: [r], fontSize: "11px" },
+										formatter: function (e) {
+											return parseInt(e);
+										},
+									},
+								},
+								responsive: [
+									{
+										breakpoint: 768,
+										options: {
+											xaxis: {
+												labels: {
+													style: {
+														fontSize: "7px"
+													}
+												}
+											},
+											yaxis: {
+												labels: {
+													style: {
+														fontSize: "7px"
+													}
+												}
+											}
+										}
+									}
+								],
+								fill: { opacity: 1 },
+								states: { normal: { filter: { type: "none", value: 0 } }, hover: { filter: { type: "none", value: 0 } }, active: { allowMultipleDataPointsSelection: !1, filter: { type: "none", value: 0 } } },
+								tooltip: {
+									style: { fontSize: "12px", borderRadius: 4 },
+									y: {
+										formatter: function (e) {
+											return e > 0 ? e : Math.abs(e);
+										},
+									},
+								},
+								colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
+								grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
+								markers: {
+									size: 2, // Размер маркеров (точек) на линии
+									colors: [KTUtil.getCssVariableValue("--bs-primary")],
+									strokeColor: KTUtil.getCssVariableValue("--bs-primary"),
+									strokeWidth: 0.5,
+									hover: {
+										size: 6,
+									},
+								},
+							};
+						(e.self = new ApexCharts(t, i)),
+							setTimeout(function () {
+								e.self.render(), (e.rendered = !0);
+							}, 200);
+					}
+				};
+			return {
+				init: function () {
+					t(),
+						KTThemeMode.on("kt.thememode.change", function () {
+							e.rendered && e.self.destroy(), t();
+						});
+				},
+			};
+		})();
 
 		"undefined" != typeof module && (module.exports = KTChartsWidget1) && (module.exports = KTChartsGameDynamics),
 			KTUtil.onDOMContentLoaded(function () {
