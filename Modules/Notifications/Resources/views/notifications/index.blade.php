@@ -236,10 +236,10 @@
                             colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
                             grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
                             markers: {
-                                size: 4, // Размер маркеров (точек) на линии
+                                size: 3, // Размер маркеров (точек) на линии
                                 colors: [KTUtil.getCssVariableValue("--bs-primary")],
                                 strokeColor: KTUtil.getCssVariableValue("--bs-primary"),
-                                strokeWidth: 2,
+                                strokeWidth: 1,
                                 hover: {
                                     size: 6,
                                 },
