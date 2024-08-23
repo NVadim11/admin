@@ -102,22 +102,22 @@
 @endpush
 
 @php
-	$period = 'day';
+	$period = 'minute';
 	if (isset($_GET['stat'])) {
 		$period = $_GET['stat'];
 	}
 	switch($period) {
-		case "day":
+		case "minute":
+			$count = 60;
+			break;
+		case "hour":
 			$count = 24;
 			break;
-		case "week":
+		case "day":
 			$count = 14;
 			break;
-		case "month":
-			$count = 31;
-			break;
-		case "year":
-			$count = 12;
+		case "week":
+			$count = 4;
 			break;
 	}
 
@@ -139,10 +139,19 @@
 							o = KTUtil.getCssVariableValue("--bs-border-dashed-color"),
 							i = {
 								series: [
-									{ name: "Votes", data: {{ $vote }} },
+									{ name: "Notifications", data: {{ $vote }} },
 								],
-								chart: { fontFamily: "inherit", type: "bar", stacked: !0, height: l, toolbar: { show: !1 } },
-								plotOptions: { bar: { columnWidth: "35%", barHeight: "70%", borderRadius: [6, 6] } },
+								chart: { fontFamily: "inherit", type: "line", height: l, toolbar: { show: !1 } },
+								plotOptions: {
+									line: {
+										curve: 'smooth', // Установка сглаживания линии
+										dataLabels: { enabled: false }, // Отключаем метки данных
+									}
+								},
+								stroke: { // Настройка толщины линии
+									width: 2, // Установите толщину линии в 2 пикселя
+									curve: 'smooth' // Для сглаживания линии, если требуется
+								},
 								legend: { show: !1 },
 								dataLabels: { enabled: !1 },
 								xaxis: {
@@ -150,8 +159,11 @@
 									axisBorder: { show: !1 },
 									axisTicks: { show: !1 },
 									tickAmount: {{ $count }},
-									labels: { style: { colors: [r], fontSize: "11px" } },
+									labels: { style: { colors: [r], fontSize: "10px" } },
 									crosshairs: { show: !1 },
+									tooltip: { // Отключаем тултип по оси X
+										enabled: false
+									}
 								},
 								yaxis: {
 									min: 0,
@@ -191,12 +203,24 @@
 									style: { fontSize: "12px", borderRadius: 4 },
 									y: {
 										formatter: function (e) {
-											return e > 0 ? e  : Math.abs(e);
+											return e > 0 ? e : Math.abs(e);
 										},
 									},
+									x: {
+										show: false // Отключаем тултип по оси X
+									}
 								},
 								colors: [KTUtil.getCssVariableValue("--bs-primary"), a],
 								grid: { borderColor: o, strokeDashArray: 4, yaxis: { lines: { show: !0 } } },
+								markers: {
+									size: 2, // Размер маркеров (точек) на линии
+									colors: [KTUtil.getCssVariableValue("--bs-primary")],
+									strokeColor: KTUtil.getCssVariableValue("--bs-primary"),
+									strokeWidth: 0.5,
+									hover: {
+										size: 6,
+									},
+								},
 							};
 						(e.self = new ApexCharts(t, i)),
 							setTimeout(function () {
