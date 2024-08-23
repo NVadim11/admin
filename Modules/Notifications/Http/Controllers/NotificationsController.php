@@ -102,11 +102,10 @@ class NotificationsController extends CrudController
             switch($period) {
                 case "minute":
                     $date = $date->copy();
-                    $startOfDay = $date->copy();
-                    $endOfDay = $date->copy()->subMinutes(60);
+                    $endOfDay = $date->copy();
+                    $startOfDay = $date->copy()->subMinutes(60);
                     $formattedDate = $startOfDay->format('d M H:i');
                     $formattedDay = $endOfDay->format('d M H:i');
-
                     break;
                 case "hour":
                     $date = $date->copy();
