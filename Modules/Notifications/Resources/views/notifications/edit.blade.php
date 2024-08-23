@@ -34,22 +34,22 @@
 						<!--end::Menu separator-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
-							<a href="/admin/notifications/{{ $item->id }}/edit?stat=day" class="menu-link px-3 {{ request()->get('stat') == 'day' || !request()->get('stat') ? 'active' : '' }}">Day</a>
+							<a href="/admin/notifications/{{ $item->id }}/edit?stat=minute" class="menu-link px-3 {{ request()->get('stat') == 'minute' || !request()->get('stat') ? 'active' : '' }}">Minute</a>
+						</div>
+						<!--end::Menu item-->
+						<!--begin::Menu item-->
+						<div class="menu-item px-3">
+							<a href="/admin/notifications/{{ $item->id }}/edit?stat=hour" class="menu-link px-3 {{ request()->get('stat') == 'hour' ? 'active' : '' }}">Hour</a>
+						</div>
+						<!--end::Menu item-->
+						<!--begin::Menu item-->
+						<div class="menu-item px-3">
+							<a href="/admin/notifications/{{ $item->id }}/edit?stat=day" class="menu-link px-3 {{ request()->get('stat') == 'day' ? 'active' : '' }}">Day</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu item-->
 						<div class="menu-item px-3">
 							<a href="/admin/notifications/{{ $item->id }}/edit?stat=week" class="menu-link px-3 {{ request()->get('stat') == 'week' ? 'active' : '' }}">Week</a>
-						</div>
-						<!--end::Menu item-->
-						<!--begin::Menu item-->
-						<div class="menu-item px-3">
-							<a href="/admin/notifications/{{ $item->id }}/edit?stat=month" class="menu-link px-3 {{ request()->get('stat') == 'month' ? 'active' : '' }}">Month</a>
-						</div>
-						<!--end::Menu item-->
-						<!--begin::Menu item-->
-						<div class="menu-item px-3">
-							<a href="/admin/notifications/{{ $item->id }}/edit?stat=year" class="menu-link px-3 {{ request()->get('stat') == 'year' ? 'active' : '' }}">Year</a>
 						</div>
 						<!--end::Menu item-->
 						<!--begin::Menu separator-->

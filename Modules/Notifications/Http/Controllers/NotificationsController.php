@@ -185,7 +185,7 @@ class NotificationsController extends CrudController
         $item = $this->crudService->getItemById($id);
 
         $date = Carbon::now();
-        $period = 'day';
+        $period = 'minute';
         $votes = [];
 
         if (Req::get('stat')) {
