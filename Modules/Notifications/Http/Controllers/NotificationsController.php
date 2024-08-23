@@ -85,7 +85,7 @@ class NotificationsController extends CrudController
 
         switch($period) {
             case "minute":
-                $days_count = 60;
+                $days_count = 30;
                 break;
             case "hour":
                 $days_count = 14;
@@ -198,7 +198,7 @@ class NotificationsController extends CrudController
 
         switch($period) {
             case "minute":
-                $days_count = 60;
+                $days_count = 30;
                 break;
             case "hour":
                 $days_count = 14;

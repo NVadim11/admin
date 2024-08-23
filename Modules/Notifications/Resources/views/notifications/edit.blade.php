@@ -108,7 +108,7 @@
 	}
 	switch($period) {
 		case "minute":
-			$count = 60;
+			$count = 30;
 			break;
 		case "hour":
 			$count = 24;
