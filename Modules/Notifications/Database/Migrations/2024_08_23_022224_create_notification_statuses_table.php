@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('id_telegram', 16)->nullable();
             $table->tinyInteger('notification_type')->default(0);
+            $table->timestamps();
         });
     }
 

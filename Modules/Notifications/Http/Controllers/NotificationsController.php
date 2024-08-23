@@ -2,7 +2,9 @@
 
 namespace Modules\Notifications\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Modules\Core\Http\Controllers\CrudController;
 use Modules\Notifications\Entities\Notification;
 use Yajra\DataTables\DataTables;
@@ -93,7 +95,87 @@ class NotificationsController extends CrudController
     public function edit($id)
     {
         app()->setLocale(auth()->user()->locale ?? config('app.locale'));
-//        $item = $this->crudService->getItemById($id)->load('partners')->load('certificates');
+
+        $request = new Request();
+        $date = Carbon::now();
+        $period = 'day';
+        $votes = [];
+
+        if ($request->get('stat')) {
+            $period = $request->get('stat');
+        }
+
+        switch($period) {
+            case "day":
+                $days_count = 24;
+                break;
+            case "week":
+                $days_count = 14;
+                break;
+            case "month":
+                $days_count = 31;
+                break;
+            case "year":
+                $days_count = 12;
+                break;
+        }
+
+        for ($i = 0; $i < $days_count; $i++) {
+            switch($period) {
+                case "day":
+                    $startOfDay = $date->copy()->format('Y-m-d H:00:00');
+                    $endOfDay = $date->format('Y-m-d H:59:59');
+                    $formattedDate = $date->format('d M H:00');
+                    $formattedDay = $date->format('d M H:00');
+                    break;
+                case "week":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "month":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "year":
+                    $startOfDay = $date->startOfDay()->format('Y-m-01');
+                    $endOfDay = $date->endOfDay()->format('Y-m-31');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('M');
+                    break;
+            }
+
+            $votesCount = DB::selectOne('
+                SELECT COUNT(CASE WHEN client_id IS NOT NULL THEN 1 END) as count 
+                FROM project_votes 
+                WHERE created_at BETWEEN ? AND ?
+            ', [$startOfDay, $endOfDay])->count;
+
+            $votes[] = [
+                'date' => $formattedDate,
+                'day' => $formattedDay,
+                'votes' => $votesCount
+            ];
+
+            switch($period) {
+                case "day":
+                    $date->subHour();
+                    break;
+                case "week":
+                    $date->subDay();
+                    break;
+                case "month":
+                    $date->subDay();
+                    break;
+                case "year":
+                    $date->subMonth();
+                    break;
+            }
+        }
+
         $item = $this->crudService->getItemById($id);
         $route = action($this->getActionRoute('update'), ['notification' => $id]);
         $form = $this->crudService->getEditForm($item, $route);
@@ -105,7 +187,8 @@ class NotificationsController extends CrudController
             'module_title' => $this->getTitle('index'),
             'controller' => $this->getController(),
             'item' => $item,
-			'page' => $page
+			'page' => $page,
+            'votes' => $votes
         ]);
     }
 
