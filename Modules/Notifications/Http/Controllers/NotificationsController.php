@@ -24,10 +24,10 @@ class NotificationsController extends CrudController
                 'name' => 'Name',
                 'type' => 'text'
             ],
-            'message' => [
-                'name' => 'Message',
-                'type' => 'textarea'
-            ],
+//            'message' => [
+//                'name' => 'Message',
+//                'type' => 'textarea'
+//            ],
             'image' => [
                 'name' => 'Image',
                 'type' => 'image'
