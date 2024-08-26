@@ -226,7 +226,7 @@ class LiderboardApiController extends Controller
             }
 
             if ($current) {
-                $position = DB::select("SELECT id, username, referrals_count, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.referrals_count > a1.referrals_count) AS 'rank' FROM accounts AS a1 WHERE id = " . $current->id);
+                $position = DB::select("SELECT id, username, referrals_count, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.referrals_count > a1.referrals_count) AS 'rank' FROM accounts AS a1 WHERE id_telegram = " . $current->id);
                 $accounts = Account::select('id', 'username', 'wallet_address', 'id_telegram', 'referrals_count')
                     ->orderByRaw("referrals_count DESC")
                     ->whereRaw('referrals_count > 0 and vis = 1')
