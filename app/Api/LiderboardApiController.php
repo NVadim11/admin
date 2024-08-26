@@ -148,9 +148,10 @@ class LiderboardApiController extends Controller
 
                 $accounts = ProjectVote::select('project_votes.client_id')
                     ->selectRaw('accounts.username')
+                    ->selectRaw('accounts.vis')
                     ->selectRaw('COUNT(project_votes.id) AS total_votes')
                     ->join('accounts', 'accounts.id_telegram', '=', 'project_votes.client_id')
-                    ->groupBy('project_votes.client_id', 'accounts.username')
+                    ->groupBy('project_votes.client_id', 'accounts.username', 'accounts.vis')
                     ->orderBy('total_votes', 'desc')
                     ->limit(100)
                     ->get();
