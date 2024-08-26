@@ -157,25 +157,27 @@ class LiderboardApiController extends Controller
 
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
-                        $cur_pos = $pos + 1;
-                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
-                            $res[] = array(
-                                'id' => $account->id,
-                                'username' => $account->username,
-                                'position' => $cur_pos,
-                                'current' => true,
-                                'id_telegram' => $account->client_id,
-                                'total_votes' => $account->total_votes,
-                            );
-                        } else {
-                            $res[] = array(
-                                'id' => $account->id,
-                                'username' => $account->username,
-                                'position' => $cur_pos,
-                                'current' => false,
-                                'id_telegram' => $account->client_id,
-                                'total_votes' => $account->total_votes,
-                            );
+                        if ($account->vis) {
+                            $cur_pos = $pos + 1;
+                            if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
+                                $res[] = array(
+                                    'id' => $account->id,
+                                    'username' => $account->username,
+                                    'position' => $cur_pos,
+                                    'current' => true,
+                                    'id_telegram' => $account->client_id,
+                                    'total_votes' => $account->total_votes,
+                                );
+                            } else {
+                                $res[] = array(
+                                    'id' => $account->id,
+                                    'username' => $account->username,
+                                    'position' => $cur_pos,
+                                    'current' => false,
+                                    'id_telegram' => $account->client_id,
+                                    'total_votes' => $account->total_votes,
+                                );
+                            }
                         }
                     }
 
