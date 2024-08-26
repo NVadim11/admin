@@ -261,7 +261,7 @@ class LiderboardApiController extends Controller
                         $res[] = array(
                             'id' => $current->id,
                             'username' => $current->username,
-                            'position' => $position->rank,
+                            'position' => $position[0]->rank,
                             'current' => true,
                             'id_telegram' => $current->id_telegram,
                             'referrals_count' => $current->referrals_count,
