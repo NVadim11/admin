@@ -96,6 +96,14 @@ class AccountsController extends CrudController
                 'name' => 'Timezone',
                 'type' => 'static'
             ],
+            'vis' => [
+                'name' => 'Display',
+                'type' => 'option',
+                'choises' => [
+                    1 => 'Yes',
+                    0 => 'No'
+                ]
+            ],
             'created_at' => [
                 'name' => 'Created at',
                 'type' => 'static'

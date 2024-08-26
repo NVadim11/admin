@@ -83,6 +83,24 @@ class AccountForm extends Form
                 'label' => 'Timezone',
                 'aside' => 1
             ])
+            ->add('is_wallet_connected', 'select', [
+                'label' => 'Is wallet connected',
+                'aside' => 1,
+                'choices' => [
+                    0 => 'No',
+                    1 => 'Yes'
+                ]
+            ])
+            ->add('claimer_timer', 'datetimepicker', [
+                'label' => 'Next claim in',
+                'aside' => 1
+            ])
+            ->add('claimer_value', 'text', [
+                'label' => 'Claimer value',
+                'default_value' => 0,
+                'rules' => 'min:1|regex:/^[0-9]+$/u',
+                'aside' => 1
+            ])
             ->add('twitter', 'select', [
                 'label' => 'Twitter',
                 'choices' => [
@@ -113,6 +131,13 @@ class AccountForm extends Form
             ])
             ->add('referral_code', 'text', [
                 'label' => 'Referral Code'
+            ])
+            ->add('vis', 'select', [
+                'label' => 'Display',
+                'choices' => [
+                    1 => 'Yes',
+                    0 => 'No'
+                ]
             ])
         ;
     }

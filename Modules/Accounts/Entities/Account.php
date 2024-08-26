@@ -48,7 +48,9 @@ class Account extends Model
                             'sessions',
                             'timezone',
                             'claimer_timer',
-                            'claimer_value'
+                            'claimer_value',
+                            'is_wallet_connected',
+                            'vis'
                         ];
 
     protected $appends = ['tap_value', 'tap_boost_value', 'max_energy', 'call_down_minutes'];
