@@ -148,37 +148,36 @@ class LiderboardApiController extends Controller
 
                 $accounts = ProjectVote::select('project_votes.client_id')
                     ->selectRaw('accounts.username')
-                    ->selectRaw('accounts.vis')
                     ->selectRaw('COUNT(project_votes.id) AS total_votes')
                     ->join('accounts', 'accounts.id_telegram', '=', 'project_votes.client_id')
-                    ->groupBy('project_votes.client_id', 'accounts.username', 'accounts.vis')
+                    ->where('accounts.vis', 1)
+                    ->groupBy('project_votes.client_id', 'accounts.username')
                     ->orderBy('total_votes', 'desc')
                     ->limit(100)
                     ->get();
 
+
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
-                        if ($account->vis) {
-                            $cur_pos = $pos + 1;
-                            if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
-                                $res[] = array(
-                                    'id' => $account->id,
-                                    'username' => $account->username,
-                                    'position' => $cur_pos,
-                                    'current' => true,
-                                    'id_telegram' => $account->client_id,
-                                    'total_votes' => $account->total_votes,
-                                );
-                            } else {
-                                $res[] = array(
-                                    'id' => $account->id,
-                                    'username' => $account->username,
-                                    'position' => $cur_pos,
-                                    'current' => false,
-                                    'id_telegram' => $account->client_id,
-                                    'total_votes' => $account->total_votes,
-                                );
-                            }
+                        $cur_pos = $pos + 1;
+                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
+                            $res[] = array(
+                                'id' => $account->id,
+                                'username' => $account->username,
+                                'position' => $cur_pos,
+                                'current' => true,
+                                'id_telegram' => $account->client_id,
+                                'total_votes' => $account->total_votes,
+                            );
+                        } else {
+                            $res[] = array(
+                                'id' => $account->id,
+                                'username' => $account->username,
+                                'position' => $cur_pos,
+                                'current' => false,
+                                'id_telegram' => $account->client_id,
+                                'total_votes' => $account->total_votes,
+                            );
                         }
                     }
 
