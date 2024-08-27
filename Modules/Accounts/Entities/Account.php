@@ -118,7 +118,7 @@ class Account extends Model
 
     public function partners_quests()
     {
-        return $this->hasMany(AccountPartnersQuest::class)->with('partners_quest');
+        return $this->hasMany(AccountPartnersQuest::class, 'id_telegram', 'id_telegram')->with('partners_quest');
     }
 
     public function projects_tasks()

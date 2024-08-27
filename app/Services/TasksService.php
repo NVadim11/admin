@@ -40,7 +40,7 @@ class TasksService
             foreach ($new_partners_quests as $new_partners_quest_id) {
                 $partners_quest = PartnersQuest::find($new_partners_quest_id);
                 $account_partners_quest = new AccountPartnersQuest();
-                $account_partners_quest->account_id = $account->id;
+                $account_partners_quest->id_telegram = $account->id_telegram;
                 $account_partners_quest->partners_quest_id = $partners_quest->id;
                 $account_partners_quest->reward = $partners_quest->reward;
                 $account_partners_quest->save();
