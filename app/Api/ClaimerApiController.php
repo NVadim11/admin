@@ -211,24 +211,15 @@ class ClaimerApiController extends Controller
     private function getAccount($id_telegram, $wallet_address)
     {
         $account = [];
-        $redis = new RedisService();
-        // Getting account from Redis
-        if ($id_telegram && $account = $redis->getData($id_telegram)) {
 
-            $account = json_decode($account);
-
-        } 
-        // Getting from DB
-        else {
-            if ($wallet_address) {
-                $account = Account::where('wallet_address', $wallet_address)
-                    ->with(['daily_quests', 'partners_quests'])
-                    ->first();
-            } elseif ($id_telegram) {
-                $account = Account::where('id_telegram', $id_telegram)
-                    ->with(['daily_quests', 'partners_quests'])
-                    ->first();
-            }
+        if ($wallet_address) {
+            $account = Account::where('wallet_address', $wallet_address)
+                ->with(['daily_quests', 'partners_quests'])
+                ->first();
+        } elseif ($id_telegram) {
+            $account = Account::where('id_telegram', $id_telegram)
+                ->with(['daily_quests', 'partners_quests'])
+                ->first();
         }
 
         return $account;
