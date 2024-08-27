@@ -93,6 +93,7 @@ class AccountForm extends Form
             ])
             ->add('claimer_timer', 'datetimepicker', [
                 'label' => 'Next claim in',
+                'default_value' => 0,
                 'aside' => 1
             ])
             ->add('claimer_value', 'text', [
