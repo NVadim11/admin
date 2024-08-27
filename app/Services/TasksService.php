@@ -19,8 +19,12 @@ class TasksService
             $partners_quests = PartnersQuest::where('vis', 1)->pluck('id')->toArray();
 
             // Daily quests
-            $existing_daily_quests = $account->daily_quests->pluck('daily_quest_id')->toArray();
-            $new_daily_quests = array_diff($daily_quests, $existing_daily_quests);
+            if(!empty($account->daily_quests)) {
+                $existing_daily_quests = $account->daily_quests->pluck('daily_quest_id')->toArray();
+                $new_daily_quests = array_diff($daily_quests, $existing_daily_quests);
+            } else {
+                $new_daily_quests = $daily_quests->pluck('id')->toArray();
+            }
 
             foreach ($new_daily_quests as $new_daily_quest_id) {
                 $daily_quest = DailyQuest::find($new_daily_quest_id);
@@ -34,8 +38,12 @@ class TasksService
             }
 
             // Partners quests
-            $existing_partners_quests = $account->partners_quests->pluck('partners_quest_id')->toArray();
-            $new_partners_quests = array_diff($partners_quests, $existing_partners_quests);
+            if(!empty($account->partners_quests)) {
+                $existing_partners_quests = $account->partners_quests->pluck('partners_quest_id')->toArray();
+                $new_partners_quests = array_diff($partners_quests, $existing_partners_quests);
+            } else {
+                $new_partners_quests = $partners_quests->pluck('id')->toArray();
+            }
 
             foreach ($new_partners_quests as $new_partners_quest_id) {
                 $partners_quest = PartnersQuest::find($new_partners_quest_id);
