@@ -53,8 +53,9 @@ class PartnersQuestsApiController extends Controller
 
             $partnersQuest->save();
 
+            $account->wallet_balance += $partnersQuest->reward;
+
             if ($account instanceof Account) {
-                $account->wallet_balance += $partnersQuest->reward;
                 $account->save();
             }
         });
