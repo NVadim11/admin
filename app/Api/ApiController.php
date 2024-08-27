@@ -148,21 +148,21 @@ class ApiController extends Controller
                 return response()->json(['message' => 'telegram ID not found'], 404);
             }
 
-            if ($account->wallet_address) {
-                $tasks = new TasksService();
-                $tasks->makeTasks($account);
+//            if ($account->wallet_address) {
+            $tasks = new TasksService();
+            $tasks->makeTasks($account);
 
-                //log
-                $startTime = microtime(true);
+            //log
+            $startTime = microtime(true);
 
-                $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
-                    ->where('id_telegram', $id)->first();
+            $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+                ->where('id_telegram', $id)->first();
 
-                $endTime = microtime(true);
-                $executionTime = ($endTime - $startTime) * 1000; // Время выполнения в миллисекундах
-                Log::channel('enter_game_log')->debug("BOT — User updated with tasks from DB exec time: {$executionTime} ms");
-                //log
-            }
+            $endTime = microtime(true);
+            $executionTime = ($endTime - $startTime) * 1000; // Время выполнения в миллисекундах
+            Log::channel('enter_game_log')->debug("BOT — User updated with tasks from DB exec time: {$executionTime} ms");
+            //log
+//            }
 
             $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
             Log::channel('enter_game_log')->debug("BOT — Save User to Redis");
