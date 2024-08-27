@@ -43,11 +43,11 @@ class AccountPartnersQuest extends Model
         self::created(function($model){});
         self::updated(function($model){
             $redis = new RedisService();
-            $redis->deleteIfExists($model->account()->id_telegram);
+            $redis->deleteIfExists($model->id_telegram);
         });
         self::deleted(function($model){
             $redis = new RedisService();
-            $redis->deleteIfExists($model->account()->id_telegram);
+            $redis->deleteIfExists($model->id_telegram);
         });
     }
 }
