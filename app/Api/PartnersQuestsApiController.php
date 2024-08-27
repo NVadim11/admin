@@ -42,7 +42,6 @@ class PartnersQuestsApiController extends Controller
                 return response()->json(['message' => 'user not found'], 404);
             }
 
-        } else {
             $account = json_decode($account, false);
         }
 
