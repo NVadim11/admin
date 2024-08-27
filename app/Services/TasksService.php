@@ -20,7 +20,11 @@ class TasksService
 
             // Daily quests
             if(!empty($account->daily_quests)) {
-                $existing_daily_quests = $account->daily_quests->pluck('daily_quest_id')->toArray();
+                if (is_array($account->daily_quests)) {
+                    $existing_daily_quests = array_column($account['daily_quests'], 'daily_quest_id');
+                } else {
+                    $existing_daily_quests = $account->daily_quests->pluck('daily_quest_id')->toArray();
+                }
                 $new_daily_quests = array_diff($daily_quests, $existing_daily_quests);
             } else {
                 $new_daily_quests = $daily_quests;
@@ -39,8 +43,11 @@ class TasksService
 
             // Partners quests
             if(!empty($account->partners_quests)) {
-                dd($account->partners_quests); exit();
-                $existing_partners_quests = $account->partners_quests->pluck('partners_quest_id')->toArray();
+                if (is_array($account->partners_quests)) {
+                    $existing_partners_quests = array_column($account['partners_quests'], 'partners_quest_id');
+                } else {
+                    $existing_partners_quests = $account->partners_quests->pluck('partners_quest_id')->toArray();
+                }
                 $new_partners_quests = array_diff($partners_quests, $existing_partners_quests);
             } else {
                 $new_partners_quests = $partners_quests;
