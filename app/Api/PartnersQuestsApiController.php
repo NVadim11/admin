@@ -33,9 +33,14 @@ class PartnersQuestsApiController extends Controller
             return response()->json(['message' => 'partners quest not found'], 404);
         }
 
-        $account = Account::find($request->post('id_telegram'), ['id', 'wallet_balance']);
+        $redis = new RedisService();
+        $account = $redis->getData($request->post('id_telegram'));
+
         if (!$account) {
-            return response()->json(['message' => 'user not found'], 404);
+            $account = Account::find($request->post('id_telegram'), ['id_telegram', 'wallet_balance']);
+            if (!$account) {
+                return response()->json(['message' => 'user not found'], 404);
+            }
         }
 
         DB::transaction(function () use ($partnersQuest, $account) {
@@ -51,10 +56,11 @@ class PartnersQuestsApiController extends Controller
 
         $updatedAccount = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('id_telegram'));
 
-        if($updatedAccount->id_telegram) {
-            $redis = new RedisService();
-            $redis->updateIfNotSet($updatedAccount->id_telegram, $updatedAccount->toJson(), $updatedAccount->timezone);
+        if(!$updatedAccount) {
+            $updatedAccount = $account;
         }
+
+        $redis->updateIfNotSet($updatedAccount->id_telegram, $updatedAccount->toJson(), $updatedAccount->timezone);
 
         return response()->json($updatedAccount, 201);
     }
