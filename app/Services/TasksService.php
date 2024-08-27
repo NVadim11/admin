@@ -21,10 +21,13 @@ class TasksService
             // Daily quests
             if(!empty($account->daily_quests)) {
                 if (is_array($account->daily_quests)) {
-                    $existing_daily_quests = array_column($account['daily_quests'], 'daily_quest_id');
+                    $existing_daily_quests = array_map(function($quest) {
+                        return $quest->daily_quest_id;
+                    }, $account->daily_quests);
                 } else {
                     $existing_daily_quests = $account->daily_quests->pluck('daily_quest_id')->toArray();
                 }
+
                 $new_daily_quests = array_diff($daily_quests, $existing_daily_quests);
             } else {
                 $new_daily_quests = $daily_quests;
