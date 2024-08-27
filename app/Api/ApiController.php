@@ -280,6 +280,9 @@ class ApiController extends Controller
             return response()->json(['message' => 'user not found'], 404);
         }
 
+        $redis = new RedisService();
+        $redis->deleteIfExists($account->id_telegram);
+
         $task = $request->post('task');
         $validTasks = [
             'twitter' => 'twitter_connect_price',
@@ -303,7 +306,6 @@ class ApiController extends Controller
                 $account->save();
 
                 if($account->id_telegram) {
-                    $redis = new RedisService();
                     $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
                 }
 
