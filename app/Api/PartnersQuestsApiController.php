@@ -17,11 +17,11 @@ class PartnersQuestsApiController extends Controller
     public function index()
     {
         $redis = new RedisService();
-        $res = $redis->getData('partners_quests');
+//        $res = $redis->getData('partners_quests');
         if(!$res) {
             $res = PartnersQuest::where('vis', 1)->orderBy('pos', 'ASC')->get();
             if ($res) {
-                $redis->updateIfNotSet('partners_quests', json_encode($res));
+//                $redis->updateIfNotSet('partners_quests', json_encode($res));
                 return response()->json($res, 201);
             }
         } else {
