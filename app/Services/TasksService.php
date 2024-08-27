@@ -34,6 +34,7 @@ class TasksService
             }
 
             foreach ($new_daily_quests as $new_daily_quest_id) {
+                #todo check exists
                 $daily_quest = DailyQuest::find($new_daily_quest_id);
                 $account_daily_quest = new AccountDailyQuest();
                 $account_daily_quest->account_id = $account->id;
@@ -60,13 +61,20 @@ class TasksService
             }
 
             foreach ($new_partners_quests as $new_partners_quest_id) {
-                $partners_quest = PartnersQuest::find($new_partners_quest_id);
-                $account_partners_quest = new AccountPartnersQuest();
-                $account_partners_quest->id_telegram = $account->id_telegram;
-                $account_partners_quest->partners_quest_id = $partners_quest->id;
-                $account_partners_quest->reward = $partners_quest->reward;
-                $account_partners_quest->save();
+                $exists = AccountPartnersQuest::where('id_telegram', $account->id_telegram)
+                    ->where('partners_quest_id', $new_partners_quest_id)
+                    ->exists();
+
+                if (!$exists) {
+                    $partners_quest = PartnersQuest::find($new_partners_quest_id);
+                    $account_partners_quest = new AccountPartnersQuest();
+                    $account_partners_quest->id_telegram = $account->id_telegram;
+                    $account_partners_quest->partners_quest_id = $partners_quest->id;
+                    $account_partners_quest->reward = $partners_quest->reward;
+                    $account_partners_quest->save();
+                }
             }
+
 
             if ($account->partners_quests) {
                 $quests = [
