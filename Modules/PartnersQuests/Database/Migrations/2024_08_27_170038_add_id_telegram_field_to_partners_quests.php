@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::table('accounts_partners_quests', function (Blueprint $table) {
             $table->dropColumn('account_id');
             $table->string('id_telegram')->index()->after('id');
-            $table->foreign('id_telegram')->references('id_telegram')->on('accounts')->onDelete('cascade');
+//            $table->foreign('id_telegram')->references('id_telegram')->on('accounts')->onDelete('cascade');
         });
     }
 
@@ -30,7 +30,7 @@ return new class extends Migration
         Schema::table('accounts_partners_quests', function (Blueprint $table) {
             $table->unsignedBigInteger('account_id')->index();
             $table->dropColumn('id_telegram');
-            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
+//            $table->foreign('account_id')->references('id')->on('accounts')->onDelete('cascade');
         });
     }
 };
