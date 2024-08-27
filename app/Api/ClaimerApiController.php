@@ -259,6 +259,13 @@ class ClaimerApiController extends Controller
         $task_code = $request->post('code');
         $account = $this->getAccount($id_telegram, $wallet_address);
 
+        if (!$account) {
+            return response()->json(['message' => 'user not found'], 404);
+        }
+
+        $redis = new RedisService();
+        $redis->deleteIfExists($account->id_telegram);
+
         if ($account && ($task_code == 'tg_channel' || $task_code == 'tg_chat' || $task_code == 'twitter'))
         {
 

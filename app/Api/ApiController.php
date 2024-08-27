@@ -143,7 +143,6 @@ class ApiController extends Controller
             Log::channel('enter_game_log')->debug("BOT — GET user from DB if not in Redis exec time: {$executionTime} ms");
             //log
 
-
             if (!$account) {
                 return response()->json(['message' => 'telegram ID not found'], 404);
             }
