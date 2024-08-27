@@ -44,10 +44,13 @@ class TasksService
             // Partners quests
             if(!empty($account->partners_quests)) {
                 if (is_array($account->partners_quests)) {
-                    $existing_partners_quests = array_column($account['partners_quests'], 'partners_quest_id');
+                    $existing_partners_quests = array_map(function($quest) {
+                        return $quest->partners_quest_id;
+                    }, $account->partners_quests);
                 } else {
                     $existing_partners_quests = $account->partners_quests->pluck('partners_quest_id')->toArray();
                 }
+
                 $new_partners_quests = array_diff($partners_quests, $existing_partners_quests);
             } else {
                 $new_partners_quests = $partners_quests;
