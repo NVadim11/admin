@@ -41,6 +41,8 @@ class PartnersQuestsApiController extends Controller
             if (!$account) {
                 return response()->json(['message' => 'user not found'], 404);
             }
+        } else {
+            $account = json_decode($account, false);
         }
 
         DB::transaction(function () use ($partnersQuest, $account) {
