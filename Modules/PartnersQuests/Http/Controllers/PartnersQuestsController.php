@@ -26,10 +26,10 @@ class PartnersQuestsController extends CrudController
                 'name' => 'Name(EN)',
                 'type' => 'text'
             ],
-            'name_ru' => [
-                'name' => 'Name(RU)',
-                'type' => 'text'
-            ],
+//            'name_ru' => [
+//                'name' => 'Name(RU)',
+//                'type' => 'text'
+//            ],
             'link' => [
                 'name' => 'Link',
                 'type' => 'text'
@@ -37,6 +37,14 @@ class PartnersQuestsController extends CrudController
             'reward' => [
                 'name' => 'Reward',
                 'type' => 'text'
+            ],
+            'type' => [
+                'name' => 'Type',
+                'type' => 'option',
+                'choises' => [
+                    0 => 'Regular',
+                    1 => 'Base',
+                ]
             ],
             'vis' => [
                 'name' => 'Display',

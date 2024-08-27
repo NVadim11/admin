@@ -39,7 +39,7 @@ Route::get('notify-play', [\App\Api\NotifyApiController::class, 'bot_notify_play
 Route::get('daily-quests', [\App\Api\DailyQuestsApiController::class, 'daily_quests']);
 Route::post('pass-daily-quest', [\App\Api\DailyQuestsApiController::class, 'pass_daily_quest']);
 
-Route::get('partners-quests', [\App\Api\PartnersQuestsApiController::class, 'partners_quests']);
+Route::get('partners-quests', [\App\Api\PartnersQuestsApiController::class, 'index']);
 Route::post('pass-partners-quest', [\App\Api\PartnersQuestsApiController::class, 'pass_partners_quest']);
 Route::post('claimer', [\App\Api\ClaimerApiController::class, 'index']);
 Route::post('check-task', [\App\Api\ClaimerApiController::class, 'check_task']);

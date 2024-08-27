@@ -9,12 +9,27 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
 use Modules\PartnersQuests\Entities\AccountPartnersQuest;
+use Modules\PartnersQuests\Entities\PartnersQuest;
 
 class PartnersQuestsApiController extends Controller
 {
-    /*
-        POST /api/pass-partners-quest
-    */
+
+    public function index()
+    {
+        $redis = new RedisService();
+        $res = $redis->getData('partners_quests');
+        if(!$res) {
+            $res = PartnersQuest::where('vis', 1)->orderBy('pos', 'ASC')->get();
+            if ($res) {
+                $redis->updateIfNotSet('partners_quests', json_encode($res));
+                return response()->json($res, 201);
+            }
+        } else {
+            return response()->json(json_decode($res, true), 201);
+        }
+
+        return response()->json(404);
+    }
 
     public function pass_partners_quest(Request $request)
     {
