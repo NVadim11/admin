@@ -33,7 +33,8 @@ class PartnersQuestsApiController extends Controller
             return response()->json(['message' => 'partners quest not found'], 404);
         }
         $redis = new RedisService();
-        $account = Account::find($request->post('id_telegram'), ['id_telegram', 'wallet_balance']);
+        $account = Account::where('id_telegram', $request->post('id_telegram'))
+            ->first(['id_telegram', 'wallet_balance']);
 
         if (!$account) {
             $account = $redis->getData($request->post('id_telegram'));
