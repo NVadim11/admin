@@ -211,7 +211,7 @@ class ApiController extends Controller
             $account = $exist;
         }
 
-        $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
+        $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
 
         return response()->json($account, 201);
     }
