@@ -204,8 +204,14 @@ class ApiController extends Controller
             ->first();
 
         if (!$exist) {
-            $accountData = (array)$account;
-            $account = Account::create($accountData);
+            $accountData = is_object($account) ? (array)$account : $account;
+            $newAccount = Account::create($accountData);
+
+            if ($newAccount) {
+                $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+                    ->where('id_telegram', $newAccount->id_telegram)
+                    ->first();
+            }
         } else {
             $account = $exist;
         }
