@@ -24,6 +24,9 @@ class PartnersQuestForm extends Form
                 'rules' => 'required|regex:/^[0-9]+$/u',
                 'label' => 'Reward'
             ])
+            ->add('code', 'text', [
+                'label' => 'Code'
+            ])
             ->add('type', 'select', [
                 'label' => 'Type',
                 'choices' => [

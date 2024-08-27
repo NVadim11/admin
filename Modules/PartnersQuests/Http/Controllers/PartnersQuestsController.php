@@ -38,6 +38,10 @@ class PartnersQuestsController extends CrudController
                 'name' => 'Reward',
                 'type' => 'text'
             ],
+            'code' => [
+                'name' => 'Code',
+                'type' => 'text'
+            ],
             'type' => [
                 'name' => 'Type',
                 'type' => 'option',
