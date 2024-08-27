@@ -211,15 +211,24 @@ class ClaimerApiController extends Controller
     private function getAccount($id_telegram, $wallet_address)
     {
         $account = [];
+        $redis = new RedisService();
+        // Getting account from Redis
+        if ($id_telegram && $account = $redis->getData($id_telegram)) {
 
-        if ($wallet_address) {
-            $account = Account::where('wallet_address', $wallet_address)
-                ->with(['daily_quests', 'partners_quests'])
-                ->first();
-        } elseif ($id_telegram) {
-            $account = Account::where('id_telegram', $id_telegram)
-                ->with(['daily_quests', 'partners_quests'])
-                ->first();
+            $account = json_decode($account);
+
+        }
+        // Getting from DB
+        else {
+            if ($wallet_address) {
+                $account = Account::where('wallet_address', $wallet_address)
+                    ->with(['daily_quests', 'partners_quests'])
+                    ->first();
+            } elseif ($id_telegram) {
+                $account = Account::where('id_telegram', $id_telegram)
+                    ->with(['daily_quests', 'partners_quests'])
+                    ->first();
+            }
         }
 
         return $account;
@@ -249,12 +258,6 @@ class ClaimerApiController extends Controller
         $id_telegram = $request->post('id_telegram');
         $task_code = $request->post('code');
         $account = $this->getAccount($id_telegram, $wallet_address);
-
-        if (!$account) {
-            return response()->json(['message' => 'user not found'], 404);
-        }
-
-        $redis->deleteIfExists($id_telegram);
 
         if ($account && ($task_code == 'tg_channel' || $task_code == 'tg_chat' || $task_code == 'twitter'))
         {

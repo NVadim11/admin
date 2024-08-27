@@ -15,6 +15,24 @@ class TasksService
         try {
             DB::beginTransaction();
 
+            if ($account->partners_quests) {
+                $quests = [
+                    'tg_channel' => 1,
+                    'tg_chat' => 2,
+                    'twitter' => 3,
+                    'is_wallet_connected' => 4,
+                    'referrals_count' => 5
+                ];
+
+                foreach ($quests as $field => $quest_id) {
+                    if ($account->$field) {
+                        DB::table('accounts_partners_quests')
+                            ->where('partners_quest_id', $quest_id)
+                            ->update(['status' => 1]);
+                    }
+                }
+            }
+
             $daily_quests = DailyQuest::where('vis', 1)->pluck('id')->toArray();
             $partners_quests = PartnersQuest::where('vis', 1)->pluck('id')->toArray();
 
