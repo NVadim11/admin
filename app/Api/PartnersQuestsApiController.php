@@ -9,33 +9,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
 use Modules\PartnersQuests\Entities\AccountPartnersQuest;
-use Modules\PartnersQuests\Entities\PartnersQuest;
 
 class PartnersQuestsApiController extends Controller
 {
-
-    public function index()
-    {
-        $redis = new RedisService();
-//        $res = $redis->getData('partners_quests');
-//        if(!$res) {
-            $res = PartnersQuest::where('vis', 1)->orderBy('pos', 'ASC')->get();
-            if ($res) {
-//                $redis->updateIfNotSet('partners_quests', json_encode($res));
-                return response()->json($res, 201);
-            }
-//        } else {
-//            return response()->json(json_decode($res, true), 201);
-//        }
-
-        return response()->json(404);
-    }
-
     public function pass_partners_quest(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required',
-            'user_id' => 'required|regex:/^[0-9]+$/u',
+            'id_telegram' => 'required|min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
             'partners_quest_id' => 'required|regex:/^[0-9]+$/u'
         ]);
 
@@ -52,7 +33,7 @@ class PartnersQuestsApiController extends Controller
             return response()->json(['message' => 'partners quest not found'], 404);
         }
 
-        $account = Account::find($request->post('user_id'), ['id', 'wallet_balance']);
+        $account = Account::find($request->post('id_telegram'), ['id', 'wallet_balance']);
         if (!$account) {
             return response()->json(['message' => 'user not found'], 404);
         }
@@ -68,7 +49,7 @@ class PartnersQuestsApiController extends Controller
             $account->save();
         });
 
-        $updatedAccount = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('user_id'));
+        $updatedAccount = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('id_telegram'));
 
         if($updatedAccount->id_telegram) {
             $redis = new RedisService();

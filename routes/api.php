@@ -27,6 +27,7 @@ Route::post('clear-wallet-address', [\App\Api\ApiController::class, 'clear_walle
 Route::post('set-wallet-address', [\App\Api\ApiController::class, 'set_wallet_address']);
 Route::get('users/{user}', [\App\Api\ApiController::class, 'show']);
 Route::get('telegram-id/{id}', [\App\Api\ApiController::class, 'show_by_telegram_id']);
+Route::get('make-tasks/{id}', [\App\Api\ApiController::class, 'make_tasks']);
 Route::get('generate-referral-code/{user}', [\App\Api\ApiController::class, 'generate_referral_code']);
 Route::get('check-referral-code/{code}', [\App\Api\ApiController::class, 'check_referral_code']);
 
@@ -39,7 +40,6 @@ Route::get('notify-play', [\App\Api\NotifyApiController::class, 'bot_notify_play
 Route::get('daily-quests', [\App\Api\DailyQuestsApiController::class, 'daily_quests']);
 Route::post('pass-daily-quest', [\App\Api\DailyQuestsApiController::class, 'pass_daily_quest']);
 
-Route::get('partners-quests', [\App\Api\PartnersQuestsApiController::class, 'index']);
 Route::post('pass-partners-quest', [\App\Api\PartnersQuestsApiController::class, 'pass_partners_quest']);
 Route::post('claimer', [\App\Api\ClaimerApiController::class, 'index']);
 Route::post('check-task', [\App\Api\ClaimerApiController::class, 'check_task']);

@@ -173,6 +173,45 @@ class ApiController extends Controller
         return response()->json($account, 201);
     }
 
+    public function make_tasks($id)
+    {
+        $validator = Validator::make(['id' => $id], [
+            'id' => 'required|min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+        }
+
+        if (!$id) {
+            return response()->json(404);
+        }
+
+        $redis = new RedisService();
+        $account = $redis->getData($id);
+
+        if (!$account) {
+            $account = Account::where('id_telegram', $id)->first();
+
+            if (!$account) {
+                return response()->json(['message' => 'telegram ID not found'], 404);
+            }
+
+        } else {
+            $account = json_decode($account, true);
+        }
+
+        $tasks = new TasksService();
+        $tasks->makeTasks($account);
+
+        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+            ->where('id_telegram', $id)->first();
+
+        $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
+
+        return response()->json($account, 201);
+    }
+
     /*
          GET /api/generate-referral-code/{wallet_address}
     */
