@@ -198,7 +198,7 @@ class ApiController extends Controller
             }
 
         } else {
-            $account = json_decode($account, true);
+            $account = json_decode($account, false);
         }
 
         $tasks = new TasksService();
