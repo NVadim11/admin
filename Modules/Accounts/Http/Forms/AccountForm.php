@@ -91,7 +91,7 @@ class AccountForm extends Form
                     1 => 'Yes'
                 ]
             ])
-            ->add('claimer_timer', 'datetimepicker', [
+            ->add('claimer_timer', 'text', [
                 'label' => 'Next claim in',
                 'default_value' => 0,
                 'aside' => 1
