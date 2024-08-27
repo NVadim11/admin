@@ -183,10 +183,6 @@ class ApiController extends Controller
             return response()->json($validator->errors(), 404);
         }
 
-        if (!$id) {
-            return response()->json(404);
-        }
-
         $redis = new RedisService();
         $account = $redis->getData($id);
 
@@ -196,7 +192,6 @@ class ApiController extends Controller
             if (!$account) {
                 return response()->json(['message' => 'telegram ID not found'], 404);
             }
-
         } else {
             $account = json_decode($account, false);
         }
@@ -205,9 +200,13 @@ class ApiController extends Controller
         $tasks->makeTasks($account);
 
         $exist = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
-            ->where('id_telegram', $id)->first();
+            ->where('id_telegram', $id)
+            ->first();
 
-        if ($exist) {
+        if (!$exist) {
+            $accountData = (array)$account;
+            $account = Account::create($accountData);
+        } else {
             $account = $exist;
         }
 
