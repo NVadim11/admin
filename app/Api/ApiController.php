@@ -196,12 +196,13 @@ class ApiController extends Controller
             }
         }
 
+        $account = Account::where('id_telegram', $id)->first();
+        $tasks = new TasksService();
+        $tasks->makeTasks($account);
+
         $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
             ->where('id_telegram', $id)
             ->first();
-
-        $tasks = new TasksService();
-        $tasks->makeTasks($account);
 
         $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
 
