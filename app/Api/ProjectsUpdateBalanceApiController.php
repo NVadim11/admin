@@ -90,6 +90,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                             $balance = $gaming->taps + $score;
                             $energy = $gaming->energy;
                             $energy_scored = $gaming->energy + $score;
+                            $project = $gaming->project;
 
                             // go ot call down
                             if (($energy_scored) >= 1000) {
@@ -108,7 +109,6 @@ class ProjectsUpdateBalanceApiController extends Controller
                                 ]);
 
                                 if ($project_vote) {
-                                    $project = $gaming->project;
 
                                     if ($project) {
                                         $project->vote_24 = ProjectVote::where('project_id', $gaming->project_id)
@@ -116,10 +116,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                                             ->count();
 
                                         $project->vote_total += 1;
-                                        $project->tap_total += 1;
                                         $project->sessions_total += 1;
-
-                                        $project->save();
                                     }
                                 }
 
@@ -130,6 +127,9 @@ class ProjectsUpdateBalanceApiController extends Controller
                             $gaming->taps = $balance;
                             $gaming->updated_at = Carbon::now();
                             $gaming->save();
+
+                            $project->tap_total += $balance;
+                            $project->save();
 
                             $account = Account::where('id_telegram', $account->id_telegram)
                                 ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
