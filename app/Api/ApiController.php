@@ -173,7 +173,7 @@ class ApiController extends Controller
         return response()->json($account, 201);
     }
 
-    public function make_tasks($id)
+   public function make_tasks($id)
     {
         $validator = Validator::make(['id' => $id], [
             'id' => 'required|min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
@@ -184,37 +184,24 @@ class ApiController extends Controller
         }
 
         $redis = new RedisService();
-        $account = $redis->getData($id);
+        $inRedis = $redis->getData($id);
 
-        if (!$account) {
+        if ($inRedis) {
+            $inRedis = json_decode($inRedis, true);
             $account = Account::where('id_telegram', $id)->first();
 
             if (!$account) {
-                return response()->json(['message' => 'telegram ID not found'], 404);
+                Account::create($inRedis);
+                $redis->deleteIfExists($inRedis['id_telegram']);  // Удаление записи из Redis после создания в базе
             }
-        } else {
-            $account = json_decode($account, false);
         }
 
-        $tasks = new TasksService();
-        $tasks->makeTasks($account);
-
-        $exist = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
             ->where('id_telegram', $id)
             ->first();
 
-        if (!$exist) {
-            $accountData = is_object($account) ? (array)$account : $account;
-            $newAccount = Account::create($accountData);
-
-            if ($newAccount) {
-                $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
-                    ->where('id_telegram', $newAccount->id_telegram)
-                    ->first();
-            }
-        } else {
-            $account = $exist;
-        }
+        $tasks = new TasksService();
+        $tasks->makeTasks($account);
 
         $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
 
