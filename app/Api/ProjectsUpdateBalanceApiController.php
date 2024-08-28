@@ -45,7 +45,7 @@ class ProjectsUpdateBalanceApiController extends Controller
             $max_coins = app('settings')->get('update_balance_max_coins');
 
             if ($account) {
-                $account = json_decode($account);
+                $account = json_decode($account, false);
             } else {
                 // get from DB
                 $account = Account::where('id_telegram', $id_telegram)
@@ -58,7 +58,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                 return response()->json(['message' => 'account not found'], 404);
             }
 
-            if (!isset($account->projects_gaming) || $account->projects_gaming->isEmpty()) {
+            if (!isset($account->projects_gaming) || $account->projects_gaming->isEmpty() || empty($account->projects_gaming)) {
                 $redis->deleteIfExists($id_telegram);
 
                 $gaming = new AccountProjectGaming();
