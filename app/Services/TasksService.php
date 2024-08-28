@@ -60,8 +60,6 @@ class TasksService
                 $new_partners_quests = $partners_quests;
             }
 
-            var_dump($new_partners_quests);; exit();
-
             foreach ($new_partners_quests as $new_partners_quest_id) {
                 $exists = AccountPartnersQuest::where('id_telegram', $account->id_telegram)
                     ->where('partners_quest_id', $new_partners_quest_id)
