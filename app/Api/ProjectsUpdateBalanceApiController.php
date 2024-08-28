@@ -45,21 +45,19 @@ class ProjectsUpdateBalanceApiController extends Controller
             $max_coins = app('settings')->get('update_balance_max_coins');
 
             if ($account) {
-                $account = json_decode($account, false);
-            } else {
-                // get from DB
-                $account = Account::where('id_telegram', $id_telegram)
-                    ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
-                    ->first();
+                $redis->deleteIfExists($id_telegram);
             }
+
+            $account = Account::where('id_telegram', $id_telegram)
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
+                ->first();
 
             if (!$account) {
                 Log::channel('update_balance_log')->debug("account not found");
                 return response()->json(['message' => 'account not found'], 404);
             }
 
-            if (!isset($account->projects_gaming) || $account->projects_gaming->isEmpty() || empty($account->projects_gaming)) {
-                $redis->deleteIfExists($id_telegram);
+            if (!isset($account->projects_gaming) || $account->projects_gaming->isEmpty()) {
 
                 $gaming = new AccountProjectGaming();
                 $gaming->account_id = $account->id;
