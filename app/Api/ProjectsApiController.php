@@ -252,6 +252,7 @@ class ProjectsApiController extends Controller
         $res = array(
             'id_telegram' => $account->id_telegram,
             'id_project' => $gaming->project_id,
+            'id_game_progress' => $gaming->id,
             'active_at' => $gaming->can_play_at,
         );
 
