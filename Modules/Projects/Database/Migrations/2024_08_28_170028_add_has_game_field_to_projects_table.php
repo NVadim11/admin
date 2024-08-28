@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('projects', function (Blueprint $table) {
-            $table->string('has_game', 2)->default(0)->after('image');
+            $table->tinyInteger('has_game')->default(0)->after('image');
         });
     }
 
