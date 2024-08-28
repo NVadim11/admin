@@ -58,7 +58,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                 return response()->json(['message' => 'account not found'], 404);
             }
 
-            if ($account->projects_gaming->isEmpty()) {
+            if (!isset($account->projects_gaming) || $account->projects_gaming->isEmpty()) {
                 $redis->deleteIfExists($id_telegram);
 
                 $gaming = new AccountProjectGaming();
