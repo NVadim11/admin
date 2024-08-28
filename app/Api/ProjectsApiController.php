@@ -234,7 +234,12 @@ class ProjectsApiController extends Controller
             return response()->json(['message' => 'token invalid'], 404);
         }
 
-        $gaming = AccountProjectGaming::where(['id_telegram', $request->post('id_telegram'), 'id_project', $request->post('id_project')])->first();
+        $account = Account::where('id_telegram', $request->post('id_telegram'))->first();
+        if(!$account) {
+            return response()->json(['message' => 'account not found'], 404);
+        }
+
+        $gaming = AccountProjectGaming::where(['account_id' => $account->id, 'project_id' => $request->post('id_project')])->first();
 
         if(!$gaming) {
             return response()->json(['message' => 'gaming progress not found'], 404);
@@ -245,8 +250,8 @@ class ProjectsApiController extends Controller
         $gaming->save();
 
         $res = array(
-            'id_telegram' => $gaming->id_telegram,
-            'id_project' => $gaming->id_project,
+            'id_telegram' => $account->id_telegram,
+            'id_project' => $gaming->project_id,
             'active_at' => $gaming->can_play_at,
         );
 
