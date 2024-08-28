@@ -18,6 +18,7 @@ class Project extends Model
         'contract',
         'projectLink',
         'taskLink',
+        'has_game',
         'vis'
     ];
 

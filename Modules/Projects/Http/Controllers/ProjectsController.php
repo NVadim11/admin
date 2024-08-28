@@ -53,6 +53,14 @@ class ProjectsController extends CrudController
                 'name' => 'Task Link',
                 'type' => 'text'
             ],
+            'has_game' => [
+                'name' => 'Has Game',
+                'type' => 'option',
+                'choises' => [
+                    0 => 'No',
+                    1 => 'Yes'
+                ]
+            ],
             'vis' => [
                 'name' => 'Display',
                 'type' => 'option',

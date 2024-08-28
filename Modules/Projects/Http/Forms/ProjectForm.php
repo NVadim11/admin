@@ -34,6 +34,13 @@ class ProjectForm extends Form
             ->add('taskLink', 'text', [
                 'label' => 'Task Link'
             ])
+            ->add('has_game', 'select', [
+                'label' => 'Has Game',
+                'choices' => [
+                    0 => 'No',
+                    1 => 'Yes'
+                ]
+            ])
             ->add('vis', 'select', [
                 'label' => 'Display',
                 'choices' => [
