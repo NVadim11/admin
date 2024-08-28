@@ -471,6 +471,7 @@ class ApiController extends Controller
 
             if ($account->is_wallet_connected == 0) {
                 $account->is_wallet_connected = 1;
+                $account->wallet_balance = $account->wallet_balance + 1;
             }
 
             $account->save();
