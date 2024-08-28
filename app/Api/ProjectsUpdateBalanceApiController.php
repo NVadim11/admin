@@ -85,18 +85,20 @@ class ProjectsUpdateBalanceApiController extends Controller
                 if (is_null($gaming->can_play_at) || time() > $gaming->can_play_at) {
                     if (is_null($gaming->update_balance_at) || time() > $gaming->update_balance_at) {
                         DB::transaction(function () use ($request, $account, $gaming, $score, $redis, $client_agent, $client_ip) {
+                            $project = $gaming->project;
                             $gaming->update_balance_at = strtotime('+' . app('settings')->get('update_balance_time') . ' second');
                             $gaming->notify_play = 0;
                             $balance = $gaming->taps + $score;
+                            $project_balance = $project->tap_total + $score;
                             $energy = $gaming->energy;
                             $energy_scored = $gaming->energy + $score;
-                            $project = $gaming->project;
 
                             // go ot call down
                             if (($energy_scored) >= 1000) {
                                 $addHour = new \DateTime();
                                 $addHour->add(new \DateInterval('PT1H'));
                                 $balance = $gaming->taps + (1000 - $gaming->energy);
+                                $project_balance = $project->tap_total + (1000 - $gaming->energy);
                                 $gaming->energy = 0;
                                 $gaming->can_play_at = $addHour->getTimestamp();
                                 $gaming->sessions = $gaming->sessions + 1;
@@ -128,7 +130,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                             $gaming->updated_at = Carbon::now();
                             $gaming->save();
 
-                            $project->tap_total += $balance;
+                            $project->tap_total = $project_balance;
                             $project->save();
 
                             $account = Account::where('id_telegram', $account->id_telegram)
