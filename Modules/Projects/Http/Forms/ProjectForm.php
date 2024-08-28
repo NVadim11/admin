@@ -31,15 +31,21 @@ class ProjectForm extends Form
             ->add('projectLink', 'text', [
                 'label' => 'Project Link'
             ])
-            ->add('taskLink', 'text', [
-                'label' => 'Task Link'
-            ])
+//            ->add('taskLink', 'text', [
+//                'label' => 'Task Link'
+//            ])
             ->add('has_game', 'select', [
                 'label' => 'Has Game',
                 'choices' => [
                     0 => 'No',
                     1 => 'Yes'
                 ]
+            ])
+            ->add('tap_total', 'text', [
+                'label' => 'Tap Total'
+            ])
+            ->add('sessions_total', 'text', [
+                'label' => 'Sessions Total'
             ])
             ->add('vis', 'select', [
                 'label' => 'Display',

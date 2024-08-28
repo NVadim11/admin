@@ -19,6 +19,8 @@ class Project extends Model
         'projectLink',
         'taskLink',
         'has_game',
+        'tap_total',
+        'sessions_total',
         'vis'
     ];
 

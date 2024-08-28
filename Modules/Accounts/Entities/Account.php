@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\DailyQuests\Entities\AccountDailyQuest;
 use Modules\PartnersQuests\Entities\AccountPartnersQuest;
+use Modules\Projects\Entities\AccountProjectGaming;
 use Modules\Projects\Entities\AccountProjectTask;
 use Modules\ReferralTransactions\Entities\AccountReferralTransaction;
 
@@ -126,6 +127,11 @@ class Account extends Model
         return $this->hasMany(AccountProjectTask::class);
     }
 
+    public function projects_gaming()
+    {
+        return $this->hasMany(AccountProjectGaming::class);
+    }
+
     public function referral_template()
     {
         return $this->hasOne(AccountReferralTransaction::class);
@@ -175,6 +181,7 @@ class Account extends Model
 
         self::deleted(function($model){
             $model->projects_tasks()->delete();
+            $model->projects_gaming()->delete();
             $model->partners_quests()->delete();
             $model->daily_quests()->delete();
 

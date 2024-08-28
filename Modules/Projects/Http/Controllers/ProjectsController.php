@@ -49,10 +49,10 @@ class ProjectsController extends CrudController
                 'name' => 'Project Link',
                 'type' => 'text'
             ],
-            'taskLink' => [
-                'name' => 'Task Link',
-                'type' => 'text'
-            ],
+//            'taskLink' => [
+//                'name' => 'Task Link',
+//                'type' => 'text'
+//            ],
             'has_game' => [
                 'name' => 'Has Game',
                 'type' => 'option',
@@ -60,6 +60,14 @@ class ProjectsController extends CrudController
                     0 => 'No',
                     1 => 'Yes'
                 ]
+            ],
+            'tap_total' => [
+                'name' => 'Tap Total',
+                'type' => 'text'
+            ],
+            'sessions_total' => [
+                'name' => 'Sessions Total',
+                'type' => 'text'
             ],
             'vis' => [
                 'name' => 'Display',
