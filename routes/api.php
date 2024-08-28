@@ -50,5 +50,7 @@ Route::get('top-projects', [\App\Api\ProjectsApiController::class, 'top_projects
 Route::get('top-daily-projects', [\App\Api\ProjectsApiController::class, 'top_daily_projects']);
 Route::get('top-new-projects', [\App\Api\ProjectsApiController::class, 'top_new_projects']);
 Route::post('pass-project-task', [\App\Api\ProjectsApiController::class, 'pass_project_task']);
+Route::post('update-project-balance', [\App\Api\ProjectsUpdateBalanceApiController::class, 'index']);
+Route::post('set-project-activity', [\App\Api\ProjectsApiController::class, 'set_project_activity_time']);
 
 Route::post('votes', [\App\Api\VotesApiController::class, 'index']);

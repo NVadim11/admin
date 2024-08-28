@@ -4,10 +4,12 @@ namespace App\Api;
 
 use App\Http\Controllers\Controller;
 use App\Services\RedisService;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
+use Modules\Projects\Entities\AccountProjectGaming;
 use Modules\Projects\Entities\AccountProjectTask;
 use Modules\Projects\Entities\Project;
 use Modules\Projects\Entities\ProjectTask;
@@ -213,5 +215,41 @@ class ProjectsApiController extends Controller
     private function isTokenValid($token)
     {
         return checkToken($token);
+    }
+
+    public function set_project_activity_time(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'id_telegram' => 'required|min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
+            'id_project' => 'required|regex:/^[0-9]+$/u',
+            'timestamp' => 'required|date_format:U|after:' . Carbon::now()->format('U')
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+        }
+
+        if(!checkToken($request->post('token'))) {
+            return response()->json(['message' => 'token invalid'], 404);
+        }
+
+        $gaming = AccountProjectGaming::where(['id_telegram', $request->post('id_telegram'), 'id_project', $request->post('id_project')])->first();
+
+        if(!$gaming) {
+            return response()->json(['message' => 'gaming progress not found'], 404);
+        }
+
+        $gaming->can_play_at = $request->post('timestamp');
+        $gaming->energy = 0;
+        $gaming->save();
+
+        $res = array(
+            'id_telegram' => $gaming->id_telegram,
+            'id_project' => $gaming->id_project,
+            'active_at' => $gaming->can_play_at,
+        );
+
+        return response()->json($res, 201);
     }
 }

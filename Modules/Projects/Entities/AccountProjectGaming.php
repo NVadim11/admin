@@ -31,6 +31,11 @@ class AccountProjectGaming extends Model
         return $this->belongsTo(Account::class);
     }
 
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
     public static function boot()
     {
         parent::boot();

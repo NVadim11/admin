@@ -154,7 +154,7 @@ class ApiController extends Controller
             //log
             $startTime = microtime(true);
 
-            $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+            $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
                 ->where('id_telegram', $id)->first();
 
             $endTime = microtime(true);
@@ -200,7 +200,7 @@ class ApiController extends Controller
         $tasks = new TasksService();
         $tasks->makeTasks($account);
 
-        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
             ->where('id_telegram', $id)
             ->first();
 
@@ -223,7 +223,7 @@ class ApiController extends Controller
         }
 
         $account = Account::where('wallet_address', $wallet_address)
-            ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+            ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
             ->first();
 
         if (!$account) {
@@ -303,11 +303,11 @@ class ApiController extends Controller
         $account = null;
         if ($walletAddress) {
             $account = Account::where('wallet_address', $walletAddress)
-                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
                 ->first();
         } elseif ($idTelegram) {
             $account = Account::where('id_telegram', $idTelegram)
-                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
                 ->first();
         }
 
