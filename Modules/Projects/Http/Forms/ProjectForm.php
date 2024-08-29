@@ -42,10 +42,12 @@ class ProjectForm extends Form
                 ]
             ])
             ->add('tap_total', 'text', [
-                'label' => 'Tap Total'
+                'label' => 'Tap Total',
+                'value' => 0
             ])
             ->add('sessions_total', 'text', [
-                'label' => 'Sessions Total'
+                'label' => 'Sessions Total',
+                'value' => 0
             ])
             ->add('vis', 'select', [
                 'label' => 'Display',
