@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
 use Modules\Projects\Entities\AccountProjectGaming;
+use Modules\Projects\Entities\Project;
 use Modules\ProjectVote\Models\ProjectVote;
 
 class ProjectsUpdateBalanceApiController extends Controller
@@ -62,6 +63,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                 $gaming = new AccountProjectGaming();
                 $gaming->account_id = $account->id;
                 $gaming->project_id = $id_project;
+                $gaming->votes = Project::accountVotes($id_telegram, $id_project);
                 $gaming->save();
 
             } else {
@@ -71,6 +73,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                     $gaming = new AccountProjectGaming();
                     $gaming->account_id = $account->id;
                     $gaming->project_id = $id_project;
+                    $gaming->votes = Project::accountVotes($id_telegram, $id_project);
                     $gaming->save();
                 }
             }
@@ -102,6 +105,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                                 $gaming->energy = 0;
 //                                $gaming->can_play_at = $addHour->getTimestamp();
                                 $gaming->sessions = $gaming->sessions + 1;
+                                $gaming->votes = $gaming->votes + 1;
 
                                 $project_vote = ProjectVote::create([
                                     'project_id' => $gaming->project_id,

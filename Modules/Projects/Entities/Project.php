@@ -4,6 +4,7 @@ namespace Modules\Projects\Entities;
 
 use App\Services\RedisService;
 use Illuminate\Database\Eloquent\Model;
+use Modules\ProjectVote\Models\ProjectVote;
 
 class Project extends Model
 {
@@ -44,6 +45,11 @@ class Project extends Model
     public function activeTasks()
     {
         return $this->hasMany(ProjectTask::class)->where('vis', 1)->orderBy('pos', 'ASC');
+    }
+
+    public static function accountVotes($id_telegram, $id_project)
+    {
+        return ProjectVote::where(['client_id' => $id_telegram, 'project_id' => $id_project])->count();
     }
 
     public static function boot()
