@@ -21,7 +21,7 @@ class ProjectsApiController extends Controller
         $redis = new RedisService();
         $res = $redis->getData('projects_list');
         if(!$res) {
-            $res = Project::with(['activeTasks'])->where('vis', 1)->get();
+            $res = Project::with(['activeTasks', 'totalVoters'])->where('vis', 1)->get();
             if ($res) {
                 $redis->updateIfNotSet('projects_list', json_encode($res));
                 return response()->json($res, 201);

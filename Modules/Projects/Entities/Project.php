@@ -47,6 +47,13 @@ class Project extends Model
         return $this->hasMany(ProjectTask::class)->where('vis', 1)->orderBy('pos', 'ASC');
     }
 
+    public function totalVoters()
+    {
+        return $this->hasMany(ProjectVote::class, 'project_id')
+            ->selectRaw('project_id, COUNT(DISTINCT client_id) as total_voters')
+            ->groupBy('project_id');
+    }
+
     public static function accountVotes($id_telegram, $id_project)
     {
         return ProjectVote::where(['client_id' => $id_telegram, 'project_id' => $id_project])->count();
