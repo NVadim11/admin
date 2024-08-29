@@ -35,6 +35,14 @@ class ProjectsTasksController extends ProjectsCrudController
                 'name' => 'Task description',
                 'type' => 'textarea'
             ],
+            'main' => [
+                'name' => 'Main task',
+                'type' => 'option',
+                'choises' => [
+                    0 => 'No',
+                    1 => 'Yes'
+                ]
+            ],
             'vis' => [
                 'name' => 'Display',
                 'type' => 'option',
