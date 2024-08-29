@@ -14,7 +14,7 @@
             <div class="card-header pt-5">
                 <!--begin::Title-->
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bold text-dark">{{ $item->name }} Voting Activity</span>
+                    <span class="card-label fw-bold text-dark">{{ $item->name }} Voting Activity{{ request()->get('stat') == 'day' || !request()->get('stat') ? ' / Hour' : '' }}{{ request()->get('stat') == 'week' ? ' / Day' : '' }}{{ request()->get('stat') == 'month' ? ' / Days of month' : '' }}{{ request()->get('stat') == 'year' ? ' / Months of year' : '' }}</span>
                     {{--                <span class="text-gray-400 pt-2 fw-semibold fs-6">75% activity growth</span>--}}
                 </h3>
                 <!--end::Title-->

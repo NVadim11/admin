@@ -52,6 +52,47 @@
                         <!--begin::Symbol-->
                         <div class="symbol symbol-30px me-5">
                             <span class="symbol-label">
+                                <i class="ki-outline ki-chart-simple-2 fs-3 text-gray-600"></i>
+                            </span>
+                        </div>
+                        <!--end::Symbol-->
+                        <!--begin::Container-->
+                        <div class="d-flex align-items-center flex-stack flex-wrap d-grid gap-1 flex-row-fluid">
+                            <!--begin::Content-->
+                            <div class="me-5">
+                                <!--begin::Title-->
+                                <a href="#" class="text-gray-800 fw-bold text-hover-primary fs-6">24 Hours</a>
+                                <!--end::Title-->
+                                <!--begin::Desc-->
+                                <span class="text-gray-400 fw-semibold fs-7 d-block text-start ps-0">New members in 24 hours</span>
+                                <!--end::Desc-->
+                            </div>
+                            <!--end::Content-->
+                            <!--begin::Wrapper-->
+                            <div class="d-flex align-items-center">
+                                <!--begin::Number-->
+                                <span class="text-gray-800 fw-bold fs-4 me-3">{{ number_format($lastHourNew) }}</span>
+                                <!--end::Number-->
+                                <!--begin::Info-->
+                                <!--begin::label-->
+                                {{--                                <span class="badge badge-light-success fs-base">--}}
+                                {{--                                <i class="ki-outline ki-arrow-up fs-5 text-success ms-n1"></i>2.6%</span>--}}
+                                <!--end::label-->
+                                <!--end::Info-->
+                            </div>
+                            <!--end::Wrapper-->
+                        </div>
+                        <!--end::Container-->
+                    </div>
+                    <!--end::Item-->
+                    <!--begin::Separator-->
+                    <div class="separator separator-dashed my-3"></div>
+                    <!--end::Separator-->
+                    <!--begin::Item-->
+                    <div class="d-flex align-items-center">
+                        <!--begin::Symbol-->
+                        <div class="symbol symbol-30px me-5">
+                            <span class="symbol-label">
                                 <i class="ki-outline ki-joystick fs-3 text-gray-600"></i>
                             </span>
                         </div>
@@ -259,7 +300,7 @@
             <div class="card-header pt-5">
                 <!--begin::Title-->
                 <h3 class="card-title align-items-start flex-column">
-                    <span class="card-label fw-bold text-dark">New Members</span>
+                    <span class="card-label fw-bold text-dark">New Members{{ request()->get('new') == 'day' || !request()->get('new') ? ' / Hour' : '' }}{{ request()->get('new') == 'week' ? ' / Day' : '' }}{{ request()->get('new') == 'month' ? ' / Days of month' : '' }}{{ request()->get('new') == 'year' ? ' / Months of year' : '' }}</span>
     {{--                <span class="text-gray-400 pt-2 fw-semibold fs-6">75% activity growth</span>--}}
                 </h3>
                 <!--end::Title-->
@@ -341,7 +382,7 @@
         <div class="card-header pt-5">
             <!--begin::Title-->
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bold text-dark">Voting Activity</span>
+                <span class="card-label fw-bold text-dark">Voting Activity{{ request()->get('votes') == 'day' || !request()->get('votes') ? ' / Hour' : '' }}{{ request()->get('votes') == 'week' ? ' / Day' : '' }}{{ request()->get('votes') == 'month' ? ' / Days of month' : '' }}{{ request()->get('votes') == 'year' ? ' / Months of year' : '' }}</span>
                 {{--                <span class="text-gray-400 pt-2 fw-semibold fs-6">75% activity growth</span>--}}
             </h3>
             <!--end::Title-->

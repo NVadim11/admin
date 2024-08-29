@@ -223,7 +223,16 @@ class IndexController extends Controller
             WHERE updated_at BETWEEN ? AND ?
         ', [$startOfDay, $endOfDay])->count;
 
+        $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+
+        $lastHourNew = DB::selectOne('
+            SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count 
+            FROM accounts 
+            WHERE created_at >= ?
+        ', [$startOfDay])->count;
+
         $lastHour = Carbon::now()->subHour()->format('Y-m-d H:i:s');
+
         $lastHourPlaying = DB::selectOne('
             SELECT COUNT(id) as count 
             FROM project_votes 
@@ -357,6 +366,7 @@ class IndexController extends Controller
             'callDownAccountsNotified',
             'callDowntNotifyJobs',
             'nowPlaying',
+            'lastHourNew',
             'lastHourPlaying',
             'lastMinutePlaying',
             'neverPlaying',

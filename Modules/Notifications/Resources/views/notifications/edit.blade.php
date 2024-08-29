@@ -14,7 +14,7 @@
 			<div class="card-header pt-5">
 				<!--begin::Title-->
 				<h3 class="card-title align-items-start flex-column">
-					<span class="card-label fw-bold text-dark">{{ $item->name }} — Notify Activity</span>
+					<span class="card-label fw-bold text-dark">{{ $item->name }} — Notify Activity{{ request()->get('stat') == 'minute' || !request()->get('stat') ? ' / Minute' : '' }}{{ request()->get('stat') == 'hour' ? ' / Hour' : '' }}{{ request()->get('stat') == 'day' ? ' / Day' : '' }}{{ request()->get('stat') == 'week' ? ' / Week' : '' }}</span>
 					{{--                <span class="text-gray-400 pt-2 fw-semibold fs-6">75% activity growth</span>--}}
 				</h3>
 				<!--end::Title-->
