@@ -13,6 +13,7 @@ class Project extends Model
     protected $fillable = [
         'name',
         'image',
+        'webpImage',
         'vote_total',
         'vote_24',
         'tokenName',
@@ -25,14 +26,26 @@ class Project extends Model
         'vis'
     ];
 
+    protected $appends = ['webpImage'];
+
     protected $guarded = ['id'];
 
     public $timestamps = true;
 
-    /**
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
+    public function setWebpImageAttribute($value)
+    {
+        $this->attributes['webpImage'] = $value;
+    }
+
+    public function getWebpImageAttribute()
+    {
+        if ($this->image && getWebpPath($this->image)) {
+            return getWebpPath($this->image);
+        } else {
+            return null;
+        }
+    }
+
     public function tasks()
     {
         return $this->hasMany(ProjectTask::class)->orderBy('pos', 'ASC');
