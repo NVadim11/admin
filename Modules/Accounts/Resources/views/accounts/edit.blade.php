@@ -10,7 +10,10 @@
 	@section('actions')
 		<a href="{{ action($controller.'@index') }}" class="btn btn-flex btn-outline btn-color-gray-700 btn-active-color-primary bg-body h-40px fs-7 fw-bold">To list</a>
 	@endsection
-
+	<div class="card-body pt-0">
+		<h3>Account Referrals:</h3>
+		@include('accounts::accounts.edit.' . $outlist)
+	</div>
 	{!! form_start($form, ['class'=>'form-horizontal form-bordered form-label-stripped', 'id' => 'kt_ecommerce_add_product_form']) !!}
 	@include('core::common.form_body')
 	{!! form_end($form) !!}

@@ -145,7 +145,7 @@
                             <!--begin::Content-->
                             <div class="me-5">
                                 <!--begin::Title-->
-                                <a href="#" class="text-gray-800 fw-bold text-hover-primary fs-6">Wallet(Yes/No)</a>
+                                <a href="#" class="text-gray-800 fw-bold text-hover-primary fs-6">Has Wallet(Yes/No)</a>
                                 <!--end::Title-->
                                 <!--begin::Desc-->
                                 <span class="text-gray-400 fw-semibold fs-7 d-block text-start ps-0">Players with/without wallet address</span>
