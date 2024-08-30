@@ -145,17 +145,17 @@
                             <!--begin::Content-->
                             <div class="me-5">
                                 <!--begin::Title-->
-                                <a href="#" class="text-gray-800 fw-bold text-hover-primary fs-6">Has Wallet</a>
+                                <a href="#" class="text-gray-800 fw-bold text-hover-primary fs-6">Wallet(Yes/No)</a>
                                 <!--end::Title-->
                                 <!--begin::Desc-->
-                                <span class="text-gray-400 fw-semibold fs-7 d-block text-start ps-0">Players with wallet address</span>
+                                <span class="text-gray-400 fw-semibold fs-7 d-block text-start ps-0">Players with/without wallet address</span>
                                 <!--end::Desc-->
                             </div>
                             <!--end::Content-->
                             <!--begin::Wrapper-->
                             <div class="d-flex align-items-center">
                                 <!--begin::Number-->
-                                <span class="text-gray-800 fw-bold fs-4 me-3">{{ number_format($hasWallet) }}</span>
+                                <span class="text-gray-800 fw-bold fs-4 me-3">{{ number_format($hasWallet) }} / {{ number_format($noWallet) }}</span>
                                 <!--end::Number-->
                                 <!--begin::Info-->
                                 <!--begin::label-->

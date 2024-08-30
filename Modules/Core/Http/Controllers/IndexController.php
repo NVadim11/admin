@@ -258,6 +258,12 @@ class IndexController extends Controller
             WHERE wallet_address IS NOT NULL
         ')->count;
 
+        $noWallet = DB::selectOne('
+            SELECT COUNT(id) as count 
+            FROM accounts 
+            WHERE wallet_address IS NULL
+        ')->count;
+
         $values = $settings->allParams();
         $values['main'] = [
             'site_logo' => $values['site_logo'] ?? '',
@@ -371,6 +377,7 @@ class IndexController extends Controller
             'lastMinutePlaying',
             'neverPlaying',
             'hasWallet',
+            'noWallet',
             'days',
             'votes'
         ));
