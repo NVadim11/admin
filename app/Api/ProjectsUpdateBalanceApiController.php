@@ -103,7 +103,7 @@ class ProjectsUpdateBalanceApiController extends Controller
                                 $balance = $gaming->taps + (1000 - $gaming->energy);
                                 $project_balance = $project->tap_total + (1000 - $gaming->energy);
                                 $gaming->energy = 0;
-//                                $gaming->can_play_at = $addHour->getTimestamp();
+                                $gaming->can_play_at = $addHour->getTimestamp();
                                 $gaming->sessions = $gaming->sessions + 1;
                                 $gaming->votes = $gaming->votes + 1;
 
