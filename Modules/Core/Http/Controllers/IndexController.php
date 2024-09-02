@@ -3,6 +3,7 @@
 namespace Modules\Core\Http\Controllers;
 
 use Carbon\Carbon;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Kris\LaravelFormBuilder\FormBuilder;
 use Kris\LaravelFormBuilder\FormBuilderTrait;
@@ -17,29 +18,62 @@ class IndexController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Settings $settings, FormBuilder $form_builder)
+    public function index(Settings $settings, FormBuilder $form_builder, Request $request)
     {
 
         $date = Carbon::now();
-        $days_count = 14;
+        $period_new = 'day';
         $days = [];
 
+        if ($request->get('new')) {
+            $period_new = $request->get('new');
+        }
+
+        switch($period_new) {
+            case "day":
+                $days_count = 24;
+                break;
+            case "week":
+                $days_count = 14;
+                break;
+            case "month":
+                $days_count = 31;
+                break;
+            case "year":
+                $days_count = 12;
+                break;
+        }
+
         for ($i = 0; $i < $days_count; $i++) {
-            $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-            $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
-            $formattedDate = $date->format('Y-m-d');
-            $formattedDay = $date->format('d M');
+            switch($period_new) {
+                case "day":
+                    $startOfDay = $date->copy()->format('Y-m-d H:00:00');
+                    $endOfDay = $date->format('Y-m-d H:59:59');
+                    $formattedDate = $date->format('d M H:00');
+                    $formattedDay = $date->format('d M H:00');
+                    break;
+                case "week":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "month":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "year":
+                    $startOfDay = $date->startOfDay()->format('Y-m-01');
+                    $endOfDay = $date->endOfDay()->format('Y-m-31');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('M');
+                    break;
+            }
 
-            // Запрос для Telegram пользователей
-            $telegramCount = DB::selectOne('
+            $usersCount = DB::selectOne('
                 SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count 
-                FROM accounts 
-                WHERE created_at BETWEEN ? AND ?
-            ', [$startOfDay, $endOfDay])->count;
-
-            // Запрос для Web пользователей
-            $webCount = DB::selectOne('
-                SELECT COUNT(CASE WHEN id_telegram IS NULL THEN 1 END) as count 
                 FROM accounts 
                 WHERE created_at BETWEEN ? AND ?
             ', [$startOfDay, $endOfDay])->count;
@@ -47,90 +81,103 @@ class IndexController extends Controller
             $days[] = [
                 'date' => $formattedDate,
                 'day' => $formattedDay,
-                'telegram' => $telegramCount,
-                'web' => $webCount
+                'telegram' => $usersCount,
             ];
 
-            // Переход на предыдущий день
-            $date->subDay();
+            switch($period_new) {
+                case "day":
+                    $date->subHour();
+                    break;
+                case "week":
+                    $date->subDay();
+                    break;
+                case "month":
+                    $date->subDay();
+                    break;
+                case "year":
+                    $date->subMonth();
+                    break;
+            }
         }
 
         $date = Carbon::now();
-        $days_count = 14;
-        $gaming = [];
+        $period_votes = 'day';
+        $votes = [];
 
-        for ($i = 0; $i < $days_count; $i++) {
-            $startOfDay = $date->startOfDay()->timestamp;
-            $endOfDay = $date->endOfDay()->timestamp;
-            $formattedDate = $date->format('Y-m-d');
-            $formattedDay = $date->format('d M');
-
-            // Запрос для Telegram пользователей
-            $telegramCount = DB::selectOne('
-                SELECT COUNT(id) as count 
-                FROM accounts 
-                WHERE id_telegram IS NOT NULL  
-                AND update_balance_at BETWEEN ? AND ?
-            ', [$startOfDay, $endOfDay])->count;
-
-            // Запрос для Web пользователей
-            $webCount = DB::selectOne('
-                SELECT COUNT(id) as count 
-                FROM accounts 
-                WHERE id_telegram IS NULL 
-                AND update_balance_at BETWEEN ? AND ?
-            ', [$startOfDay, $endOfDay])->count;
-
-            $gaming[] = [
-                'date' => $formattedDate,
-                'day' => $formattedDay,
-                'telegram' => $telegramCount,
-                'web' => $webCount
-            ];
-
-            // Переход на предыдущий день
-            $date->subDay();
+        if ($request->get('votes')) {
+            $period_votes = $request->get('votes');
         }
 
-//        $date = Carbon::now();
-//        $days_count = 14;
-//        $players = [];
-//
-//        for ($i = 0; $i < $days_count; $i++) {
-//            $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
-//            $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
-//            $startOfDayTime = $date->startOfDay()->timestamp;
-//            $formattedDate = $date->format('Y-m-d');
-//            $formattedDay = $date->format('d M');
-//
-//            // Запрос для Telegram пользователей
-//            $telegramCount = DB::selectOne('
-//                SELECT COUNT(id) as count
-//                FROM accounts
-//                WHERE id_telegram IS NOT NULL
-//                AND update_balance_at > ?
-//                AND id in (SELECT account_id from accounts_daily_quests where created_at BETWEEN ? AND ?)
-//            ', [$startOfDayTime, $startOfDay, $endOfDay])->count;
-//
-//            // Запрос для Web пользователей
-//            $webCount = DB::selectOne('
-//                SELECT COUNT(id) as count
-//                FROM accounts
-//                WHERE id_telegram IS NULL
-//                AND update_balance_at > ?
-//                AND id in (SELECT account_id from accounts_daily_quests where created_at BETWEEN ? AND ?)
-//            ', [$startOfDayTime, $startOfDay, $endOfDay])->count;
-//
-//            $players[] = [
-//                'date' => $formattedDate,
-//                'day' => $formattedDay,
-//                'telegram' => $telegramCount,
-//                'web' => $webCount
-//            ];
-//
-//            // Переход на предыдущий день
-//            $date->subDay();
-//        }
+        switch($period_votes) {
+            case "day":
+                $days_count = 24;
+                break;
+            case "week":
+                $days_count = 14;
+                break;
+            case "month":
+                $days_count = 31;
+                break;
+            case "year":
+                $days_count = 12;
+                break;
+        }
+
+        for ($i = 0; $i < $days_count; $i++) {
+            switch($period_votes) {
+                case "day":
+                    $startOfDay = $date->copy()->format('Y-m-d H:00:00');
+                    $endOfDay = $date->format('Y-m-d H:59:59');
+                    $formattedDate = $date->format('d M H:00');
+                    $formattedDay = $date->format('d M H:00');
+                    break;
+                case "week":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "month":
+                    $startOfDay = $date->startOfDay()->format('Y-m-d H:i:s');
+                    $endOfDay = $date->endOfDay()->format('Y-m-d H:i:s');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('d M');
+                    break;
+                case "year":
+                    $startOfDay = $date->startOfDay()->format('Y-m-01');
+                    $endOfDay = $date->endOfDay()->format('Y-m-31');
+                    $formattedDate = $date->format('Y-m-d');
+                    $formattedDay = $date->format('M');
+                    break;
+            }
+
+            $votesCount = DB::selectOne('
+                SELECT COUNT(CASE WHEN client_id IS NOT NULL THEN 1 END) as count 
+                FROM project_votes 
+                WHERE created_at BETWEEN ? AND ?
+            ', [$startOfDay, $endOfDay])->count;
+
+            $votes[] = [
+                'date' => $formattedDate,
+                'day' => $formattedDay,
+                'votes' => $votesCount
+            ];
+
+            switch($period_votes) {
+                case "day":
+                    $date->subHour();
+                    break;
+                case "week":
+                    $date->subDay();
+                    break;
+                case "month":
+                    $date->subDay();
+                    break;
+                case "year":
+                    $date->subMonth();
+                    break;
+            }
+        }
 
         $currentTime = time();
         $callDownAccounts = DB::selectOne('
@@ -167,41 +214,54 @@ class IndexController extends Controller
         ')->count;
 
         $today = Carbon::today();
-        $startOfDay = $today->startOfDay()->timestamp;
-        $endOfDay = $today->endOfDay()->timestamp;
+        $startOfDay = $today->startOfDay()->format('Y-m-d H:i:s');
+        $endOfDay = $today->endOfDay()->format('Y-m-d H:i:s');
 
         $nowPlaying = DB::selectOne('
             SELECT COUNT(id) as count 
-            FROM accounts 
-            WHERE update_balance_at BETWEEN ? AND ?
+            FROM project_votes 
+            WHERE updated_at BETWEEN ? AND ?
         ', [$startOfDay, $endOfDay])->count;
 
-        $lastHour = Carbon::now()->subHour()->timestamp;
+        $startOfDay = Carbon::now()->startOfDay()->format('Y-m-d H:i:s');
+
+        $lastHourNew = DB::selectOne('
+            SELECT COUNT(CASE WHEN id_telegram IS NOT NULL THEN 1 END) as count 
+            FROM accounts 
+            WHERE created_at >= ?
+        ', [$startOfDay])->count;
+
+        $lastHour = Carbon::now()->subHour()->format('Y-m-d H:i:s');
+
         $lastHourPlaying = DB::selectOne('
             SELECT COUNT(id) as count 
-            FROM accounts 
-            WHERE update_balance_at > ?
+            FROM project_votes 
+            WHERE updated_at > ?
         ', [$lastHour])->count;
 
-        $lastMinute = Carbon::now()->subMinute()->timestamp;
+        $lastMinute = Carbon::now()->subMinute()->format('Y-m-d H:i:s');
         $lastMinutePlaying = DB::selectOne('
             SELECT COUNT(id) as count 
-            FROM accounts 
-            WHERE update_balance_at > ?
+            FROM project_votes 
+            WHERE updated_at > ?
         ', [$lastMinute])->count;
 
         $neverPlaying = DB::selectOne('
             SELECT COUNT(id) as count 
             FROM accounts 
-            WHERE energy = 0 
-            AND wallet_balance = 0 
-            AND active_at IS NULL
+            WHERE id_telegram NOT IN (select client_id from project_votes)  
         ')->count;
 
         $hasWallet = DB::selectOne('
             SELECT COUNT(id) as count 
             FROM accounts 
             WHERE wallet_address IS NOT NULL
+        ')->count;
+
+        $noWallet = DB::selectOne('
+            SELECT COUNT(id) as count 
+            FROM accounts 
+            WHERE wallet_address IS NULL
         ')->count;
 
         $values = $settings->allParams();
@@ -312,13 +372,14 @@ class IndexController extends Controller
             'callDownAccountsNotified',
             'callDowntNotifyJobs',
             'nowPlaying',
+            'lastHourNew',
             'lastHourPlaying',
             'lastMinutePlaying',
             'neverPlaying',
             'hasWallet',
+            'noWallet',
             'days',
-            'gaming',
-//            'players'
+            'votes'
         ));
     }
 

@@ -96,6 +96,14 @@ class AccountsController extends CrudController
                 'name' => 'Timezone',
                 'type' => 'static'
             ],
+            'vis' => [
+                'name' => 'Display',
+                'type' => 'option',
+                'choises' => [
+                    1 => 'Yes',
+                    0 => 'No'
+                ]
+            ],
             'created_at' => [
                 'name' => 'Created at',
                 'type' => 'static'
@@ -153,19 +161,37 @@ class AccountsController extends CrudController
     public function edit($id)
     {
         app()->setLocale(auth()->user()->locale ?? config('app.locale'));
-//        $item = $this->crudService->getItemById($id)->load('partners')->load('certificates');
+        $request = request();
         $item = $this->crudService->getItemById($id);
         $route = action($this->getActionRoute('update'), ['account' => $id]);
         $form = $this->crudService->getEditForm($item, $route);
-		$page = isset($_GET['page']) ? $_GET['page'] : 1;
+        $page = isset($_GET['page']) ? $_GET['page'] : 1;
+
+        $params = $request->all();
+        $query = Account::query();
+        $fields = $this->listFields();
+        foreach ($params as $key => $value) {
+            if (!empty($value) && (!empty($fields[$key]) || $key == 'id')) {
+                $query->where($key, 'like', '%' . $value . '%');
+            }
+        }
+
+        $items = $query
+            ->where('parent_id', $item->id)
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
 
         return view($this->templateEdit, [
             'form' => $form,
             'title' => $this->getTitle('edit'),
             'module_title' => $this->getTitle('index'),
             'controller' => $this->getController(),
+            'items' => $items->appends($request->except('page')),
             'item' => $item,
-			'page' => $page
+            'fields' => $this->listFields(),
+            'sortable' => $this->isSortable,
+            'outlist' => $this->outlist,
+            'page' => $page
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace Modules\Projects\Entities;
 
+use App\Services\RedisService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\Accounts\Entities\Account;
@@ -31,6 +32,9 @@ class AccountProjectTask extends Model
 
         self::created(function($model){});
         self::updated(function($model){});
-        self::deleted(function($model){});
+        self::deleted(function($model){
+            $redis = new RedisService();
+            $redis->deleteIfExists($model->account()->id_telegram);
+        });
     }
 }

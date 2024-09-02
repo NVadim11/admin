@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 use Modules\Accounts\Entities\Account;
 use Modules\DailyQuests\Entities\DailyQuest;
 use Modules\PartnersQuests\Entities\PartnersQuest;
@@ -142,26 +143,25 @@ class ApiController extends Controller
             Log::channel('enter_game_log')->debug("BOT — GET user from DB if not in Redis exec time: {$executionTime} ms");
             //log
 
-
             if (!$account) {
                 return response()->json(['message' => 'telegram ID not found'], 404);
             }
 
-            if ($account->wallet_address) {
-                $tasks = new TasksService();
-                $tasks->makeTasks($account);
+//            if ($account->wallet_address) {
+            $tasks = new TasksService();
+            $tasks->makeTasks($account);
 
-                //log
-                $startTime = microtime(true);
+            //log
+            $startTime = microtime(true);
 
-                $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
-                    ->where('id_telegram', $id)->first();
+            $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
+                ->where('id_telegram', $id)->first();
 
-                $endTime = microtime(true);
-                $executionTime = ($endTime - $startTime) * 1000; // Время выполнения в миллисекундах
-                Log::channel('enter_game_log')->debug("BOT — User updated with tasks from DB exec time: {$executionTime} ms");
-                //log
-            }
+            $endTime = microtime(true);
+            $executionTime = ($endTime - $startTime) * 1000; // Время выполнения в миллисекундах
+            Log::channel('enter_game_log')->debug("BOT — User updated with tasks from DB exec time: {$executionTime} ms");
+            //log
+//            }
 
             $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
             Log::channel('enter_game_log')->debug("BOT — Save User to Redis");
@@ -169,6 +169,42 @@ class ApiController extends Controller
         } else {
             $account = json_decode($account, true);
         }
+
+        return response()->json($account, 201);
+    }
+
+   public function make_tasks($id)
+    {
+        $validator = Validator::make(['id' => $id], [
+            'id' => 'required|min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+        }
+
+        $redis = new RedisService();
+        $inRedis = $redis->getData($id);
+
+        if ($inRedis) {
+            $inRedis = json_decode($inRedis, true);
+            $account = Account::where('id_telegram', $id)->first();
+
+            if (!$account) {
+                Account::create($inRedis);
+                $redis->deleteIfExists($inRedis['id_telegram']);  // Удаление записи из Redis после создания в базе
+            }
+        }
+
+        $account = Account::where('id_telegram', $id)->first();
+        $tasks = new TasksService();
+        $tasks->makeTasks($account);
+
+        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
+            ->where('id_telegram', $id)
+            ->first();
+
+        $redis->updateIfNotSet($account->id_telegram, json_encode($account), $account->timezone);
 
         return response()->json($account, 201);
     }
@@ -187,7 +223,7 @@ class ApiController extends Controller
         }
 
         $account = Account::where('wallet_address', $wallet_address)
-            ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+            ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
             ->first();
 
         if (!$account) {
@@ -267,17 +303,20 @@ class ApiController extends Controller
         $account = null;
         if ($walletAddress) {
             $account = Account::where('wallet_address', $walletAddress)
-                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
                 ->first();
         } elseif ($idTelegram) {
             $account = Account::where('id_telegram', $idTelegram)
-                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+                ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
                 ->first();
         }
 
         if (!$account) {
             return response()->json(['message' => 'user not found'], 404);
         }
+
+        $redis = new RedisService();
+        $redis->deleteIfExists($account->id_telegram);
 
         $task = $request->post('task');
         $validTasks = [
@@ -302,7 +341,6 @@ class ApiController extends Controller
                 $account->save();
 
                 if($account->id_telegram) {
-                    $redis = new RedisService();
                     $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
                 }
 
@@ -384,10 +422,21 @@ class ApiController extends Controller
 
     public function update_wallet_address(Request $request)
     {
+        $account = Account::where('id_telegram', $request->post('id_telegram'))->first();
+
+        if (!$account) {
+            return response()->json(['message' => 'telegram account not found'], 404);
+        }
+
         $validator = Validator::make($request->all(), [
             'token' => 'required',
-            'wallet_address' => 'required|unique:accounts|min:10|max:100',
-            'user_id' => 'required|regex:/^[0-9]+$/u'
+            'wallet_address' => [
+                'required',
+                'min:10',
+                'max:100',
+                Rule::unique('accounts')->ignore($account->id, 'id'),
+            ],
+            'id_telegram' => 'min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
         ]);
 
         if ($validator->fails()) {
@@ -398,28 +447,24 @@ class ApiController extends Controller
             return response()->json(['message' => 'token invalid'], 404);
         }
 
-        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('user_id'));
-
-        if (!$account) {
-            return response()->json(['message' => 'user not found'], 404);
-        }
-
-//        if ($account->update_wallet_at && (time() < $account->update_wallet_at)) {
-//            return response()->json(['message' => 'error, try again later'], 404);
-//        }
-
         try {
             DB::beginTransaction();
 
             $redis = new RedisService();
             $currentDateTime = new \DateTime();
-            $currentDateTime->add(new \DateInterval('PT72H'));
+        //    $currentDateTime->add(new \DateInterval('PT72H'));
 
             $account->update_wallet_at = $currentDateTime->getTimestamp();
             $account->wallet_address = $request->post('wallet_address');
+
+            if ($account->is_wallet_connected == 0) {
+                $account->is_wallet_connected = 1;
+                $account->wallet_balance = $account->wallet_balance + 1;
+            }
+
             $account->save();
 
-            if($account->id_telegram) {
+            if ($account->id_telegram) {
                 $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
             }
 
@@ -559,5 +604,48 @@ class ApiController extends Controller
         }
 
         return response()->json(404);
+    }
+
+    public function clear_wallet_address(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'wallet_address' => 'min:10|max:100'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+        }
+
+        if (!checkToken($request->post('token'))) {
+            return response()->json(['message' => 'token invalid'], 404);
+        }
+
+        $account = Account::where('wallet_address', $request->post('wallet_address'))->first();
+
+        if (!$account) {
+            return response()->json(['message' => 'user not found'], 404);
+        }
+
+        try {
+            DB::beginTransaction();
+
+            $account->wallet_address = NULL;
+            $account->save();
+
+            $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($account->id);
+
+            if($account->id_telegram) {
+                $redis = new RedisService();
+                $redis->updateIfNotSet($account->id_telegram, $account->toJson(), $account->timezone);
+            }
+
+            DB::commit();
+
+            return response()->json($account, 201);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json(['error' => $e->getMessage()], 404);
+        }
     }
 }

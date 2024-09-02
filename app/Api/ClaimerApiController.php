@@ -2,13 +2,13 @@
 
 namespace App\Api;
 
+use App\Entities\NotificationStatuses;
 use App\Http\Controllers\Controller;
 use App\Services\RedisService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
-use Illuminate\Support\Facades\Validator;
 use Modules\Accounts\Entities\Account;
 
 class ClaimerApiController extends Controller
@@ -18,7 +18,7 @@ class ClaimerApiController extends Controller
     public $tg_chat_id = -1002216416628;
 
     public $claimer_bonus = 1;
-    public $claimer_period = 10;
+    public $claimer_period = 60*60;
 
     public function index(Request $request)
     {
@@ -87,7 +87,7 @@ class ClaimerApiController extends Controller
 
                 if ($currentTime > $claimerTime) {
                     
-                    $account->wallet_balance = $account->wallet_balance + $claimer_bonus;
+                    $account->wallet_balance = $account->wallet_balance + ($account->claimer_value ?? $claimer_bonus);
                     $account->update_balance_at = Carbon::now();
                     $account->updated_at = Carbon::now();
                     $account->claimer_timer = $currentTime + $claimer_period;
@@ -128,6 +128,10 @@ class ClaimerApiController extends Controller
                         //log
                     }
 
+                    NotificationStatuses::where('notification_type', 2)
+                        ->where('id_telegram', $account->id_telegram)
+                        ->delete();
+
                     return response()->json([
                         'message' => 'Claimed! New balacne: '.$account->wallet_balance, 
                         'success' => true,
@@ -135,8 +139,13 @@ class ClaimerApiController extends Controller
                         'claimer_bonus' => $this->claimer_bonus,
                         'claimer_timer'=>$account->claimer_timer], 200);
 
-                } Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
-                return response()->json(['message' => 'Claimer is not ready. Please try again later.'], 404);
+                } 
+                Log::channel('update_balance_log')->debug("Claimer timer for user in not ready");
+                return response()->json([
+                    'message' => 'Claimer is not ready. Please try again later.',
+                    'error_code' => 'claimer_not_ready',
+                    'claimer_timer' => $account->claimer_timer
+                ], 400);
             }
             else {
                 Log::channel('update_balance_log')->debug("account not found");
@@ -208,7 +217,7 @@ class ClaimerApiController extends Controller
 
             $account = json_decode($account);
 
-        } 
+        }
         // Getting from DB
         else {
             if ($wallet_address) {

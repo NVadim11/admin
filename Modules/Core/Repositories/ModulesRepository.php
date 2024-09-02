@@ -51,6 +51,7 @@ class ModulesRepository
             'tools' => ['name' => 'Tools', 'icon' => 'gear'],
             'referrals' => ['name' => 'Referrals', 'icon' => 'briefcase'],
             'projects' => ['name' => 'Projects', 'icon' => 'some-files'],
+            'notifications' => ['name' => 'Notifications', 'icon' => 'send'],
         ];
 
         if($short){

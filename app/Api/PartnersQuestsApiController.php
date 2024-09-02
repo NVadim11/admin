@@ -12,15 +12,11 @@ use Modules\PartnersQuests\Entities\AccountPartnersQuest;
 
 class PartnersQuestsApiController extends Controller
 {
-    /*
-        POST /api/pass-partners-quest
-    */
-
     public function pass_partners_quest(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'token' => 'required',
-            'user_id' => 'required|regex:/^[0-9]+$/u',
+            'id_telegram' => 'required|min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
             'partners_quest_id' => 'required|regex:/^[0-9]+$/u'
         ]);
 
@@ -36,10 +32,19 @@ class PartnersQuestsApiController extends Controller
         if (!$partnersQuest || !$partnersQuest->partners_quest || $partnersQuest->status) {
             return response()->json(['message' => 'partners quest not found'], 404);
         }
+        $redis = new RedisService();
+        $account = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+            ->where('id_telegram', $request->post('id_telegram'))
+            ->first();
 
-        $account = Account::find($request->post('user_id'), ['id', 'wallet_balance']);
         if (!$account) {
-            return response()->json(['message' => 'user not found'], 404);
+            $account = $redis->getData($request->post('id_telegram'));
+
+            if (!$account) {
+                return response()->json(['message' => 'user not found'], 404);
+            }
+
+            $account = json_decode($account, false);
         }
 
         DB::transaction(function () use ($partnersQuest, $account) {
@@ -50,15 +55,21 @@ class PartnersQuestsApiController extends Controller
             $partnersQuest->save();
 
             $account->wallet_balance += $partnersQuest->reward;
-            $account->save();
+
+            if ($account instanceof Account) {
+                $account->save();
+            }
         });
 
-        $updatedAccount = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])->find($request->post('user_id'));
+        $updatedAccount = Account::with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id'])
+            ->where('id_telegram', $request->post('id_telegram'))
+            ->first();
 
-        if($updatedAccount->id_telegram) {
-            $redis = new RedisService();
-            $redis->updateIfNotSet($updatedAccount->id_telegram, $updatedAccount->toJson(), $updatedAccount->timezone);
+        if(!$updatedAccount) {
+            $updatedAccount = $account;
         }
+
+        $redis->updateIfNotSet($updatedAccount->id_telegram, $updatedAccount->toJson(), $updatedAccount->timezone);
 
         return response()->json($updatedAccount, 201);
     }

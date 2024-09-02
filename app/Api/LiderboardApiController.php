@@ -32,17 +32,18 @@ class LiderboardApiController extends Controller
             }
 
             if ($current) {
-                $position = DB::select("SELECT id, username, wallet_balance, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.wallet_balance > a1.wallet_balance ) AS 'rank' FROM accounts AS a1 WHERE id = " . $current->id);
+                $position = DB::select("SELECT id, id_telegram, username, wallet_balance, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.wallet_balance > a1.wallet_balance and a2.vis = 1 ) AS 'rank' FROM accounts AS a1 WHERE id = " . $current->id);
                 $accounts = Account::select('id', 'username', 'wallet_address', 'id_telegram', 'wallet_balance')
+                    ->where('wallet_balance', '>', 0)
+                    ->where('vis', 1)
                     ->orderByRaw("wallet_balance DESC")
-                    ->whereRaw('wallet_balance > 0')
                     ->limit(100)
                     ->get();
 
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
                         $cur_pos = $pos + 1;
-                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 10) {
+                        if ($position && $cur_pos == $position[0]->rank && $position[0]->rank <= 100) {
                             $res[] = array(
                                 'id' => $account->id,
                                 'username' => $account->username,
@@ -63,7 +64,7 @@ class LiderboardApiController extends Controller
                         }
                     }
 
-                    if ($position && $position[0]->rank > 10) {
+                    if ($position && $position[0]->rank > 100) {
                         $res[] = array(
                             'id' => $current->id,
                             'username' => $current->username,
@@ -92,6 +93,7 @@ class LiderboardApiController extends Controller
         $accounts = Account::select('wallet_address', 'wallet_balance')
             ->orderByDesc('wallet_balance')
             ->where('wallet_balance', '>', 0)
+            ->where('vis', 1)
             ->limit(5)
             ->get();
 
@@ -148,10 +150,12 @@ class LiderboardApiController extends Controller
                     ->selectRaw('accounts.username')
                     ->selectRaw('COUNT(project_votes.id) AS total_votes')
                     ->join('accounts', 'accounts.id_telegram', '=', 'project_votes.client_id')
+                    ->where('accounts.vis', 1)
                     ->groupBy('project_votes.client_id', 'accounts.username')
                     ->orderBy('total_votes', 'desc')
                     ->limit(100)
                     ->get();
+
 
                 if ($accounts) {
                     foreach ($accounts as $pos => $account) {
@@ -222,10 +226,10 @@ class LiderboardApiController extends Controller
             }
 
             if ($current) {
-                $position = DB::select("SELECT id, username, referrals_count, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.referrals_count > a1.referrals_count ) AS 'rank' FROM accounts AS a1 WHERE id = " . $current->id);
+                $position = DB::select("SELECT id, username, referrals_count, ( SELECT COUNT(*) + 1 FROM accounts AS a2 WHERE a2.referrals_count > a1.referrals_count) AS 'rank' FROM accounts AS a1 WHERE a1.id = " . $current->id);
                 $accounts = Account::select('id', 'username', 'wallet_address', 'id_telegram', 'referrals_count')
                     ->orderByRaw("referrals_count DESC")
-                    ->whereRaw('referrals_count > 0')
+                    ->whereRaw('referrals_count > 0 and vis = 1')
                     ->limit(100)
                     ->get();
 
@@ -257,7 +261,7 @@ class LiderboardApiController extends Controller
                         $res[] = array(
                             'id' => $current->id,
                             'username' => $current->username,
-                            'position' => $position->rank,
+                            'position' => $position[0]->rank,
                             'current' => true,
                             'id_telegram' => $current->id_telegram,
                             'referrals_count' => $current->referrals_count,

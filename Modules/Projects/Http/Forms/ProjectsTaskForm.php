@@ -23,6 +23,13 @@ class ProjectsTaskForm extends Form
             ->add('task_descr', 'textarea', [
                 'label' => 'Task description'
             ])
+            ->add('main', 'select', [
+                'label' => 'Main task',
+                'choices' => [
+                    0 => 'No',
+                    1 => 'Yes'
+                ]
+            ])
             ->add('vis', 'select', [
                 'label' => 'Display',
                 'choices' => [

@@ -10,7 +10,7 @@ class PartnersQuest extends Model
     use HasFactory;
 
 	protected $table = "partners_quests";
-	protected $fillable = ['name', 'name_ru', 'link', 'reward', 'vis'];
+	protected $fillable = ['name', 'name_ru', 'link', 'reward', 'code', 'type', 'vis'];
 	protected $guarded = ['id'];
 	public $timestamps = true;
 

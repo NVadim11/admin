@@ -2,12 +2,14 @@
 
 namespace Modules\Accounts\Entities;
 
+use App\Entities\NotificationStatuses;
 use App\Services\RedisService;
 use App\Services\ReferralsService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Modules\DailyQuests\Entities\AccountDailyQuest;
 use Modules\PartnersQuests\Entities\AccountPartnersQuest;
+use Modules\Projects\Entities\AccountProjectGaming;
 use Modules\Projects\Entities\AccountProjectTask;
 use Modules\ReferralTransactions\Entities\AccountReferralTransaction;
 
@@ -45,7 +47,11 @@ class Account extends Model
                             'active_referrals_count',
                             'active_referral',
                             'sessions',
-                            'timezone'
+                            'timezone',
+                            'claimer_timer',
+                            'claimer_value',
+                            'is_wallet_connected',
+                            'vis'
                         ];
 
     protected $appends = ['tap_value', 'tap_boost_value', 'max_energy', 'call_down_minutes'];
@@ -113,12 +119,17 @@ class Account extends Model
 
     public function partners_quests()
     {
-        return $this->hasMany(AccountPartnersQuest::class)->with('partners_quest');
+        return $this->hasMany(AccountPartnersQuest::class, 'id_telegram', 'id_telegram')->with('partners_quest');
     }
 
     public function projects_tasks()
     {
         return $this->hasMany(AccountProjectTask::class);
+    }
+
+    public function projects_gaming()
+    {
+        return $this->hasMany(AccountProjectGaming::class);
     }
 
     public function referral_template()
@@ -168,7 +179,15 @@ class Account extends Model
             }
         });
 
-        self::deleted(function($model){});
+        self::deleted(function($model){
+            $model->projects_tasks()->delete();
+            $model->projects_gaming()->delete();
+            $model->partners_quests()->delete();
+            $model->daily_quests()->delete();
+
+            $redis = new RedisService();
+            $redis->deleteIfExists($model->id_telegram);
+        });
         self::updating(function($model){
             $redis = new RedisService();
             $redis->deleteIfExists($model->id_telegram);

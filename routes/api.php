@@ -23,9 +23,11 @@ Route::post('pass-task', [\App\Api\ApiController::class, 'pass_task']);
 Route::post('update-balance', [\App\Api\UpdateBalanceApiController::class, 'index']);
 Route::post('set-activity', [\App\Api\ApiController::class, 'set_activity_time']);
 Route::post('update-wallet-address', [\App\Api\ApiController::class, 'update_wallet_address']);
+Route::post('clear-wallet-address', [\App\Api\ApiController::class, 'clear_wallet_address']);
 Route::post('set-wallet-address', [\App\Api\ApiController::class, 'set_wallet_address']);
 Route::get('users/{user}', [\App\Api\ApiController::class, 'show']);
 Route::get('telegram-id/{id}', [\App\Api\ApiController::class, 'show_by_telegram_id']);
+Route::get('make-tasks/{id}', [\App\Api\ApiController::class, 'make_tasks']);
 Route::get('generate-referral-code/{user}', [\App\Api\ApiController::class, 'generate_referral_code']);
 Route::get('check-referral-code/{code}', [\App\Api\ApiController::class, 'check_referral_code']);
 
@@ -38,7 +40,6 @@ Route::get('notify-play', [\App\Api\NotifyApiController::class, 'bot_notify_play
 Route::get('daily-quests', [\App\Api\DailyQuestsApiController::class, 'daily_quests']);
 Route::post('pass-daily-quest', [\App\Api\DailyQuestsApiController::class, 'pass_daily_quest']);
 
-Route::get('partners-quests', [\App\Api\PartnersQuestsApiController::class, 'partners_quests']);
 Route::post('pass-partners-quest', [\App\Api\PartnersQuestsApiController::class, 'pass_partners_quest']);
 Route::post('claimer', [\App\Api\ClaimerApiController::class, 'index']);
 Route::post('check-task', [\App\Api\ClaimerApiController::class, 'check_task']);
@@ -48,5 +49,8 @@ Route::get('projects', [\App\Api\ProjectsApiController::class, 'index']);
 Route::get('top-projects', [\App\Api\ProjectsApiController::class, 'top_projects']);
 Route::get('top-daily-projects', [\App\Api\ProjectsApiController::class, 'top_daily_projects']);
 Route::get('top-new-projects', [\App\Api\ProjectsApiController::class, 'top_new_projects']);
+Route::post('pass-project-task', [\App\Api\ProjectsApiController::class, 'pass_project_task']);
+Route::post('update-project-balance', [\App\Api\ProjectsUpdateBalanceApiController::class, 'index']);
+Route::post('set-project-activity', [\App\Api\ProjectsApiController::class, 'set_project_activity_time']);
 
 Route::post('votes', [\App\Api\VotesApiController::class, 'index']);
