@@ -52,5 +52,6 @@ Route::get('top-new-projects', [\App\Api\ProjectsApiController::class, 'top_new_
 Route::post('pass-project-task', [\App\Api\ProjectsApiController::class, 'pass_project_task']);
 Route::post('update-project-balance', [\App\Api\ProjectsUpdateBalanceApiController::class, 'index']);
 Route::post('set-project-activity', [\App\Api\ProjectsApiController::class, 'set_project_activity_time']);
+Route::post('click-action', [\App\Api\ApiController::class, 'click_action']);
 
 Route::post('votes', [\App\Api\VotesApiController::class, 'index']);

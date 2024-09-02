@@ -12,8 +12,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Modules\Accounts\Entities\Account;
+use Modules\Accounts\Entities\AccountClickAction;
 use Modules\DailyQuests\Entities\DailyQuest;
 use Modules\PartnersQuests\Entities\PartnersQuest;
+use Modules\Projects\Entities\Project;
+use Modules\Projects\Entities\ProjectTask;
 
 class ApiController extends Controller
 {
@@ -646,6 +649,77 @@ class ApiController extends Controller
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json(['error' => $e->getMessage()], 404);
+        }
+    }
+
+    public function click_action(Request $request)
+    {
+        if(!checkToken($request->post('token'))) {
+            return response()->json(['message' => 'token invalid'], 404);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'token' => 'required',
+            'id_telegram' => 'required|min:5|max:16|regex:/^[a-zA-Z0-9]+$/u',
+            'id_project' => 'regex:/^[0-9]+$/u',
+            'id_project_task' => 'regex:/^[0-9]+$/u',
+            'action' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 404);
+        }
+
+        $id_telegram = $request->post('id_telegram');
+        $id_project = $request->post('id_project');
+        $id_project_task = $request->post('id_project_task');
+        $action = $request->post('action');
+
+        $account = Account::where('id_telegram', $id_telegram)
+            ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
+            ->first();
+
+        if (!$account) {
+            return response()->json(['message' => 'account not found'], 404);
+        }
+
+        if ($id_project) {
+            $project = Project::find($id_project);
+            if (!$project) {
+                return response()->json(['message' => 'project not found'], 404);
+            }
+        }
+
+        if ($id_project_task) {
+            $projectTask = ProjectTask::find($id_project_task);
+            if (!$projectTask) {
+                return response()->json(['message' => 'project task not found'], 404);
+            }
+        }
+
+        if (is_null($account->update_account_at) || time() > $account->update_account_at) {
+            DB::transaction(function () use ($request, $account, $id_telegram, $id_project, $id_project_task, $action) {
+
+                $clickAction = new AccountClickAction();
+                $clickAction->account_id = $id_telegram;
+                $clickAction->project_id = $id_project;
+                $clickAction->projects_task_id = $id_project_task;
+                $clickAction->action = $action;
+                $clickAction->save();
+
+                $account->update_account_at = strtotime('+' . app('settings')->get('update_balance_time') . ' second');
+                $account->updated_at = Carbon::now();
+                $account->save();
+
+                $account = Account::where('id_telegram', $account->id_telegram)
+                    ->with(['daily_quests', 'partners_quests', 'projects_tasks:account_id,projects_task_id', 'projects_gaming'])
+                    ->first();
+            });
+
+            return response()->json($account, 201);
+
+        } else {
+            return response()->json(['message' => 'activity time limit'], 404);
         }
     }
 }
